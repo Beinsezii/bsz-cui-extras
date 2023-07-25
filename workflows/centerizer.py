@@ -17,13 +17,11 @@ def roundint(n: int, step: int) -> int:
     return result
 
 parser = ArgumentParser()
-parser.add_argument('-x', default=600)
-parser.add_argument('-y', default=600)
-parser.add_argument('files', nargs='+', type=FileType('r+'))
+parser.add_argument('-x', default=600, help="Origin point X. Default 600")
+parser.add_argument('-y', default=600, help="Origin point Y. Default 600")
+parser.add_argument('files', nargs='+', type=FileType('r+'), help="List of .json files to centerize")
 
 args = parser.parse_args()
-
-#) -- my IDE gets confused so this helps
 
 for f in args.files:
     data = json.load(f)
