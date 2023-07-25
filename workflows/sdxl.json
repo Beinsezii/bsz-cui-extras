@@ -7,7 +7,7 @@
       "type": "PrimitiveNode",
       "pos": [
         -140,
-        -620
+        600
       ],
       "size": {
         "0": 430,
@@ -52,7 +52,7 @@
       "type": "PrimitiveNode",
       "pos": [
         -140,
-        -400
+        820
       ],
       "size": {
         "0": 430,
@@ -97,7 +97,7 @@
       "type": "CheckpointLoaderSimple",
       "pos": [
         -140,
-        -90
+        1130
       ],
       "size": {
         "0": 430,
@@ -151,7 +151,7 @@
       "type": "Reroute",
       "pos": [
         820,
-        -230
+        990
       ],
       "size": [
         82,
@@ -189,7 +189,7 @@
       "type": "Reroute",
       "pos": [
         780,
-        -200
+        1020
       ],
       "size": [
         140.8,
@@ -227,7 +227,7 @@
       "type": "Reroute",
       "pos": [
         800,
-        -170
+        1050
       ],
       "size": [
         140.8,
@@ -265,7 +265,7 @@
       "type": "KSamplerAdvanced",
       "pos": [
         1000,
-        -760
+        460
       ],
       "size": {
         "0": 315,
@@ -364,7 +364,7 @@
       "type": "Reroute",
       "pos": [
         1240,
-        -240
+        980
       ],
       "size": [
         75,
@@ -400,7 +400,7 @@
       "type": "VAEDecode",
       "pos": [
         1340,
-        -470
+        750
       ],
       "size": {
         "0": 210,
@@ -443,7 +443,7 @@
       "type": "VAELoader",
       "pos": [
         -140,
-        -190
+        1030
       ],
       "size": {
         "0": 430,
@@ -475,7 +475,7 @@
       "type": "CLIPTextEncodeSDXL",
       "pos": [
         360,
-        -650
+        570
       ],
       "size": {
         "0": 220,
@@ -620,7 +620,7 @@
       "type": "CheckpointLoaderSimple",
       "pos": [
         -140,
-        -760
+        460
       ],
       "size": {
         "0": 430,
@@ -669,7 +669,7 @@
       "type": "CLIPTextEncodeSDXL",
       "pos": [
         360,
-        -420
+        800
       ],
       "size": {
         "0": 220,
@@ -814,7 +814,7 @@
       "type": "KSamplerAdvanced",
       "pos": [
         630,
-        -760
+        460
       ],
       "size": {
         "0": 315,
@@ -913,7 +913,7 @@
       "type": "CLIPTextEncodeSDXLRefiner",
       "pos": [
         360,
-        -190
+        1030
       ],
       "size": {
         "0": 210,
@@ -1006,7 +1006,7 @@
       "type": "CLIPTextEncodeSDXLRefiner",
       "pos": [
         360,
-        -40
+        1180
       ],
       "size": {
         "0": 210,
@@ -1099,7 +1099,7 @@
       "type": "Reroute",
       "pos": [
         400,
-        110
+        1330
       ],
       "size": [
         82,
@@ -1137,7 +1137,7 @@
       "type": "Reroute",
       "pos": [
         390,
-        80
+        1300
       ],
       "size": [
         75,
@@ -1173,7 +1173,7 @@
       "type": "EmptyLatentImage",
       "pos": [
         360,
-        -760
+        460
       ],
       "size": {
         "0": 210,
@@ -1248,7 +1248,7 @@
       "type": "SaveImage",
       "pos": [
         400,
-        -1270
+        -50
       ],
       "size": {
         "0": 500,
@@ -1277,7 +1277,7 @@
       "type": "Reroute",
       "pos": [
         320,
-        -1320
+        -100
       ],
       "size": [
         82,
@@ -1313,7 +1313,7 @@
       "type": "Reroute",
       "pos": [
         900,
-        -1320
+        -100
       ],
       "size": [
         82,
@@ -1349,7 +1349,7 @@
       "type": "Reroute",
       "pos": [
         870,
-        -1350
+        -130
       ],
       "size": [
         82,
@@ -1389,7 +1389,7 @@
       "type": "PrimitiveNode",
       "pos": [
         80,
-        -880
+        340
       ],
       "size": {
         "0": 210,
@@ -1431,7 +1431,7 @@
       "type": "PrimitiveNode",
       "pos": [
         -140,
-        -880
+        340
       ],
       "size": {
         "0": 210,
@@ -1474,7 +1474,7 @@
       "type": "BSZAutoHiresCombined",
       "pos": [
         20,
-        -1180
+        40
       ],
       "size": {
         "0": 270,
