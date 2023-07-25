@@ -1,5 +1,5 @@
 # bsz-cui-extras
-Addons for ComfyUI
+Addons for [ComfyUI](https://github.com/comfyanonymous/ComfyUI)
 
 ## Custom Nodes
 
