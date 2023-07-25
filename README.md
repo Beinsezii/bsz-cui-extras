@@ -8,29 +8,29 @@ Contains 3 nodes each with a different means to the same end result.
 These nodes are designed to automatically calculate the appropriate latent sizes when performing a "Hi Res Fix" style workflow.
 
 #### Common:
- - Input
-  - `base_model_res` : Resolution of base model being used. SD 1.5 ≅ 512, SD 2.1 ≅ 768, SDXL ≅ 1024
- - Output
-  - `Lo Res Width` : Width intended to be used for first/low res pass
-  - `Lo Res Height` : Height intended to be used for first/low res pass
-  - `Hi Res Width` : Width intended to be used for final/high res pass
-  - `Hi Res Height` : Height intended to be used for final/high res pass
+  - Input
+    - `base_model_res` : Resolution of base model being used. SD 1.5 ≅ 512, SD 2.1 ≅ 768, SDXL ≅ 1024
+  - Output
+    - `Lo Res Width` : Width intended to be used for first/low res pass
+    - `Lo Res Height` : Height intended to be used for first/low res pass
+    - `Hi Res Width` : Width intended to be used for final/high res pass
+    - `Hi Res Height` : Height intended to be used for final/high res pass
 
 #### BSZAutoHires:
- - Input
-  - `desired_width` : Width in pixels for final/high res pass.
-  - `desired_height` : Height in pixels for final/high res pass.
+  - Input
+    - `desired_width` : Width in pixels for final/high res pass.
+    - `desired_height` : Height in pixels for final/high res pass.
 
 #### BSZAutoHiresAspect:
- - Input
-  - `desired_aspect_x` : Horizontal aspect.
-  - `desired_aspect_Y` : Vertical aspect.
-  - `scale` : Hi Res horizontal and vertical scale over Lo Res sizes. Note that because this scales both axes, a scale of `2.0` will actually quadruple the amount of pixels in an image, so use with care.
+  - Input
+    - `desired_aspect_x` : Horizontal aspect.
+    - `desired_aspect_Y` : Vertical aspect.
+    - `scale` : Hi Res horizontal and vertical scale over Lo Res sizes. Note that because this scales both axes, a scale of `2.0` will actually quadruple the amount of pixels in an image, so use with care.
 
 #### BSZAutoHiresCombined:
 A unique node that functions both as BSZAutoHires and BSZAutoHiresAspect with a convenient toggle
- - Input
-  - `use_aspect_scale_instead` : Use aspect & scale inputs instead of desired width/height inputs
+  - Input
+    - `use_aspect_scale_instead` : Use aspect & scale inputs instead of desired width/height inputs
 
 ## Workflows
 
@@ -38,13 +38,13 @@ A unique node that functions both as BSZAutoHires and BSZAutoHiresAspect with a 
 Personal flair of the SDXL "partial diffusion" workflow. Minimalist node setup with defaults balanced approach to speed/quality
 
 #### Dependencies
- - `bsz-auto-hires.py` : While this workflow doesn't actually perform any upscaling, it still uses the `BSZAutoHiresCombined` node for quick aspect ratio changing and easy CLIP detail target adjustments
+  - `bsz-auto-hires.py` : While this workflow doesn't actually perform any upscaling, it still uses the `BSZAutoHiresCombined` node for quick aspect ratio changing and easy CLIP detail target adjustments
 
 ### sdxl.json
 Personal flair of the SDXL "partial diffusion" workflow with added "High res fix". Slightly prioritizes speed as far as upscaling is concerned.
 
 #### Dependencies
- - `bsz-auto-hires.py` : Workflow is painful without it.
+  - `bsz-auto-hires.py` : Workflow is painful without it.
 
 ## F.A.Q.
 Question|Answer
