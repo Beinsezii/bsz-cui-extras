@@ -5,6 +5,7 @@ def roundint(n: int, step: int) -> int:
         return n - (n % step)
 
 class BSZAutoHires:
+    # {{{
     @classmethod
     def INPUT_TYPES(s):
         return {
@@ -48,9 +49,11 @@ class BSZAutoHires:
             int(roundint(desired_width, step)),
             int(roundint(desired_height, step)),
         )
+# }}}
 
 
 class BSZAutoHiresAspect:
+    # {{{
     @classmethod
     def INPUT_TYPES(s):
         return {
@@ -100,9 +103,11 @@ class BSZAutoHiresAspect:
             int(roundint(width * scale, step)),
             int(roundint(height * scale, step)),
         )
+# }}}
 
 
 class BSZAutoHiresCombined:
+    # {{{
     @classmethod
     def INPUT_TYPES(s):
         return {
@@ -157,6 +162,7 @@ class BSZAutoHiresCombined:
             return BSZAutoHiresAspect.hiresify(self, base_model_res, desired_aspect_x, desired_aspect_y, scale)
         else:
             return BSZAutoHires.hiresify(self, base_model_res, desired_width, desired_height)
+# }}}
 
 
 NODE_CLASS_MAPPINGS = {
