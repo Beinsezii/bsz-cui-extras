@@ -1,7 +1,6 @@
 #! /usr/bin/env python3
 
 from argparse import ArgumentParser, FileType
-import re
 import json
 
 def roundint(n: int, step: int) -> int:
@@ -24,7 +23,6 @@ parser.add_argument('files', nargs='+', type=FileType('r+'))
 
 args = parser.parse_args()
 
-pattern = re.compile(r'"pos": *\[\n? *(-?\d+),\n? *(-?\d+)')
 #) -- my IDE gets confused so this helps
 
 for f in args.files:
