@@ -32,7 +32,7 @@ class BSZPrincipledSDXL:
                 "refiner_amount": ("FLOAT", {"default": 0.35, "min": 0.0, "max": 1.0, "step": 0.01}),
                 "refiner_ascore_positive": ("FLOAT", {"default": 8.0, "min": 0.0, "max": 1000.0, "step": 0.01}),
                 "refiner_ascore_negative": ("FLOAT", {"default": 2.0, "min": 0.0, "max": 1000.0, "step": 0.01}),
-                "refiner_misalign_steps": ("INT", {"default": 0, "min": 0, "max": 10000}),
+                "refiner_misalign_steps": ("INT", {"default": 0, "min": -10000, "max": 10000}),
                 "width": ("INT", {"default": 1024, "min": 64, "max": nodes.MAX_RESOLUTION, "step": 8}),
                 "height": ("INT", {"default": 1024, "min": 64, "max": nodes.MAX_RESOLUTION, "step": 8}),
                 "target_width": ("INT", {"default": 1024, "min": 64, "max": nodes.MAX_RESOLUTION, "step": 8}),
@@ -175,7 +175,7 @@ class BSZPrincipledSDXL:
             return nodes.common_ksampler(
                 refiner_model,
                 seed,
-                min(steps, steps - refiner_misalign_steps),
+                max(base_end+1, steps + refiner_misalign_steps),
                 cfg,
                 sampler,
                 scheduler,
