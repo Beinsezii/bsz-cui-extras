@@ -15,15 +15,15 @@ class BSZPrincipledSDXL:
                 "refiner_model": ("MODEL",),
                 "refiner_clip": ("CLIP",),
                 "positive_prompt_G": ("STRING", {
-                    "multiline": False, # True means latent preview is tiny
+                    "multiline": True,
                     "default": "photograph of a kitten"
                 }),
                 "positive_prompt_L": ("STRING", {
-                    "multiline": False,
+                    "multiline": True,
                     "default": "analogue film"
                 }),
                 "negative_prompt": ("STRING", {
-                    "multiline": False,
+                    "multiline": True,
                     "default": "cropped, blurry"
                 }),
                 "steps": ("INT", {"default": 30, "min": 1, "max": 10000}),
