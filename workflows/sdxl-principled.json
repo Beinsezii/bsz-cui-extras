@@ -502,6 +502,7 @@
         1024,
         "euler",
         "normal",
+        "enable",
         "disable",
         "bislerp",
         0.65,

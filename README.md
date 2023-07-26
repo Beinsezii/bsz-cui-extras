@@ -59,6 +59,7 @@ Input fields
   - `target_height` : CLIP target height in pixels. If `scale_to_target` is enabled, latent will be resized to this
   - `sampler` : Sampler
   - `scheduler` : Scheduler
+  - `refiner_denoise_boost` : Increase `refiner_amount` to account for denoise levels
   - `scale_to_target` : Enable a "High Res Fix" style effect, running a short first pass with base before scaling to target sizes
   - `scale_method` : Algorithm for latent scaling
   - `scale_denoise` : Amount to denoise after latent upscale

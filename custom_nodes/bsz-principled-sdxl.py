@@ -39,6 +39,7 @@ class BSZPrincipledSDXL:
                 "target_height": ("INT", {"default": 1024, "min": 64, "max": nodes.MAX_RESOLUTION, "step": 8}),
                 "sampler": (samplers.KSampler.SAMPLERS,),
                 "scheduler": (samplers.KSampler.SCHEDULERS,),
+                "refiner_denoise_boost": (["enable", "disable"],),
                 "scale_to_target": (["disable", "enable"],),
                 "scale_method": (nodes.LatentUpscale.upscale_methods, {"default": "bislerp"}),
                 "scale_denoise": ("FLOAT", {"default": 0.65, "min": 0.0, "max": 1.0, "step": 0.01}),
@@ -82,6 +83,7 @@ class BSZPrincipledSDXL:
         sampler,
         scheduler,
         seed: int,
+        refiner_denoise_boost: str,
         scale_to_target: str,
         scale_method,
         scale_denoise: float,
@@ -144,32 +146,39 @@ class BSZPrincipledSDXL:
 
             denoise = scale_denoise
 
+        if refiner_denoise_boost == "enable":
+            refiner_amount = min(1, refiner_amount / max(denoise, 0.00001))
         # base/refiner split
         base_start = round(steps - steps * denoise)
         base_end = round((steps - base_start) * ( 1 - refiner_amount) + base_start)
 
+        # Skip everything if denoise is too low
+        if base_start == steps:
+            return (latent_image,)
         # Skip refiner if < 1 step
-        if base_end == steps:
+        elif base_end == steps:
             return nodes.KSampler.sample(self, base_model, seed, steps, cfg, sampler, scheduler, base_pos_cond, base_neg_cond, latent_image, denoise)
         else:
+
             refiner_pos_cond = nodes_xl.CLIPTextEncodeSDXLRefiner.encode(self, refiner_clip, 8.0, target_width, target_height, positive_prompt_G)[0]
             refiner_neg_cond = nodes_xl.CLIPTextEncodeSDXLRefiner.encode(self, refiner_clip, 2.0, target_width, target_height, negative_prompt)[0]
 
             # partial base pass
-            latent_image = nodes.common_ksampler(
-                base_model,
-                seed,
-                steps,
-                cfg,
-                sampler,
-                scheduler,
-                base_pos_cond,
-                base_neg_cond,
-                latent_image,
-                start_step=base_start,
-                last_step=base_end,
-                force_full_denoise=False,
-            )[0]
+            if base_start < base_end:
+                latent_image = nodes.common_ksampler(
+                    base_model,
+                    seed,
+                    steps,
+                    cfg,
+                    sampler,
+                    scheduler,
+                    base_pos_cond,
+                    base_neg_cond,
+                    latent_image,
+                    start_step=base_start,
+                    last_step=base_end,
+                    force_full_denoise=False,
+                )[0]
 
             # refiner continue sampling after base
             return nodes.common_ksampler(
