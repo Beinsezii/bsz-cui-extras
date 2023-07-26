@@ -47,7 +47,7 @@
         "Node name for S&R": "CheckpointLoaderSimple"
       },
       "widgets_values": [
-        "sdxl-v0.9.safetensors"
+        "sdxl-v1.safetensors"
       ],
       "color": "#223",
       "bgcolor": "#335"
@@ -335,10 +335,10 @@
         "randomize",
         22,
         6,
-        "ddim",
-        "ddim_uniform",
-        15,
-        22,
+        "euler",
+        "normal",
+        19,
+        10000,
         "disable"
       ],
       "color": "#233",
@@ -725,10 +725,10 @@
         "randomize",
         22,
         6,
-        "ddim",
-        "ddim_uniform",
+        "euler",
+        "normal",
         8,
-        15,
+        19,
         "enable"
       ],
       "color": "#2a363b",
@@ -1165,7 +1165,7 @@
         "Node name for S&R": "CheckpointLoaderSimple"
       },
       "widgets_values": [
-        "sdxl-v0.9-refiner.safetensors"
+        "sdxl-v1-refiner.safetensors"
       ],
       "color": "#233",
       "bgcolor": "#355"
@@ -1199,7 +1199,7 @@
         "Node name for S&R": "VAELoader"
       },
       "widgets_values": [
-        "sdxl-vae.safetensors"
+        "sdxl-vae-v09.safetensors"
       ]
     },
     {

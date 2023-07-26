@@ -29,7 +29,7 @@ class BSZPrincipledSDXL:
                 "steps": ("INT", {"default": 30, "min": 1, "max": 10000}),
                 "denoise": ("FLOAT", {"default": 1.0, "min": 0.0, "max": 1.0, "step": 0.01}),
                 "cfg": ("FLOAT", {"default": 8.0, "min": 0.0, "max": 100.0}),
-                "refiner_amount": ("FLOAT", {"default": 0.35, "min": 0.0, "max": 1.0, "step": 0.01}),
+                "refiner_amount": ("FLOAT", {"default": 0.15, "min": 0.0, "max": 1.0, "step": 0.01}),
                 "refiner_ascore_positive": ("FLOAT", {"default": 8.0, "min": 0.0, "max": 1000.0, "step": 0.01}),
                 "refiner_ascore_negative": ("FLOAT", {"default": 2.0, "min": 0.0, "max": 1000.0, "step": 0.01}),
                 "refiner_misalign_steps": ("INT", {"default": 0, "min": -10000, "max": 10000}),
@@ -157,7 +157,19 @@ class BSZPrincipledSDXL:
             return (latent_image,)
         # Skip refiner if < 1 step
         elif base_end == steps:
-            return nodes.KSampler.sample(self, base_model, seed, steps, cfg, sampler, scheduler, base_pos_cond, base_neg_cond, latent_image, denoise)
+            return nodes.common_ksampler(
+                base_model,
+                seed,
+                steps,
+                cfg,
+                sampler,
+                scheduler,
+                base_pos_cond,
+                base_neg_cond,
+                latent_image,
+                start_step=base_start,
+                force_full_denoise=True,
+            )
         else:
 
             refiner_pos_cond = nodes_xl.CLIPTextEncodeSDXLRefiner.encode(self, refiner_clip, 8.0, target_width, target_height, positive_prompt_G)[0]
