@@ -1031,7 +1031,7 @@
         "Node name for S&R": "LatentUpscale"
       },
       "widgets_values": [
-        "bislerp",
+        "bilinear",
         1536,
         1536,
         "disabled"

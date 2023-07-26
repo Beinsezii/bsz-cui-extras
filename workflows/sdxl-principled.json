@@ -504,7 +504,7 @@
         "normal",
         "enable",
         "disable",
-        "bislerp",
+        "bilinear",
         0.65,
         30,
         0.65,

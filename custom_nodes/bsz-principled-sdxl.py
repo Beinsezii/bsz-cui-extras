@@ -41,7 +41,7 @@ class BSZPrincipledSDXL:
                 "scheduler": (samplers.KSampler.SCHEDULERS,),
                 "refiner_denoise_boost": (["enable", "disable"],),
                 "scale_to_target": (["disable", "enable"],),
-                "scale_method": (nodes.LatentUpscale.upscale_methods, {"default": "bislerp"}),
+                "scale_method": (nodes.LatentUpscale.upscale_methods, {"default": "bilinear"}),
                 "scale_denoise": ("FLOAT", {"default": 0.65, "min": 0.0, "max": 1.0, "step": 0.01}),
                 "scale_initial_steps": ("INT", {"default": 30, "min": 1, "max": 10000}),
                 "scale_initial_cutoff": ("FLOAT", {"default": 0.65, "min": 0.0, "max": 1.0, "step": 0.01}),
