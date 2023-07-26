@@ -76,11 +76,19 @@ Personal flair of the SDXL "partial diffusion" workflow. Minimalist node setup w
 #### Dependencies
   - `bsz-auto-hires.py` : While this workflow doesn't actually perform any upscaling, it still uses the `BSZAutoHiresCombined` node for quick aspect ratio changing and easy CLIP detail target adjustments
 
-### sdxl.json
+### sdxl-upscale.json
 Personal flair of the SDXL "partial diffusion" workflow with added "High res fix". Slightly prioritizes speed as far as upscaling is concerned.
 
 #### Dependencies
   - `bsz-auto-hires.py` : Workflow is painful without it.
+
+### sdxl-principled.json
+Demonstration of the bsz-principled-sdxl node
+
+#### Dependencies
+  - `bsz-auto-hires.py` : Principled can use hi res sizes
+  - `bsz-principled-sdxl.py` : Yes.
+
 
 ## F.A.Q.
 Question|Answer
