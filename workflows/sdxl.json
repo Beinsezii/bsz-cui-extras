@@ -467,7 +467,7 @@
         "Node name for S&R": "VAELoader"
       },
       "widgets_values": [
-        "sdxl-vae-v1.safetensors"
+        "sdxl-vae.safetensors"
       ]
     },
     {
