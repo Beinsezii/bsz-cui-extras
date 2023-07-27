@@ -43,6 +43,7 @@ Input fields
   - `refiner_model` : Model from refiner checkpoint
   - `refiner_clip` : CLIP from refiner checkpoint
   - `latent_image` : Latent image to start from. Optional, useful mostly for img2img
+  - `pixel_scale_vae` : VAE used for pixel scaling methods. Only needed if they're being used
   - `positive_prompt_G` : Positive prompt for base CLIP G and refiner
   - `positive_prompt_L` : Positive prompt for base CLIP L. Typically viewed as "supporting terms" for the main G prompt. Setting both L and G to the same value is completely valid
   - `negative_prompt` : Negative prompt
@@ -59,7 +60,6 @@ Input fields
   - `target_height` : CLIP target height in pixels. If `scale_to_target` is enabled, latent will be resized to this
   - `sampler` : Sampler
   - `scheduler` : Scheduler
-  - `refiner_denoise_boost` : Increase `refiner_amount` to account for denoise levels
   - `scale_to_target` : Enable a "High Res Fix" style effect, running a short first pass with base before scaling to target sizes
   - `scale_method` : Algorithm for latent scaling
   - `scale_denoise` : Amount to denoise after latent upscale
