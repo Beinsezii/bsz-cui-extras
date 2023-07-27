@@ -124,10 +124,10 @@ class BSZPrincipledSDXL:
             negative_prompt,
         )[0]
 
-        latent_w, latent_h = latent_image["samples"].size()[2:4]
+        latent_h, latent_w = latent_image["samples"].size()[2:4]
 
         # High Res Fix. Can technically do low res too I guess, so it's "scale" not "upscale"
-        if scale_method != "disable" and (width != target_width or height != target_height or latent_w / 8 != width or latent_h / 8 != height):
+        if scale_method != "disable" and (width != target_width or height != target_height or latent_w * 8 != width or latent_h * 8 != height):
             assert scale_method in latent_ui_scales or pixel_scale_vae is not None
             start = round(scale_initial_steps - denoise * scale_initial_steps)
             end = round(scale_initial_cutoff * scale_initial_steps)
