@@ -43,8 +43,7 @@ class BSZPrincipledSDXL:
                 "target_height": ("INT", {"default": 1024, "min": 64, "max": nodes.MAX_RESOLUTION, "step": 8}),
                 "sampler": (samplers.KSampler.SAMPLERS,),
                 "scheduler": (samplers.KSampler.SCHEDULERS,),
-                "scale_to_target": (["disable", "enable"],),
-                "scale_method": (list(latent_ui_scales.keys()) + list(pixel_ui_scales.keys()), {"default": "latent bilinear"}),
+                "scale_method": (["disable"] + list(latent_ui_scales.keys()) + list(pixel_ui_scales.keys()),),
                 "scale_denoise": ("FLOAT", {"default": 0.65, "min": 0.0, "max": 1.0, "step": 0.01}),
                 "scale_initial_steps": ("INT", {"default": 30, "min": 1, "max": 10000}),
                 "scale_initial_cutoff": ("FLOAT", {"default": 0.65, "min": 0.0, "max": 1.0, "step": 0.01}),
@@ -86,7 +85,6 @@ class BSZPrincipledSDXL:
         sampler,
         scheduler,
         seed: int,
-        scale_to_target: str,
         scale_method,
         scale_denoise: float,
         scale_initial_steps: int,
@@ -127,7 +125,7 @@ class BSZPrincipledSDXL:
         )[0]
 
         # High Res Fix. Can technically do low res too I guess, so it's "scale" not "upscale"
-        if scale_to_target == "enable" and (width != target_width or height != target_height):
+        if scale_method != "disable" and (width != target_width or height != target_height):
             assert scale_method in latent_ui_scales or pixel_scale_vae is not None
             latent_image = nodes.common_ksampler(
                 base_model,

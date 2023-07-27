@@ -56,13 +56,12 @@ Input fields
   - `refiner_misalign_steps` : Misalign refiner and base total steps by N. Questionably useful. Felt cute, might remove later
   - `width` : CLIP input width in pixels. If no `latent_image` is provided, will generate one with this size
   - `height` : CLIP input height in pixels. If no `latent_image` is provided, will generate one with this size
-  - `target_width` : CLIP target width in pixels. If `scale_to_target` is enabled, latent will be resized to this
-  - `target_height` : CLIP target height in pixels. If `scale_to_target` is enabled, latent will be resized to this
+  - `target_width` : CLIP target width in pixels. If `scale_method` is enabled, image will be resized to this
+  - `target_height` : CLIP target height in pixels. If `scale_method` is enabled, image will be resized to this
   - `sampler` : Sampler
   - `scheduler` : Scheduler
-  - `scale_to_target` : Enable a "High Res Fix" style effect, running a short first pass with base before scaling to target sizes
-  - `scale_method` : Algorithm for latent scaling
-  - `scale_denoise` : Amount to denoise after latent upscale
+  - `scale_method` : If set, will scale image to match target sizes using the provided algorithm
+  - `scale_denoise` : Amount to denoise after scale
   - `scale_initial_steps` : Total target steps for pre-scale pass
   - `scale_initial_cutoff` : Amount of steps to actually process for pre-scale pass
   - `scale_initial_sampler` : Sampler for pre-scale pass
