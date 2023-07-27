@@ -146,6 +146,7 @@ class BSZPrincipledSDXL:
                     last_step=end,
                     force_full_denoise=True,
                 )[0]
+                denoise = scale_denoise
 
             if scale_method in latent_ui_scales:
                 latent_image = nodes.LatentUpscale.upscale(None, latent_image, latent_ui_scales[scale_method], target_width, target_height, "disabled")[0]
@@ -180,8 +181,6 @@ class BSZPrincipledSDXL:
                 negative_prompt,
                 negative_prompt
             )[0]
-
-            denoise = scale_denoise
 
         # steps skipped by img2img are effectively base steps as far
         # as the refiner is concerned
