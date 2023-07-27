@@ -2,12 +2,16 @@ import nodes
 import comfy_extras.nodes_clip_sdxl as nodes_xl
 import comfy.samplers as samplers
 
+latent_ui_scales = { f"latent {x}": x for x in nodes.LatentUpscale.upscale_methods }
+pixel_ui_scales = { f"pixel {x}": x for x in nodes.ImageScale.upscale_methods }
+
 class BSZPrincipledSDXL:
     @classmethod
     def INPUT_TYPES(s):
         return {
             "optional": {
                 "latent_image": ("LATENT",),
+                "pixel_scale_vae": ("VAE",),
             },
             "required": {
                 "base_model": ("MODEL",),
@@ -39,9 +43,8 @@ class BSZPrincipledSDXL:
                 "target_height": ("INT", {"default": 1024, "min": 64, "max": nodes.MAX_RESOLUTION, "step": 8}),
                 "sampler": (samplers.KSampler.SAMPLERS,),
                 "scheduler": (samplers.KSampler.SCHEDULERS,),
-                "refiner_denoise_boost": (["enable", "disable"],),
                 "scale_to_target": (["disable", "enable"],),
-                "scale_method": (nodes.LatentUpscale.upscale_methods, {"default": "bilinear"}),
+                "scale_method": (list(latent_ui_scales.keys()) + list(pixel_ui_scales.keys()), {"default": "latent bilinear"}),
                 "scale_denoise": ("FLOAT", {"default": 0.65, "min": 0.0, "max": 1.0, "step": 0.01}),
                 "scale_initial_steps": ("INT", {"default": 30, "min": 1, "max": 10000}),
                 "scale_initial_cutoff": ("FLOAT", {"default": 0.65, "min": 0.0, "max": 1.0, "step": 0.01}),
@@ -83,7 +86,6 @@ class BSZPrincipledSDXL:
         sampler,
         scheduler,
         seed: int,
-        refiner_denoise_boost: str,
         scale_to_target: str,
         scale_method,
         scale_denoise: float,
@@ -92,14 +94,15 @@ class BSZPrincipledSDXL:
         scale_initial_sampler,
         scale_initial_scheduler,
         latent_image=None,
+        pixel_scale_vae=None,
     ):
         # Make latent if none provided
         if latent_image is None:
-            latent_image = nodes.EmptyLatentImage.generate(self, width, height)[0]
+            latent_image = nodes.EmptyLatentImage.generate(None, width, height)[0]
 
         # Base clips
         base_pos_cond = nodes_xl.CLIPTextEncodeSDXL.encode(
-            self,
+            None,
             base_clip,
             width,
             height,
@@ -111,7 +114,7 @@ class BSZPrincipledSDXL:
             positive_prompt_L,
         )[0]
         base_neg_cond = nodes_xl.CLIPTextEncodeSDXL.encode(
-            self,
+            None,
             base_clip,
             width,
             height,
@@ -125,6 +128,7 @@ class BSZPrincipledSDXL:
 
         # High Res Fix. Can technically do low res too I guess, so it's "scale" not "upscale"
         if scale_to_target == "enable" and (width != target_width or height != target_height):
+            assert scale_method in latent_ui_scales or pixel_scale_vae is not None
             latent_image = nodes.common_ksampler(
                 base_model,
                 seed,
@@ -139,15 +143,46 @@ class BSZPrincipledSDXL:
                 last_step=round(scale_initial_cutoff * scale_initial_steps),
                 force_full_denoise=True,
             )[0]
-            latent_image = nodes.LatentUpscale.upscale(self, latent_image, scale_method, target_width, target_height, "disabled")[0]
+
+            if scale_method in latent_ui_scales:
+                latent_image = nodes.LatentUpscale.upscale(None, latent_image, latent_ui_scales[scale_method], target_width, target_height, "disabled")[0]
+            else:
+                pixels = nodes.VAEDecode.decode(None, pixel_scale_vae, latent_image)[0]
+                pixels = nodes.ImageScale.upscale(None, pixels, pixel_ui_scales[scale_method], target_width, target_height, "disabled")[0]
+                encoder = nodes.VAEEncode()
+                latent_image = encoder.encode(pixel_scale_vae, pixels)[0]
+                del pixels
             # Base clips with new sizes
-            base_pos_cond = nodes_xl.CLIPTextEncodeSDXL.encode(self, base_clip, target_width, target_height, 0, 0, target_width, target_height, positive_prompt_G, positive_prompt_L)[0]
-            base_neg_cond = nodes_xl.CLIPTextEncodeSDXL.encode(self, base_clip, target_width, target_height, 0, 0, target_width, target_height, negative_prompt, negative_prompt)[0]
+            base_pos_cond = nodes_xl.CLIPTextEncodeSDXL.encode(
+                None,
+                base_clip,
+                target_width,
+                target_height,
+                0,
+                0,
+                target_width,
+                target_height,
+                positive_prompt_G,
+                positive_prompt_L
+            )[0]
+            base_neg_cond = nodes_xl.CLIPTextEncodeSDXL.encode(
+                None,
+                base_clip,
+                target_width,
+                target_height,
+                0,
+                0,
+                target_width,
+                target_height,
+                negative_prompt,
+                negative_prompt
+            )[0]
 
             denoise = scale_denoise
 
-        if refiner_denoise_boost == "enable":
-            refiner_amount = min(1, refiner_amount / max(denoise, 0.00001))
+        # steps skipped by img2img are effectively base steps as far
+        # as the refiner is concerned
+        refiner_amount = min(1, refiner_amount / max(denoise, 0.00001))
         # base/refiner split
         base_start = round(steps - steps * denoise)
         base_end = round((steps - base_start) * ( 1 - refiner_amount) + base_start)
@@ -172,8 +207,8 @@ class BSZPrincipledSDXL:
             )
         else:
 
-            refiner_pos_cond = nodes_xl.CLIPTextEncodeSDXLRefiner.encode(self, refiner_clip, 8.0, target_width, target_height, positive_prompt_G)[0]
-            refiner_neg_cond = nodes_xl.CLIPTextEncodeSDXLRefiner.encode(self, refiner_clip, 2.0, target_width, target_height, negative_prompt)[0]
+            refiner_pos_cond = nodes_xl.CLIPTextEncodeSDXLRefiner.encode(None, refiner_clip, 8.0, target_width, target_height, positive_prompt_G)[0]
+            refiner_neg_cond = nodes_xl.CLIPTextEncodeSDXLRefiner.encode(None, refiner_clip, 2.0, target_width, target_height, negative_prompt)[0]
 
             # partial base pass
             if base_start < base_end:
