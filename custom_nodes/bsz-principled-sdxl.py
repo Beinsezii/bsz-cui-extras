@@ -209,9 +209,11 @@ class BSZPrincipledSDXL:
 
             refiner_pos_cond = nodes_xl.CLIPTextEncodeSDXLRefiner.encode(None, refiner_clip, 8.0, target_width, target_height, positive_prompt_G)[0]
             refiner_neg_cond = nodes_xl.CLIPTextEncodeSDXLRefiner.encode(None, refiner_clip, 2.0, target_width, target_height, negative_prompt)[0]
+            disable_noise=False
 
             # partial base pass
             if base_start < base_end:
+                disable_noise=True
                 latent_image = nodes.common_ksampler(
                     base_model,
                     seed,
@@ -239,7 +241,7 @@ class BSZPrincipledSDXL:
                 refiner_neg_cond,
                 latent_image,
                 start_step=base_end,
-                disable_noise=True,
+                disable_noise=disable_noise,
                 force_full_denoise=True,
             )
 
