@@ -45,7 +45,7 @@ class BSZPrincipledSDXL:
                 "scheduler": (samplers.KSampler.SCHEDULERS,),
                 "scale_method": (["disable"] + list(latent_ui_scales.keys()) + list(pixel_ui_scales.keys()),),
                 "scale_denoise": ("FLOAT", {"default": 0.65, "min": 0.0, "max": 1.0, "step": 0.01}),
-                "scale_initial_steps": ("INT", {"default": 30, "min": 1, "max": 10000}),
+                "scale_initial_steps": ("INT", {"default": 30, "min": 0, "max": 10000}),
                 "scale_initial_cutoff": ("FLOAT", {"default": 0.65, "min": 0.0, "max": 1.0, "step": 0.01}),
                 "scale_initial_sampler": (samplers.KSampler.SAMPLERS, {"default": "dpmpp_2m"}),
                 "scale_initial_scheduler": (samplers.KSampler.SCHEDULERS, {"default": "karras"}),
@@ -127,20 +127,23 @@ class BSZPrincipledSDXL:
         # High Res Fix. Can technically do low res too I guess, so it's "scale" not "upscale"
         if scale_method != "disable" and (width != target_width or height != target_height):
             assert scale_method in latent_ui_scales or pixel_scale_vae is not None
-            latent_image = nodes.common_ksampler(
-                base_model,
-                seed,
-                scale_initial_steps,
-                cfg,
-                scale_initial_sampler,
-                scale_initial_scheduler,
-                base_pos_cond,
-                base_neg_cond,
-                latent_image,
-                start_step=round(scale_initial_steps - denoise * scale_initial_steps),
-                last_step=round(scale_initial_cutoff * scale_initial_steps),
-                force_full_denoise=True,
-            )[0]
+            start = round(scale_initial_steps - denoise * scale_initial_steps)
+            end = round(scale_initial_cutoff * scale_initial_steps)
+            if end > start:
+                latent_image = nodes.common_ksampler(
+                    base_model,
+                    seed,
+                    scale_initial_steps,
+                    cfg,
+                    scale_initial_sampler,
+                    scale_initial_scheduler,
+                    base_pos_cond,
+                    base_neg_cond,
+                    latent_image,
+                    start_step=start,
+                    last_step=end,
+                    force_full_denoise=True,
+                )[0]
 
             if scale_method in latent_ui_scales:
                 latent_image = nodes.LatentUpscale.upscale(None, latent_image, latent_ui_scales[scale_method], target_width, target_height, "disabled")[0]
