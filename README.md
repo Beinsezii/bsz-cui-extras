@@ -69,10 +69,10 @@ Recommended settings for various workflows...
 
   - Text2Image: default
   - Text2Image w/latent upscale:
-    - `scale_method`:`latent bilinear`
+    - `scale_method`:`latent bicubic`
   - Text2Image w/pixel upscale:
-    - `scale_method` : `pixel cubic`
-    - `scale_denoise` : `0.1`
+    - `scale_method` : `pixel bicubic`
+    - `scale_denoise` : `0.15`
     - `scale_initial_cutoff` : `1.0`
   - Img2Img w/upscale:
     - Same as text2img upscaling
