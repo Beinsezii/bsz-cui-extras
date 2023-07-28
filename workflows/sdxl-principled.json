@@ -170,7 +170,7 @@
       "title": "Positive Prompt",
       "properties": {},
       "widgets_values": [
-        "kitten"
+        "fantasy artwork of a feminine demon in a colorful flowery grove, golden hour sun rays, sharp intricate details"
       ],
       "color": "#232",
       "bgcolor": "#353"
@@ -212,7 +212,7 @@
       "title": "Negative Prompt",
       "properties": {},
       "widgets_values": [
-        ""
+        "blurry, cropped, text"
       ],
       "color": "#322",
       "bgcolor": "#533"
@@ -682,7 +682,6 @@
         0.15,
         8,
         2,
-        0,
         1024,
         1024,
         1024,
@@ -693,8 +692,6 @@
         0.65,
         30,
         0.65,
-        "dpmpp_2m",
-        "karras",
         0,
         "randomize"
       ]

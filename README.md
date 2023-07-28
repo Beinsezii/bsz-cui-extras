@@ -35,7 +35,7 @@ A unique node that functions both as BSZAutoHires and BSZAutoHiresAspect with a 
 ### bsz-principled-sdxl.py
 All-in-one solution for SDXL text2img, img2img and scaling/hi res fix. Essentially the sdxl and sdxl-upscale workflows both in one node. Do note that while this node shouldn't be any slower than the regular workflow, due to ComfyUI caching latent results **per-node**, even changing just a refiner setting on this node will result in sampling starting over from the first base pass. There are at least some minimal internal optimizations to skip passes that aren't needed.
 
-Scaling works by rendering a pass using only base before scaling to `target` size and running the normal base+refiner workflow. The reason the pre-scale pass has a cutoff to end sampling early is because the post-scale pass will denoise away all the small details anyway, so ending it early saves time for almost no visual loss. This is also why DPM++ 2M Karras is the default sampler/scheudler.
+Scaling works by running an initial pass before scaling to `target` size and running another
 
 Input fields
   - `base_model` : Model from base checkpoint
@@ -53,7 +53,6 @@ Input fields
   - `refiner_amount` : Refiner to base ratio
   - `refiner_ascore_positive` : Refiner aesthetic score for positive prompt
   - `refiner_ascore_negative` : Refiner aesthetic score for negative prompt
-  - `refiner_misalign_steps` : Misalign refiner and base total steps by N. Questionably useful. Felt cute, might remove later
   - `width` : CLIP input width in pixels. If no `latent_image` is provided, will generate one with this size
   - `height` : CLIP input height in pixels. If no `latent_image` is provided, will generate one with this size
   - `target_width` : CLIP target width in pixels. If `scale_method` is enabled, image will be resized to this
@@ -63,10 +62,21 @@ Input fields
   - `scale_method` : If set, will scale image to match target sizes using the provided algorithm
   - `scale_denoise` : Amount to denoise after scale
   - `scale_initial_steps` : Total target steps for pre-scale pass
-  - `scale_initial_cutoff` : Amount of steps to actually process for pre-scale pass
-  - `scale_initial_sampler` : Sampler for pre-scale pass
-  - `scale_initial_scheduler` : Scheduler for pre-scale pass
+  - `scale_initial_cutoff` : End the initial pre-scale pass early to save time. Only useful for latent scaling, pixel scaling should be 1.0
   - `seed` : Seedy.
+
+Recommended settings for various workflows...
+
+  - Text2Image: default
+  - Text2Image w/latent upscale:
+    - `scale_method`:`latent bilinear`
+  - Text2Image w/pixel upscale:
+    - `scale_method` : `pixel cubic`
+    - `scale_denoise` : `0.1`
+    - `scale_initial_cutoff` : `1.0`
+  - Img2Img w/upscale:
+    - Same as text2img upscaling
+    - `scale_initial_steps` : `0`
 
 ## Workflows
 
