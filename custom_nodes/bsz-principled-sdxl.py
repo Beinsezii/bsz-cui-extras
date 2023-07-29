@@ -47,6 +47,7 @@ class BSZPrincipledSDXL:
                 "scale_denoise": ("FLOAT", {"default": 0.65, "min": 0.0, "max": 1.0, "step": 0.01}),
                 "scale_initial_steps": ("INT", {"default": 30, "min": 0, "max": 10000}),
                 "scale_initial_cutoff": ("FLOAT", {"default": 0.65, "min": 0.0, "max": 1.0, "step": 0.01}),
+                "vae_tile": (["disable", "encode", "decode", "enable"],),
                 "seed": ("INT", {"default": 0, "min": 0, "max": 0xffffffffffffffff}),
             },
         }
@@ -81,11 +82,12 @@ class BSZPrincipledSDXL:
         target_height: int,
         sampler,
         scheduler,
-        seed: int,
         scale_method,
         scale_denoise: float,
         scale_initial_steps: int,
         scale_initial_cutoff: float,
+        vae_tile: str,
+        seed: int,
         latent_image=None,
         pixel_scale_vae=None,
     ):
@@ -214,11 +216,13 @@ class BSZPrincipledSDXL:
             if scale_method in METHODS_LATENT:
                 latent_image = nodes.LatentUpscale.upscale(None, latent_image, METHODS_LATENT[scale_method], target_width, target_height, "disabled")[0]
             else:
-                pixels = nodes.VAEDecode.decode(None, pixel_scale_vae, latent_image)[0]
+                decoder = nodes.VAEDecodeTiled() if vae_tile == "enable" or vae_tile == "decode" else nodes.VAEDecode()
+                pixels = decoder.decode(pixel_scale_vae, latent_image)[0]
+                del decoder
                 pixels = nodes.ImageScale.upscale(None, pixels, METHODS_PIXEL[scale_method], target_width, target_height, "disabled")[0]
-                encoder = nodes.VAEEncode()
+                encoder = nodes.VAEEncodeTiled() if vae_tile == "enable" or vae_tile == "encode" else nodes.VAEEncode()
                 latent_image = encoder.encode(pixel_scale_vae, pixels)[0]
-                del pixels
+                del pixels, encoder
 
             width, height = target_width, target_height
             steps = post_steps

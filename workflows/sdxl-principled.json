@@ -1,6 +1,6 @@
 {
-  "last_node_id": 136,
-  "last_link_id": 407,
+  "last_node_id": 141,
+  "last_link_id": 418,
   "nodes": [
     {
       "id": 19,
@@ -14,7 +14,7 @@
         "1": 470
       },
       "flags": {},
-      "order": 12,
+      "order": 16,
       "mode": 0,
       "inputs": [
         {
@@ -170,7 +170,7 @@
       "title": "Positive Prompt",
       "properties": {},
       "widgets_values": [
-        "fantasy artwork of a feminine demon in a colorful flowery grove, golden hour sun rays, sharp intricate details"
+        "fantasy artwork of a monstrous feminine demon in a grove of colorful evil flowers, golden hour sun rays, sharp intricate details, half body frame"
       ],
       "color": "#232",
       "bgcolor": "#353"
@@ -212,7 +212,7 @@
       "title": "Negative Prompt",
       "properties": {},
       "widgets_values": [
-        "blurry, cropped, text"
+        "blurry, cropped, text, hand, fingers, armor, clothes"
       ],
       "color": "#322",
       "bgcolor": "#533"
@@ -253,49 +253,6 @@
       "bgcolor": "#653"
     },
     {
-      "id": 18,
-      "type": "VAEDecode",
-      "pos": [
-        900,
-        260
-      ],
-      "size": {
-        "0": 210,
-        "1": 46
-      },
-      "flags": {
-        "collapsed": true
-      },
-      "order": 10,
-      "mode": 0,
-      "inputs": [
-        {
-          "name": "samples",
-          "type": "LATENT",
-          "link": 399
-        },
-        {
-          "name": "vae",
-          "type": "VAE",
-          "link": 404
-        }
-      ],
-      "outputs": [
-        {
-          "name": "IMAGE",
-          "type": "IMAGE",
-          "links": [
-            407
-          ],
-          "shape": 3,
-          "slot_index": 0
-        }
-      ],
-      "properties": {
-        "Node name for S&R": "VAEDecode"
-      }
-    },
-    {
       "id": 136,
       "type": "Reroute",
       "pos": [
@@ -332,84 +289,6 @@
       },
       "color": "#432",
       "bgcolor": "#653"
-    },
-    {
-      "id": 135,
-      "type": "Reroute",
-      "pos": [
-        810,
-        200
-      ],
-      "size": [
-        75,
-        26
-      ],
-      "flags": {},
-      "order": 9,
-      "mode": 0,
-      "inputs": [
-        {
-          "name": "",
-          "type": "*",
-          "link": 406
-        }
-      ],
-      "outputs": [
-        {
-          "name": "VAE",
-          "type": "VAE",
-          "links": [
-            404
-          ],
-          "slot_index": 0
-        }
-      ],
-      "properties": {
-        "showOutputText": true,
-        "horizontal": false
-      },
-      "color": "#432",
-      "bgcolor": "#653"
-    },
-    {
-      "id": 128,
-      "type": "Reroute",
-      "pos": [
-        890,
-        350
-      ],
-      "size": [
-        82,
-        26
-      ],
-      "flags": {},
-      "order": 11,
-      "mode": 0,
-      "inputs": [
-        {
-          "name": "",
-          "type": "*",
-          "link": 407,
-          "pos": [
-            41,
-            0
-          ]
-        }
-      ],
-      "outputs": [
-        {
-          "name": "IMAGE",
-          "type": "IMAGE",
-          "links": [
-            381
-          ],
-          "slot_index": 0
-        }
-      ],
-      "properties": {
-        "showOutputText": true,
-        "horizontal": true
-      }
     },
     {
       "id": 125,
@@ -498,6 +377,245 @@
         1,
         1
       ]
+    },
+    {
+      "id": 135,
+      "type": "Reroute",
+      "pos": [
+        810,
+        200
+      ],
+      "size": [
+        75,
+        26
+      ],
+      "flags": {},
+      "order": 9,
+      "mode": 0,
+      "inputs": [
+        {
+          "name": "",
+          "type": "*",
+          "link": 406
+        }
+      ],
+      "outputs": [
+        {
+          "name": "VAE",
+          "type": "VAE",
+          "links": [
+            404,
+            411
+          ],
+          "slot_index": 0
+        }
+      ],
+      "properties": {
+        "showOutputText": true,
+        "horizontal": false
+      },
+      "color": "#432",
+      "bgcolor": "#653"
+    },
+    {
+      "id": 140,
+      "type": "Reroute",
+      "pos": [
+        1110,
+        230
+      ],
+      "size": [
+        82,
+        26
+      ],
+      "flags": {},
+      "order": 13,
+      "mode": 0,
+      "inputs": [
+        {
+          "name": "",
+          "type": "*",
+          "link": 414
+        }
+      ],
+      "outputs": [
+        {
+          "name": "IMAGE",
+          "type": "IMAGE",
+          "links": [],
+          "slot_index": 0
+        }
+      ],
+      "properties": {
+        "showOutputText": true,
+        "horizontal": false
+      }
+    },
+    {
+      "id": 128,
+      "type": "Reroute",
+      "pos": [
+        890,
+        350
+      ],
+      "size": [
+        82,
+        26
+      ],
+      "flags": {},
+      "order": 15,
+      "mode": 0,
+      "inputs": [
+        {
+          "name": "",
+          "type": "*",
+          "link": 417,
+          "pos": [
+            41,
+            0
+          ]
+        }
+      ],
+      "outputs": [
+        {
+          "name": "IMAGE",
+          "type": "IMAGE",
+          "links": [
+            381
+          ],
+          "slot_index": 0
+        }
+      ],
+      "properties": {
+        "showOutputText": true,
+        "horizontal": true
+      }
+    },
+    {
+      "id": 141,
+      "type": "Reroute",
+      "pos": [
+        1190,
+        250
+      ],
+      "size": [
+        82,
+        26
+      ],
+      "flags": {},
+      "order": 14,
+      "mode": 0,
+      "inputs": [
+        {
+          "name": "",
+          "type": "*",
+          "link": 418,
+          "pos": [
+            41,
+            0
+          ]
+        }
+      ],
+      "outputs": [
+        {
+          "name": "IMAGE",
+          "type": "IMAGE",
+          "links": [
+            417
+          ],
+          "slot_index": 0
+        }
+      ],
+      "properties": {
+        "showOutputText": true,
+        "horizontal": true
+      }
+    },
+    {
+      "id": 18,
+      "type": "VAEDecode",
+      "pos": [
+        920,
+        230
+      ],
+      "size": {
+        "0": 210,
+        "1": 46
+      },
+      "flags": {
+        "collapsed": true
+      },
+      "order": 10,
+      "mode": 0,
+      "inputs": [
+        {
+          "name": "samples",
+          "type": "LATENT",
+          "link": 399
+        },
+        {
+          "name": "vae",
+          "type": "VAE",
+          "link": 404
+        }
+      ],
+      "outputs": [
+        {
+          "name": "IMAGE",
+          "type": "IMAGE",
+          "links": [
+            413
+          ],
+          "shape": 3,
+          "slot_index": 0
+        }
+      ],
+      "properties": {
+        "Node name for S&R": "VAEDecode"
+      }
+    },
+    {
+      "id": 138,
+      "type": "VAEDecodeTiled",
+      "pos": [
+        920,
+        270
+      ],
+      "size": {
+        "0": 210,
+        "1": 46
+      },
+      "flags": {
+        "collapsed": true
+      },
+      "order": 11,
+      "mode": 0,
+      "inputs": [
+        {
+          "name": "samples",
+          "type": "LATENT",
+          "link": 410
+        },
+        {
+          "name": "vae",
+          "type": "VAE",
+          "link": 411
+        }
+      ],
+      "outputs": [
+        {
+          "name": "IMAGE",
+          "type": "IMAGE",
+          "links": [
+            414
+          ],
+          "shape": 3,
+          "slot_index": 0
+        }
+      ],
+      "properties": {
+        "Node name for S&R": "VAEDecodeTiled"
+      }
     },
     {
       "id": 134,
@@ -663,7 +781,8 @@
           "name": "LATENT",
           "type": "LATENT",
           "links": [
-            399
+            399,
+            410
           ],
           "shape": 3,
           "slot_index": 0
@@ -692,9 +811,46 @@
         0.65,
         30,
         0.65,
+        "disable",
         0,
         "randomize"
       ]
+    },
+    {
+      "id": 139,
+      "type": "Reroute",
+      "pos": [
+        1110,
+        200
+      ],
+      "size": [
+        82,
+        26
+      ],
+      "flags": {},
+      "order": 12,
+      "mode": 0,
+      "inputs": [
+        {
+          "name": "",
+          "type": "*",
+          "link": 413
+        }
+      ],
+      "outputs": [
+        {
+          "name": "IMAGE",
+          "type": "IMAGE",
+          "links": [
+            418
+          ],
+          "slot_index": 0
+        }
+      ],
+      "properties": {
+        "showOutputText": true,
+        "horizontal": false
+      }
     }
   ],
   "links": [
@@ -835,10 +991,50 @@
       "*"
     ],
     [
-      407,
+      410,
+      134,
+      0,
+      138,
+      0,
+      "LATENT"
+    ],
+    [
+      411,
+      135,
+      0,
+      138,
+      1,
+      "VAE"
+    ],
+    [
+      413,
       18,
       0,
+      139,
+      0,
+      "*"
+    ],
+    [
+      414,
+      138,
+      0,
+      140,
+      0,
+      "*"
+    ],
+    [
+      417,
+      141,
+      0,
       128,
+      0,
+      "*"
+    ],
+    [
+      418,
+      139,
+      0,
+      141,
       0,
       "*"
     ]
