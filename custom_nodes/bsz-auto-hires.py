@@ -130,7 +130,7 @@ class BSZAutoHiresCombined:
                     "max": 4096,
                     "step": 8
                 }),
-                "use_aspect_scale_instead": (["enable", "disable"],),
+                "use_aspect_scale": (["enable", "disable"],),
                 "desired_aspect_x": ("FLOAT", {
                     "default": 3.0,
                     "min": 0.1,
@@ -157,8 +157,8 @@ class BSZAutoHiresCombined:
     FUNCTION = "hiresify"
     CATEGORY = "utils"
 
-    def hiresify(self, base_model_res: int, desired_width: int, desired_height: int, use_aspect_scale_instead: str, desired_aspect_x: float, desired_aspect_y: float, scale: float) -> (int, int, int, int):
-        if use_aspect_scale_instead == "enable":
+    def hiresify(self, base_model_res: int, desired_width: int, desired_height: int, use_aspect_scale: str, desired_aspect_x: float, desired_aspect_y: float, scale: float) -> (int, int, int, int):
+        if use_aspect_scale == "enable":
             return BSZAutoHiresAspect.hiresify(self, base_model_res, desired_aspect_x, desired_aspect_y, scale)
         else:
             return BSZAutoHires.hiresify(self, base_model_res, desired_width, desired_height)

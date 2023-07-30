@@ -30,39 +30,38 @@ These nodes are designed to automatically calculate the appropriate latent sizes
 #### BSZAutoHiresCombined:
 A unique node that functions both as BSZAutoHires and BSZAutoHiresAspect with a convenient toggle
   - Input
-    - `use_aspect_scale_instead` : Use aspect & scale inputs instead of desired width/height inputs
+    - `use_aspect_scale` : Use aspect & scale inputs instead of desired width/height inputs
 
 ### bsz-principled-sdxl.py
 All-in-one solution for SDXL text2img, img2img and scaling/hi res fix. Essentially the sdxl and sdxl-upscale workflows both in one node. Do note that while this node shouldn't be any slower than the regular workflow, due to ComfyUI caching latent results **per-node**, even changing just a refiner setting on this node will result in sampling starting over from the first base pass. There are at least some minimal internal optimizations to skip passes that aren't needed.
 
-Scaling works by running an initial pass before scaling to `target` size and running another
+Scaling works by running initial scaling passes before running the final pass at `target` size
 
 Input fields
   - `base_model` : Model from base checkpoint
   - `base_clip` : CLIP from base checkpoint
-  - `refiner_model` : Model from refiner checkpoint
-  - `refiner_clip` : CLIP from refiner checkpoint
-  - `latent_image` : Latent image to start from. Optional, useful mostly for img2img
-  - `pixel_scale_vae` : VAE used for pixel scaling methods. Only needed if they're being used
+  - `latent_image` : Latent image to start from
+  - `refiner_model` : Model from refiner checkpoint. Optional
+  - `refiner_clip` : CLIP from refiner checkpoint. Optional
+  - `pixel_scale_vae` : VAE used for pixel scaling methods. Optional, only needed if they're being used
   - `positive_prompt_G` : Positive prompt for base CLIP G and refiner
-  - `positive_prompt_L` : Positive prompt for base CLIP L. Typically viewed as "supporting terms" for the main G prompt. Setting both L and G to the same value is completely valid
+  - `positive_prompt_L` : Positive prompt for base CLIP L. Usually either set to the same as CLIP G but sometimes is used for supporting terms
   - `negative_prompt` : Negative prompt
-  - `steps` : Total steps
-  - `denoise` : Denoise amount for img 2 img
+  - `steps` : Steps for final pass
+  - `denoise` : Denoise amount for latent input
   - `cfg` : CFG scale
-  - `refiner_amount` : Refiner to base ratio
+  - `refiner_amount` : Refiner to base ratio. Requires refiner model and refiner clip to function
   - `refiner_ascore_positive` : Refiner aesthetic score for positive prompt
   - `refiner_ascore_negative` : Refiner aesthetic score for negative prompt
-  - `width` : CLIP input width in pixels. If no `latent_image` is provided, will generate one with this size
-  - `height` : CLIP input height in pixels. If no `latent_image` is provided, will generate one with this size
   - `target_width` : CLIP target width in pixels. If `scale_method` is enabled, image will be resized to this
   - `target_height` : CLIP target height in pixels. If `scale_method` is enabled, image will be resized to this
   - `sampler` : Sampler
   - `scheduler` : Scheduler
   - `scale_method` : If set, will scale image to match target sizes using the provided algorithm
-  - `scale_denoise` : Amount to denoise after scale
-  - `scale_initial_steps` : Total target steps for pre-scale pass
-  - `scale_initial_cutoff` : End the initial pre-scale pass early to save time. Only useful for latent scaling, pixel scaling should be 1.0
+  - `scale_denoise` : Denoise amount for scaled passes
+  - `scale_steps` : Steps for non-final scaling passes
+  - `scale_iterations` : Amount of scaling passes to run. Experimental and very expensive
+  - `vae_tile` : Whether to used tiled vae during pixel scaling
   - `seed` : Seedy.
 
 Recommended settings for various workflows...
@@ -73,10 +72,10 @@ Recommended settings for various workflows...
   - Text2Image w/pixel upscale:
     - `scale_method` : `pixel bicubic`
     - `scale_denoise` : `0.15`
-    - `scale_initial_cutoff` : `1.0`
+    - `vae_tile` : `encode` if scaling to a very large resolution
   - Img2Img w/upscale:
     - Same as text2img upscaling
-    - `scale_initial_steps` : `0`
+    - `scale_steps` : `0`
 
 ## Workflows
 

@@ -6,19 +6,25 @@ DEBUG=False
 METHODS_LATENT = { f"latent {x}": x for x in nodes.LatentUpscale.upscale_methods }
 METHODS_PIXEL = { f"pixel {x}": x for x in nodes.ImageScale.upscale_methods }
 
+def roundint(n: int, step: int) -> int:
+    if n % step >= step/2:
+        return int(n + step - (n % step))
+    else:
+        return int(n - (n % step))
+
 class BSZPrincipledSDXL:
     @classmethod
     def INPUT_TYPES(s):
         return {
             "optional": {
-                "latent_image": ("LATENT",),
+                "refiner_model": ("MODEL",),
+                "refiner_clip": ("CLIP",),
                 "pixel_scale_vae": ("VAE",),
             },
             "required": {
                 "base_model": ("MODEL",),
                 "base_clip": ("CLIP",),
-                "refiner_model": ("MODEL",),
-                "refiner_clip": ("CLIP",),
+                "latent_image": ("LATENT",),
                 "positive_prompt_G": ("STRING", {
                     "multiline": True,
                     "default": "photograph of a kitten"
@@ -37,16 +43,14 @@ class BSZPrincipledSDXL:
                 "refiner_amount": ("FLOAT", {"default": 0.15, "min": 0.0, "max": 1.0, "step": 0.01}),
                 "refiner_ascore_positive": ("FLOAT", {"default": 8.0, "min": 0.0, "max": 1000.0, "step": 0.01}),
                 "refiner_ascore_negative": ("FLOAT", {"default": 2.0, "min": 0.0, "max": 1000.0, "step": 0.01}),
-                "width": ("INT", {"default": 1024, "min": 64, "max": nodes.MAX_RESOLUTION, "step": 8}),
-                "height": ("INT", {"default": 1024, "min": 64, "max": nodes.MAX_RESOLUTION, "step": 8}),
                 "target_width": ("INT", {"default": 1024, "min": 64, "max": nodes.MAX_RESOLUTION, "step": 8}),
                 "target_height": ("INT", {"default": 1024, "min": 64, "max": nodes.MAX_RESOLUTION, "step": 8}),
                 "sampler": (samplers.KSampler.SAMPLERS,),
                 "scheduler": (samplers.KSampler.SCHEDULERS,),
                 "scale_method": (["disable"] + list(METHODS_LATENT.keys()) + list(METHODS_PIXEL.keys()),),
                 "scale_denoise": ("FLOAT", {"default": 0.65, "min": 0.0, "max": 1.0, "step": 0.01}),
-                "scale_initial_steps": ("INT", {"default": 30, "min": 0, "max": 10000}),
-                "scale_initial_cutoff": ("FLOAT", {"default": 0.65, "min": 0.0, "max": 1.0, "step": 0.01}),
+                "scale_steps": ("INT", {"default": 30, "min": 0, "max": 10000}),
+                "scale_iterations": ("INT", {"default": 1, "min": 1, "max": 9}),
                 "vae_tile": (["disable", "encode", "decode", "enable"],),
                 "seed": ("INT", {"default": 0, "min": 0, "max": 0xffffffffffffffff}),
             },
@@ -65,8 +69,7 @@ class BSZPrincipledSDXL:
         self,
         base_model,
         base_clip,
-        refiner_model,
-        refiner_clip,
+        latent_image,
         positive_prompt_G: str,
         positive_prompt_L: str,
         negative_prompt: str,
@@ -76,26 +79,32 @@ class BSZPrincipledSDXL:
         refiner_amount: float,
         refiner_ascore_positive: float,
         refiner_ascore_negative: float,
-        width: int,
-        height: int,
         target_width: int,
         target_height: int,
         sampler,
         scheduler,
         scale_method,
         scale_denoise: float,
-        scale_initial_steps: int,
-        scale_initial_cutoff: float,
+        scale_steps: int,
+        scale_iterations: int,
         vae_tile: str,
         seed: int,
-        latent_image=None,
+        refiner_model=None,
+        refiner_clip=None,
         pixel_scale_vae=None,
     ):
     #{{{
-        # Make latent if none provided
-        if latent_image is None:
-            if DEBUG: print(f"Creating latent image sized {width}x{height}")
-            latent_image = nodes.EmptyLatentImage.generate(None, width, height)[0]
+        height, width = latent_image["samples"].size()[2:4]
+        height *= 8
+        width *= 8
+
+        # disable refiner if not provided
+        if refiner_model is None and refiner_clip is None:
+            refiner_amount = 0
+        elif refiner_model is not None and refiner_clip is not None:
+            pass
+        else:
+            raise Exception("You must provide both refiner model and refiner clip to use the refiner")
 
         # put conditioning in lambdas so they lazy-load
         # {{{
@@ -142,7 +151,7 @@ class BSZPrincipledSDXL:
         # }}}
 
         # internal fn for scope access. Returns latent
-        def maybe_refine(latent_image, cutoff=1.0):
+        def maybe_refine(latent_image):
         # {{{
             if DEBUG: print(f"""
     Running maybe_refine() with vars
@@ -151,24 +160,21 @@ class BSZPrincipledSDXL:
         target_width: {target_width}
         target_height: {target_height}
         denoise: {denoise}
-        cutoff: {cutoff}
         """)
             # steps skipped by img2img are effectively base steps as far
             # as the refiner is concerned
             adjusted_refiner_amount = min(1, refiner_amount / max(denoise, 0.00001))
-            # base refiner split applied after cutoff so refiner is entirely cut
-            cut_steps = round(steps * cutoff)
             base_start = round(steps - steps * denoise)
-            base_end = min(round((steps - base_start) * ( 1 - adjusted_refiner_amount) + base_start), cut_steps)
+            base_end = round((steps - base_start) * ( 1 - adjusted_refiner_amount) + base_start)
 
             base_run = False
 
             if base_start < base_end:
-                if DEBUG: print(f"Running Base - total: {cut_steps} start: {base_start} end: {base_end}")
+                if DEBUG: print(f"Running Base - total: {steps} start: {base_start} end: {base_end}")
                 latent_image = nodes.common_ksampler(
                     base_model,
                     seed,
-                    cut_steps,
+                    steps,
                     cfg,
                     sampler,
                     scheduler,
@@ -176,17 +182,17 @@ class BSZPrincipledSDXL:
                     base_neg_cond(),
                     latent_image,
                     start_step=base_start,
-                    last_step=None if base_end == cut_steps else base_end,
-                    force_full_denoise=False if base_end < cut_steps else True,
+                    last_step=None if base_end == steps else base_end,
+                    force_full_denoise=False if base_end < steps else True,
                 )[0]
                 base_run = True
 
-            if base_end < cut_steps:
-                if DEBUG: print(f"Running Refiner - total: {cut_steps} start: {base_end}")
+            if base_end < steps:
+                if DEBUG: print(f"Running Refiner - total: {steps} start: {base_end}")
                 latent_image = nodes.common_ksampler(
                     refiner_model,
                     seed,
-                    cut_steps,
+                    steps,
                     cfg,
                     sampler,
                     scheduler,
@@ -206,27 +212,36 @@ class BSZPrincipledSDXL:
         # High Res Fix. Can technically do low res too I guess, so it's "scale" not "upscale"
         if scale_method != "disable" and (width != target_width or height != target_height or latent_w * 8 != width or latent_h * 8 != height):
             if DEBUG: print(f"Running initial low-res pass")
-            assert scale_method in METHODS_LATENT or pixel_scale_vae is not None
+            if scale_method not in METHODS_LATENT and pixel_scale_vae is None:
+                raise Exception(f'To use scale method "{scale_method}" you must provide a VAE')
 
-            post_steps, steps = steps, scale_initial_steps
+            post_steps, steps = steps, scale_steps
 
-            latent_image = maybe_refine(latent_image, cutoff=scale_initial_cutoff)
+            wfactor = (target_height / height) ** (1/scale_iterations)
+            hfactor = (target_width / width) ** (1/scale_iterations)
+            og_width, og_height = width, height
 
-            if DEBUG: print(f"Upscaling with method {scale_method}")
-            if scale_method in METHODS_LATENT:
-                latent_image = nodes.LatentUpscale.upscale(None, latent_image, METHODS_LATENT[scale_method], target_width, target_height, "disabled")[0]
-            else:
-                decoder = nodes.VAEDecodeTiled() if vae_tile == "enable" or vae_tile == "decode" else nodes.VAEDecode()
-                pixels = decoder.decode(pixel_scale_vae, latent_image)[0]
-                del decoder
-                pixels = nodes.ImageScale.upscale(None, pixels, METHODS_PIXEL[scale_method], target_width, target_height, "disabled")[0]
-                encoder = nodes.VAEEncodeTiled() if vae_tile == "enable" or vae_tile == "encode" else nodes.VAEEncode()
-                latent_image = encoder.encode(pixel_scale_vae, pixels)[0]
-                del pixels, encoder
+            for i in range(scale_iterations):
+                target_width, target_height = roundint(og_width * wfactor ** (i + 1), 8), roundint(og_height * hfactor ** (i + 1), 8)
 
-            width, height = target_width, target_height
+                latent_image = maybe_refine(latent_image)
+
+                if DEBUG: print(f"Upscaling with method {scale_method}")
+                if scale_method in METHODS_LATENT:
+                    latent_image = nodes.LatentUpscale.upscale(None, latent_image, METHODS_LATENT[scale_method], target_width, target_height, "disabled")[0]
+                else:
+                    decoder = nodes.VAEDecodeTiled() if vae_tile == "enable" or vae_tile == "decode" else nodes.VAEDecode()
+                    pixels = decoder.decode(pixel_scale_vae, latent_image)[0]
+                    del decoder
+                    pixels = nodes.ImageScale.upscale(None, pixels, METHODS_PIXEL[scale_method], target_width, target_height, "disabled")[0]
+                    encoder = nodes.VAEEncodeTiled() if vae_tile == "enable" or vae_tile == "encode" else nodes.VAEEncode()
+                    latent_image = encoder.encode(pixel_scale_vae, pixels)[0]
+                    del pixels, encoder
+
+                denoise = scale_denoise
+                width, height = target_width, target_height
+
             steps = post_steps
-            denoise = scale_denoise
 
         if DEBUG: print(f"Running main pass")
         latent_image = maybe_refine(latent_image)
