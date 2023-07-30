@@ -1471,7 +1471,7 @@
     },
     {
       "id": 121,
-      "type": "BSZAutoHiresCombined",
+      "type": "BSZCombinedHires",
       "pos": [
         20,
         40
@@ -1532,7 +1532,7 @@
         }
       ],
       "properties": {
-        "Node name for S&R": "BSZAutoHiresCombined"
+        "Node name for S&R": "BSZCombinedHires"
       },
       "widgets_values": [
         1024,

@@ -4,7 +4,7 @@ def roundint(n: int, step: int) -> int:
     else:
         return n - (n % step)
 
-class BSZAutoHires:
+class BSZAbsoluteHires:
     # {{{
     @classmethod
     def INPUT_TYPES(s):
@@ -52,7 +52,7 @@ class BSZAutoHires:
 # }}}
 
 
-class BSZAutoHiresAspect:
+class BSZAspectHires:
     # {{{
     @classmethod
     def INPUT_TYPES(s):
@@ -106,7 +106,7 @@ class BSZAutoHiresAspect:
 # }}}
 
 
-class BSZAutoHiresCombined:
+class BSZCombinedHires:
     # {{{
     @classmethod
     def INPUT_TYPES(s):
@@ -166,13 +166,13 @@ class BSZAutoHiresCombined:
 
 
 NODE_CLASS_MAPPINGS = {
-    "BSZAutoHires": BSZAutoHires,
-    "BSZAutoHiresAspect": BSZAutoHiresAspect,
-    "BSZAutoHiresCombined": BSZAutoHiresCombined,
+    "BSZAbsoluteHires": BSZAbsoluteHires,
+    "BSZAspectHires": BSZAspectHires,
+    "BSZCombinedHires": BSZCombinedHires,
 }
 
 NODE_DISPLAY_NAME_MAPPINGS = {
-    "BSZAutoHires": "BSZ Automatic Hi Res (Absolute)",
-    "BSZAutoHiresAspect": "BSZ Automatic Hi Res (Aspect Scale)",
-    "BSZAutoHiresCombined": "BSZ Automatic Hi Res (Combined)",
+    "BSZAbsoluteHires": "BSZ Absolute Hi Res",
+    "BSZAspectHires": "BSZ Aspect Hi Res",
+    "BSZCombinedHires": "BSZ Combined Hi Res",
 }

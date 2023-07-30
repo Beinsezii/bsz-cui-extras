@@ -16,19 +16,19 @@ These nodes are designed to automatically calculate the appropriate latent sizes
     - `Hi Res Width` : Width intended to be used for final/high res pass
     - `Hi Res Height` : Height intended to be used for final/high res pass
 
-#### BSZAutoHires:
+#### BSZAbsoluteHires:
   - Input
     - `desired_width` : Width in pixels for final/high res pass.
     - `desired_height` : Height in pixels for final/high res pass.
 
-#### BSZAutoHiresAspect:
+#### BSZAspectHires:
   - Input
     - `desired_aspect_x` : Horizontal aspect.
     - `desired_aspect_Y` : Vertical aspect.
     - `scale` : Hi Res horizontal and vertical scale over Lo Res sizes. Note that because this scales both axes, a scale of `2.0` will actually quadruple the amount of pixels in an image, so use with care.
 
-#### BSZAutoHiresCombined:
-A unique node that functions both as BSZAutoHires and BSZAutoHiresAspect with a convenient toggle
+#### BSZCombinedHires:
+A unique node that functions both as BSZAbsoluteHires and BSZAspectHires with a convenient toggle
   - Input
     - `use_aspect_scale` : Use aspect & scale inputs instead of desired width/height inputs
 

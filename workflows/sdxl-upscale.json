@@ -1031,7 +1031,7 @@
         "Node name for S&R": "LatentUpscale"
       },
       "widgets_values": [
-        "bilinear",
+        "bicubic",
         1536,
         1536,
         "disabled"
@@ -1432,7 +1432,7 @@
     },
     {
       "id": 118,
-      "type": "BSZAutoHiresCombined",
+      "type": "BSZCombinedHires",
       "pos": [
         -110,
         -50
@@ -1503,7 +1503,7 @@
         }
       ],
       "properties": {
-        "Node name for S&R": "BSZAutoHiresCombined"
+        "Node name for S&R": "BSZCombinedHires"
       },
       "widgets_values": [
         1024,

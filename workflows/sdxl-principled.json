@@ -6,7 +6,7 @@
       "id": 19,
       "type": "SaveImage",
       "pos": [
-        910,
+        890,
         450
       ],
       "size": {
@@ -35,7 +35,7 @@
       "id": 136,
       "type": "Reroute",
       "pos": [
-        570,
+        550,
         150
       ],
       "size": [
@@ -43,7 +43,7 @@
         26
       ],
       "flags": {},
-      "order": 7,
+      "order": 10,
       "mode": 0,
       "inputs": [
         {
@@ -73,7 +73,7 @@
       "id": 135,
       "type": "Reroute",
       "pos": [
-        820,
+        800,
         150
       ],
       "size": [
@@ -81,7 +81,7 @@
         26
       ],
       "flags": {},
-      "order": 11,
+      "order": 14,
       "mode": 0,
       "inputs": [
         {
@@ -112,7 +112,7 @@
       "id": 128,
       "type": "Reroute",
       "pos": [
-        900,
+        880,
         300
       ],
       "size": [
@@ -152,7 +152,7 @@
       "id": 18,
       "type": "VAEDecode",
       "pos": [
-        930,
+        910,
         180
       ],
       "size": {
@@ -195,7 +195,7 @@
       "id": 138,
       "type": "VAEDecodeTiled",
       "pos": [
-        930,
+        910,
         220
       ],
       "size": {
@@ -238,7 +238,7 @@
       "id": 143,
       "type": "BSZPrincipledSDXL",
       "pos": [
-        570,
+        550,
         210
       ],
       "size": {
@@ -402,7 +402,7 @@
       "id": 125,
       "type": "Note",
       "pos": [
-        1020,
+        1000,
         320
       ],
       "size": {
@@ -425,7 +425,7 @@
       "id": 140,
       "type": "Reroute",
       "pos": [
-        1110,
+        1090,
         190
       ],
       "size": [
@@ -459,7 +459,7 @@
       "id": 139,
       "type": "Reroute",
       "pos": [
-        1110,
+        1090,
         150
       ],
       "size": [
@@ -495,7 +495,7 @@
       "id": 141,
       "type": "Reroute",
       "pos": [
-        1190,
+        1170,
         220
       ],
       "size": [
@@ -535,7 +535,7 @@
       "id": 11,
       "type": "CheckpointLoaderSimple",
       "pos": [
-        140,
+        120,
         1050
       ],
       "size": {
@@ -588,7 +588,7 @@
       "id": 4,
       "type": "CheckpointLoaderSimple",
       "pos": [
-        140,
+        120,
         920
       ],
       "size": {
@@ -636,7 +636,7 @@
       "id": 132,
       "type": "PrimitiveNode",
       "pos": [
-        140,
+        120,
         740
       ],
       "size": {
@@ -678,7 +678,7 @@
       "id": 131,
       "type": "PrimitiveNode",
       "pos": [
-        140,
+        120,
         560
       ],
       "size": {
@@ -718,18 +718,197 @@
       "bgcolor": "#353"
     },
     {
-      "id": 121,
-      "type": "BSZAutoHiresCombined",
+      "id": 147,
+      "type": "Reroute",
       "pos": [
-        20,
+        270,
+        500
+      ],
+      "size": [
+        75,
+        26
+      ],
+      "flags": {},
+      "order": 9,
+      "mode": 0,
+      "inputs": [
+        {
+          "name": "",
+          "type": "*",
+          "link": 435
+        }
+      ],
+      "outputs": [
+        {
+          "name": "INT",
+          "type": "INT",
+          "links": [
+            436
+          ],
+          "slot_index": 0
+        }
+      ],
+      "properties": {
+        "showOutputText": true,
+        "horizontal": false
+      }
+    },
+    {
+      "id": 146,
+      "type": "Reroute",
+      "pos": [
+        280,
+        470
+      ],
+      "size": [
+        75,
+        26
+      ],
+      "flags": {},
+      "order": 8,
+      "mode": 0,
+      "inputs": [
+        {
+          "name": "",
+          "type": "*",
+          "link": 438
+        }
+      ],
+      "outputs": [
+        {
+          "name": "INT",
+          "type": "INT",
+          "links": [
+            444
+          ],
+          "slot_index": 0
+        }
+      ],
+      "properties": {
+        "showOutputText": true,
+        "horizontal": false
+      }
+    },
+    {
+      "id": 148,
+      "type": "Reroute",
+      "pos": [
+        390,
+        500
+      ],
+      "size": [
+        75,
+        26
+      ],
+      "flags": {},
+      "order": 13,
+      "mode": 0,
+      "inputs": [
+        {
+          "name": "",
+          "type": "*",
+          "link": 436
+        }
+      ],
+      "outputs": [
+        {
+          "name": "INT",
+          "type": "INT",
+          "links": [
+            437
+          ],
+          "slot_index": 0
+        }
+      ],
+      "properties": {
+        "showOutputText": true,
+        "horizontal": false
+      }
+    },
+    {
+      "id": 149,
+      "type": "Reroute",
+      "pos": [
+        400,
+        470
+      ],
+      "size": [
+        75,
+        26
+      ],
+      "flags": {},
+      "order": 12,
+      "mode": 0,
+      "inputs": [
+        {
+          "name": "",
+          "type": "*",
+          "link": 444
+        }
+      ],
+      "outputs": [
+        {
+          "name": "INT",
+          "type": "INT",
+          "links": [
+            441
+          ],
+          "slot_index": 0
+        }
+      ],
+      "properties": {
+        "showOutputText": true,
+        "horizontal": false
+      }
+    },
+    {
+      "id": 24,
+      "type": "VAELoader",
+      "pos": [
+        120,
+        180
+      ],
+      "size": {
+        "0": 360,
+        "1": 60
+      },
+      "flags": {},
+      "order": 6,
+      "mode": 0,
+      "outputs": [
+        {
+          "name": "VAE",
+          "type": "VAE",
+          "links": [
+            405,
+            432
+          ],
+          "shape": 3,
+          "slot_index": 0
+        }
+      ],
+      "properties": {
+        "Node name for S&R": "VAELoader"
+      },
+      "widgets_values": [
+        "sdxl-vae.safetensors"
+      ],
+      "color": "#432",
+      "bgcolor": "#653"
+    },
+    {
+      "id": 121,
+      "type": "BSZCombinedHires",
+      "pos": [
+        30,
         270
       ],
       "size": [
-        260,
+        220,
         260
       ],
       "flags": {},
-      "order": 6,
+      "order": 5,
       "mode": 0,
       "outputs": [
         {
@@ -770,7 +949,7 @@
         }
       ],
       "properties": {
-        "Node name for S&R": "BSZAutoHiresCombined"
+        "Node name for S&R": "BSZCombinedHires"
       },
       "widgets_values": [
         1024,
@@ -783,162 +962,18 @@
       ]
     },
     {
-      "id": 147,
-      "type": "Reroute",
-      "pos": [
-        290,
-        500
-      ],
-      "size": [
-        75,
-        26
-      ],
-      "flags": {},
-      "order": 10,
-      "mode": 0,
-      "inputs": [
-        {
-          "name": "",
-          "type": "*",
-          "link": 435
-        }
-      ],
-      "outputs": [
-        {
-          "name": "INT",
-          "type": "INT",
-          "links": [
-            436
-          ],
-          "slot_index": 0
-        }
-      ],
-      "properties": {
-        "showOutputText": true,
-        "horizontal": false
-      }
-    },
-    {
-      "id": 146,
-      "type": "Reroute",
-      "pos": [
-        300,
-        470
-      ],
-      "size": [
-        75,
-        26
-      ],
-      "flags": {},
-      "order": 9,
-      "mode": 0,
-      "inputs": [
-        {
-          "name": "",
-          "type": "*",
-          "link": 438
-        }
-      ],
-      "outputs": [
-        {
-          "name": "INT",
-          "type": "INT",
-          "links": [
-            444
-          ],
-          "slot_index": 0
-        }
-      ],
-      "properties": {
-        "showOutputText": true,
-        "horizontal": false
-      }
-    },
-    {
-      "id": 148,
-      "type": "Reroute",
-      "pos": [
-        410,
-        500
-      ],
-      "size": [
-        75,
-        26
-      ],
-      "flags": {},
-      "order": 14,
-      "mode": 0,
-      "inputs": [
-        {
-          "name": "",
-          "type": "*",
-          "link": 436
-        }
-      ],
-      "outputs": [
-        {
-          "name": "INT",
-          "type": "INT",
-          "links": [
-            437
-          ],
-          "slot_index": 0
-        }
-      ],
-      "properties": {
-        "showOutputText": true,
-        "horizontal": false
-      }
-    },
-    {
-      "id": 149,
-      "type": "Reroute",
-      "pos": [
-        420,
-        470
-      ],
-      "size": [
-        75,
-        26
-      ],
-      "flags": {},
-      "order": 13,
-      "mode": 0,
-      "inputs": [
-        {
-          "name": "",
-          "type": "*",
-          "link": 444
-        }
-      ],
-      "outputs": [
-        {
-          "name": "INT",
-          "type": "INT",
-          "links": [
-            441
-          ],
-          "slot_index": 0
-        }
-      ],
-      "properties": {
-        "showOutputText": true,
-        "horizontal": false
-      }
-    },
-    {
       "id": 145,
       "type": "LatentFromBatch",
       "pos": [
-        290,
+        270,
         390
       ],
-      "size": [
-        210,
-        80
-      ],
+      "size": {
+        "0": 210,
+        "1": 82
+      },
       "flags": {},
-      "order": 12,
+      "order": 11,
       "mode": 0,
       "inputs": [
         {
@@ -970,7 +1005,7 @@
       "id": 144,
       "type": "EmptyLatentImage",
       "pos": [
-        290,
+        270,
         270
       ],
       "size": [
@@ -978,7 +1013,7 @@
         80
       ],
       "flags": {},
-      "order": 8,
+      "order": 7,
       "mode": 0,
       "inputs": [
         {
@@ -1038,41 +1073,6 @@
       ],
       "color": "#323",
       "bgcolor": "#535"
-    },
-    {
-      "id": 24,
-      "type": "VAELoader",
-      "pos": [
-        140,
-        180
-      ],
-      "size": {
-        "0": 360,
-        "1": 60
-      },
-      "flags": {},
-      "order": 5,
-      "mode": 0,
-      "outputs": [
-        {
-          "name": "VAE",
-          "type": "VAE",
-          "links": [
-            405,
-            432
-          ],
-          "shape": 3,
-          "slot_index": 0
-        }
-      ],
-      "properties": {
-        "Node name for S&R": "VAELoader"
-      },
-      "widgets_values": [
-        "sdxl-vae.safetensors"
-      ],
-      "color": "#432",
-      "bgcolor": "#653"
     }
   ],
   "links": [
