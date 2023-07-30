@@ -159,9 +159,9 @@ class BSZCombinedHires:
 
     def hiresify(self, base_model_res: int, desired_width: int, desired_height: int, use_aspect_scale: str, desired_aspect_x: float, desired_aspect_y: float, scale: float) -> (int, int, int, int):
         if use_aspect_scale == "enable":
-            return BSZAutoHiresAspect.hiresify(self, base_model_res, desired_aspect_x, desired_aspect_y, scale)
+            return BSZAspectHires.hiresify(self, base_model_res, desired_aspect_x, desired_aspect_y, scale)
         else:
-            return BSZAutoHires.hiresify(self, base_model_res, desired_width, desired_height)
+            return BSZAbsoluteHires.hiresify(self, base_model_res, desired_width, desired_height)
 # }}}
 
 
