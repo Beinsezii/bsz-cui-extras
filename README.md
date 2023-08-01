@@ -77,6 +77,12 @@ Recommended settings for various workflows...
     - Same as text2img upscaling
     - `scale_steps` : `0`
 
+### bsz-pixelbuster.py
+Node that loads the [Pixelbuster library](https://github.com/Beinsezii/pixelbuster). Requires either 'pixelbuster.dll' or 'libpixelbuster.so' to be placed in your `custom_nodes` folder alongside `bsz-pixelbuster.py`
+Input fields
+  - `image` : Image[s] to work on
+  - `code` : Pixelbuster code. See [the help](https://github.com/Beinsezii/pixelbuster/blob/master/src/lib.rs#L10) for reference
+
 ## Workflows
 
 ### sdxl.json
