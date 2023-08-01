@@ -3,8 +3,6 @@
 import sys
 import os.path
 
-# sys.path.append(os.path.dirname(os.path.realpath(__file__)) + '/../')
-
 import ctypes
 import numpy
 from sys import platform
@@ -68,6 +66,8 @@ class BSZPixelbuster:
     CATEGORY = "image/postprocessing"
 
     def pixelbuster(self, image, code: str):
+        if len(code.strip()) == 0:
+            return (image,)
         image = image.cpu().clone() # needs to clone or else the comfyui cache gets polluted
         batch_size, height, width, channels = image.shape
         for i in image:
