@@ -130,7 +130,7 @@ class BSZCombinedHires:
                     "max": 4096,
                     "step": 8
                 }),
-                "use_aspect_scale": ("TOGGLE", {
+                "use_aspect_scale": ("BOOLEAN", {
                     "default": True
                 }),
                 "desired_aspect_x": ("FLOAT", {
