@@ -326,11 +326,11 @@
           }
         },
         {
-          "name": "target_width",
+          "name": "scale_target_width",
           "type": "INT",
           "link": 441,
           "widget": {
-            "name": "target_width",
+            "name": "scale_target_width",
             "config": [
               "INT",
               {
@@ -343,11 +343,11 @@
           }
         },
         {
-          "name": "target_height",
+          "name": "scale_target_height",
           "type": "INT",
           "link": 437,
           "widget": {
-            "name": "target_height",
+            "name": "scale_target_height",
             "config": [
               "INT",
               {
@@ -385,11 +385,11 @@
         0.15,
         8,
         2,
-        1024,
-        1024,
         "euler",
         "normal",
         "disable",
+        1536,
+        1536,
         0.65,
         30,
         1,

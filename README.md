@@ -47,19 +47,19 @@ Input fields
   - `positive_prompt_G` : Positive prompt for base CLIP G and refiner
   - `positive_prompt_L` : Positive prompt for base CLIP L. Usually either set to the same as CLIP G but sometimes is used for supporting terms
   - `negative_prompt` : Negative prompt
-  - `steps` : Steps for final pass
+  - `steps` : Steps for non-scaled pass
   - `denoise` : Denoise amount for latent input
   - `cfg` : CFG scale
   - `refiner_amount` : Refiner to base ratio. Requires refiner model and refiner clip to function
   - `refiner_ascore_positive` : Refiner aesthetic score for positive prompt
   - `refiner_ascore_negative` : Refiner aesthetic score for negative prompt
-  - `target_width` : CLIP target width in pixels. If `scale_method` is enabled, image will be resized to this
-  - `target_height` : CLIP target height in pixels. If `scale_method` is enabled, image will be resized to this
   - `sampler` : Sampler
   - `scheduler` : Scheduler
   - `scale_method` : If set, will scale image to match target sizes using the provided algorithm
+  - `scale_target_width` : If `scale_method` is enabled, image will be resized to this
+  - `scale_target_height` : If `scale_method` is enabled, image will be resized to this
   - `scale_denoise` : Denoise amount for scaled passes
-  - `scale_steps` : Steps for non-final scaling passes
+  - `scale_steps` : Steps for scaled passes
   - `scale_iterations` : Amount of scaling passes to run. Experimental and very expensive
   - `vae_tile` : Whether to used tiled vae during pixel scaling
   - `seed` : Seedy.
@@ -75,7 +75,7 @@ Recommended settings for various workflows...
     - `vae_tile` : `encode` if scaling to a very large resolution
   - Img2Img w/upscale:
     - Same as text2img upscaling
-    - `scale_steps` : `0`
+    - `steps` : `0`
 
 ### bsz-pixelbuster.py
 Node that loads the [Pixelbuster library](https://github.com/Beinsezii/pixelbuster). Requires either `pixelbuster.dll` (windows) or `libpixelbuster.so` (linux) to be placed in your `custom_nodes` folder alongside `bsz-pixelbuster.py`
