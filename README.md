@@ -2,6 +2,11 @@
 Addons for [ComfyUI](https://github.com/comfyanonymous/ComfyUI)
 
 ## Custom Nodes
+To install all the nodes, simply put the entire `bsz-nodes` folder inside your `custom_nodes` folder in ComfyUI
+
+To install specific nodes, you may put individual `.py` files from `bsz-nodes` directly into the ComfyUI `custom_nodes` folder.
+
+`__init__.py` simply forwards all nodes within its folder to ComfyUI, and is not necessary if you're putting nodes directly into `custom_nodes`
 
 ### bsz-auto-hires.py
 Contains 3 nodes each with a different means to the same end result.
