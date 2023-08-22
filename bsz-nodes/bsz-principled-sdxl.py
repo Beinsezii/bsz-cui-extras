@@ -40,7 +40,7 @@ class BSZPrincipledSDXL:
                 "steps": ("INT", {"default": 30, "min": 0, "max": 10000}),
                 "denoise": ("FLOAT", {"default": 1.0, "min": 0.0, "max": 1.0, "step": 0.01}),
                 "cfg": ("FLOAT", {"default": 8.0, "min": 0.0, "max": 100.0}),
-                "refiner_amount": ("FLOAT", {"default": 0.15, "min": 0.0, "max": 1.0, "step": 0.01}),
+                "refiner_amount": ("FLOAT", {"default": 0.2, "min": 0.0, "max": 1.0, "step": 0.01}),
                 "refiner_ascore_positive": ("FLOAT", {"default": 8.0, "min": 0.0, "max": 1000.0, "step": 0.01}),
                 "refiner_ascore_negative": ("FLOAT", {"default": 2.0, "min": 0.0, "max": 1000.0, "step": 0.01}),
                 "sampler": (samplers.KSampler.SAMPLERS,),
