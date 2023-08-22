@@ -2,29 +2,33 @@
 # -*- coding: utf-8 -*-
 import sys
 import os.path
-
 import ctypes
 import numpy
 from sys import platform
 
-LIBRARY = {"win32": "pixelbuster.dll", "linux": "libpixelbuster.so"}
-import os.path
+# Pretty sure MacOS is .so as well
+LIBRARY = "pixelbuster.dll" if platform == "win32" else "libpixelbuster.so"
 
-pb_lib = ctypes.CDLL(os.path.join(os.path.dirname(os.path.realpath(__file__)), LIBRARY.get(platform)))
+pb_lib = None
+try:
+    pb_lib = ctypes.CDLL(os.path.join(os.path.dirname(os.path.realpath(__file__)), LIBRARY))
+    pb_lib.pb_help_ffi.restype = ctypes.c_char_p
 
-pb_lib.pb_help_ffi.restype = ctypes.c_char_p
+    pb_lib.pixelbuster_ffi.argtypes = [
+        ctypes.c_char_p, ctypes.c_char_p, numpy.ctypeslib.ndpointer(ndim=1, flags=('W', 'C', 'A')), ctypes.c_uint,
+        ctypes.c_uint
+    ]
+except Exception as e:
+    print(f"\nbsz-cui-extras: Could not load pixelbuster library '{LIBRARY}' for platform '{platform}'")
+    print("bsz-cui-extras: Consider downloading the appropriate pixelbuster library for your platform from")
+    print("bsz-cui-extras: https://github.com/Beinsezii/pixelbuster")
+    raise e
+
 HELP = pb_lib.pb_help_ffi().decode('UTF-8')
-
-pb_lib.pixelbuster_ffi.argtypes = [
-    ctypes.c_char_p, ctypes.c_char_p, numpy.ctypeslib.ndpointer(ndim=1, flags=('W', 'C', 'A')), ctypes.c_uint,
-    ctypes.c_uint
-]
 
 import nodes
 import comfy_extras.nodes_clip_sdxl as nodes_xl
 import comfy.samplers as samplers
-
-DEBUG=False
 
 DEFAULT="""\
 LCH
