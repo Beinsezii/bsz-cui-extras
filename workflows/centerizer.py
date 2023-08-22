@@ -1,4 +1,14 @@
 #! /usr/bin/env python3
+"""
+Modifies workflow .json files of your choosing to be centered on the ComfyUI grid.
+
+Basic usage `python centerizer.py my_workflow.json`
+
+See more help with `python centerizer.py -h`
+
+What is considered the 'center' may change depending how you're viewing ComfyUI.
+On my system this is 600x600, yours may be different
+"""
 
 from argparse import ArgumentParser, FileType
 import json
