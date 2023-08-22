@@ -31,6 +31,9 @@ import comfy_extras.nodes_clip_sdxl as nodes_xl
 import comfy.samplers as samplers
 
 DEFAULT="""\
+# See the 'BSZ Pixelbuster Help'
+# node for documentation
+
 LCH
 
 v1 = xnorm
@@ -88,5 +91,20 @@ class BSZPixelbuster:
             del buff
         return (image,)
 
-NODE_CLASS_MAPPINGS = {"BSZPixelbuster": BSZPixelbuster}
-NODE_DISPLAY_NAME_MAPPINGS = {"BSZPixelbuster": "BSZ Pixelbuster"}
+class BSZPixelbusterHelp:
+    RETURN_TYPES = ()
+    CATEGORY = "image/postprocessing"
+    # FUNCTION = "pixelbuster"
+    @classmethod
+    def INPUT_TYPES(s):
+        return {
+            "optional": {
+                "help": ("STRING", {
+                    "multiline": True,
+                    "default": HELP
+                }),
+            },
+        }
+
+NODE_CLASS_MAPPINGS = {"BSZPixelbuster": BSZPixelbuster, "BSZPixelbusterHelp": BSZPixelbusterHelp}
+NODE_DISPLAY_NAME_MAPPINGS = {"BSZPixelbuster": "BSZ Pixelbuster", "BSZPixelbusterHelp": "BSZ Pixelbuster Help"}
