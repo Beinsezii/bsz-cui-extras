@@ -10,7 +10,12 @@ from sys import platform
 LIBRARY = {"win32": "pixelbuster.dll", "linux": "libpixelbuster.so"}
 import os.path
 
-pb_lib = ctypes.CDLL(os.path.join(os.path.dirname(os.path.realpath(__file__)), LIBRARY.get(platform)))
+pb_lib = None
+try:
+    pb_lib = ctypes.CDLL(os.path.join(os.path.dirname(os.path.realpath(__file__)), LIBRARY.get(platform)))
+except Exception as e:
+    print(f"[ERROR] bsz-cui-extras: Installation of the '{LIBRARY.get(platform)}' file is required.")
+    raise e
 
 pb_lib.pb_help_ffi.restype = ctypes.c_char_p
 HELP = pb_lib.pb_help_ffi().decode('UTF-8')
