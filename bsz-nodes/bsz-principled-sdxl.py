@@ -100,6 +100,12 @@ class BSZPrincipledSDXL:
 
         og_width, og_height = width, height
 
+        # target base resolution for least jank
+        ratio = width/height
+        target_width = roundint((1024 ** 2 * ratio) ** 0.5, 8)
+        target_height = roundint((1024 ** 2 / ratio) ** 0.5, 8)
+
+
         # disable refiner if not provided
         if refiner_model is None and refiner_clip is None:
             refiner_amount = 0
@@ -117,8 +123,8 @@ class BSZPrincipledSDXL:
             height,
             0,
             0,
-            og_width, # targeting small sizes seems to help with upscaling artifacts?
-            og_height,
+            target_width,
+            target_height,
             positive_prompt_G,
             positive_prompt_L,
         )[0]
@@ -129,8 +135,8 @@ class BSZPrincipledSDXL:
             height,
             0,
             0,
-            og_width,
-            og_height,
+            target_width,
+            target_height,
             negative_prompt,
             negative_prompt,
         )[0]
