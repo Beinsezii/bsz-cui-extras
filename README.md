@@ -83,7 +83,7 @@ Recommended settings for various workflows...
     - `steps` : `0`
 
 ### bsz-pixelbuster.py
-Node that loads the [Pixelbuster library](https://github.com/Beinsezii/pixelbuster). Requires either `pixelbuster.dll` (windows) or `libpixelbuster.so` (linux) to be placed in your `custom_nodes` folder alongside `bsz-pixelbuster.py`
+Node that loads the [Pixelbuster library](https://github.com/Beinsezii/pixelbuster). Linux and Windows libraries are included directly in the tree
 Input fields
   - `image` : Image[s] to work on
   - `code` : Pixelbuster code. See [the help](https://github.com/Beinsezii/pixelbuster/blob/master/src/lib.rs#L10) for reference
