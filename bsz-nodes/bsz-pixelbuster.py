@@ -15,8 +15,12 @@ try:
     pb_lib.pb_help_ffi.restype = ctypes.c_char_p
 
     pb_lib.pixelbuster_ffi.argtypes = [
-        ctypes.c_char_p, ctypes.c_char_p, numpy.ctypeslib.ndpointer(ndim=1, flags=('W', 'C', 'A')), ctypes.c_uint,
-        ctypes.c_uint
+        ctypes.c_char_p, ctypes.c_char_p, numpy.ctypeslib.ndpointer(ndim=1, flags=('W', 'C', 'A')), ctypes.c_uint, ctypes.c_uint
+    ]
+
+    pb_lib.pixelbuster_ffi_ext.argtypes = [
+        ctypes.c_char_p, ctypes.c_char_p, numpy.ctypeslib.ndpointer(ndim=1, flags=('W', 'C', 'A')), ctypes.c_uint, ctypes.c_uint,
+        ctypes.c_float, ctypes.c_float, ctypes.c_float, ctypes.c_float, ctypes.c_float, ctypes.c_float, ctypes.c_float, ctypes.c_float, ctypes.c_float
     ]
 except Exception as e:
     print(f"\nbsz-cui-extras: Could not load pixelbuster library '{LIBRARY}' for platform '{platform}'")
@@ -33,6 +37,13 @@ import comfy.samplers as samplers
 DEFAULT="""\
 # See the 'BSZ Pixelbuster Help'
 # node for documentation
+#
+# External value sliders for
+# this node are as follows
+# e1 e2 e3 0.0 -> 1.0
+# e4 e5 -1.0 -> 1.0
+# e6 e7 0.0 -> 100.0
+# e8 e9 -100.0 -> 100.0
 
 LCH
 
@@ -54,6 +65,62 @@ class BSZPixelbuster:
     @classmethod
     def INPUT_TYPES(s):
         return {
+            "optional": {
+                "e1": ("FLOAT", {
+                    "default": 0.0,
+                    "min": 0.0,
+                    "max": 1.0,
+                    "step": 0.1
+                }),
+                "e2": ("FLOAT", {
+                    "default": 0.0,
+                    "min": 0.0,
+                    "max": 1.0,
+                    "step": 0.1
+                }),
+                "e3": ("FLOAT", {
+                    "default": 0.0,
+                    "min": 0.0,
+                    "max": 1.0,
+                    "step": 0.1
+                }),
+                "e4": ("FLOAT", {
+                    "default": 0.0,
+                    "min": -1.0,
+                    "max": 1.0,
+                    "step": 0.1
+                }),
+                "e5": ("FLOAT", {
+                    "default": 0.0,
+                    "min": -1.0,
+                    "max": 1.0,
+                    "step": 0.1
+                }),
+                "e6": ("FLOAT", {
+                    "default": 0.0,
+                    "min": 0.0,
+                    "max": 100.0,
+                    "step": 5.0
+                }),
+                "e7": ("FLOAT", {
+                    "default": 0.0,
+                    "min": 0.0,
+                    "max": 100.0,
+                    "step": 5.0
+                }),
+                "e8": ("FLOAT", {
+                    "default": 0.0,
+                    "min": -100.0,
+                    "max": 100.0,
+                    "step": 5.0
+                }),
+                "e9": ("FLOAT", {
+                    "default": 0.0,
+                    "min": -100.0,
+                    "max": 100.0,
+                    "step": 5.0
+                }),
+            },
             "required": {
                 "image": ("IMAGE",),
                 "code": ("STRING", {
@@ -72,20 +139,25 @@ class BSZPixelbuster:
 
     CATEGORY = "image/postprocessing"
 
-    def pixelbuster(self, image, code: str):
+    def pixelbuster(
+        self, image, code: str,
+        e1=None, e2=None, e3=None, e4=None, e5=None, e6=None, e7=None, e8=None, e9=None
+    ):
         if len(code.strip()) == 0:
             return (image,)
+        externals = [e if e is not None else 0.0 for e in [e1, e2, e3, e4, e5, e6, e7, e8, e9]]
         image = image.cpu().clone() # needs to clone or else the comfyui cache gets polluted
         batch_size, height, width, channels = image.shape
         for i in image:
             ndarr = i.numpy()
             buff = numpy.pad(ndarr, pad_width=((0, 0), (0, 0), (0, 1)), constant_values=1).flatten()
-            pb_lib.pixelbuster_ffi(
+            pb_lib.pixelbuster_ffi_ext(
                 code.encode('UTF-8'),
                 "lrgba".encode('UTF-8'),
                 buff,
                 buff.nbytes,
                 width,
+                *externals
             )
             ndarr[:] = buff.reshape(height, width, channels+1)[:, :, :-1]
             del buff

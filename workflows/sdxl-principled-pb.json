@@ -1093,6 +1093,125 @@
           "name": "image",
           "type": "IMAGE",
           "link": 446
+        },
+        {
+          "name": "e2",
+          "type": "FLOAT",
+          "link": null,
+          "widget": {
+            "name": "e2",
+            "config": [
+              "FLOAT",
+              {
+                "default": 0,
+                "min": 0,
+                "max": 1,
+                "step": 0.1
+              }
+            ]
+          }
+        },
+        {
+          "name": "e3",
+          "type": "FLOAT",
+          "link": null,
+          "widget": {
+            "name": "e3",
+            "config": [
+              "FLOAT",
+              {
+                "default": 0,
+                "min": 0,
+                "max": 1,
+                "step": 0.1
+              }
+            ]
+          }
+        },
+        {
+          "name": "e4",
+          "type": "FLOAT",
+          "link": null,
+          "widget": {
+            "name": "e4",
+            "config": [
+              "FLOAT",
+              {
+                "default": 0,
+                "min": -1,
+                "max": 1,
+                "step": 0.1
+              }
+            ]
+          }
+        },
+        {
+          "name": "e5",
+          "type": "FLOAT",
+          "link": null,
+          "widget": {
+            "name": "e5",
+            "config": [
+              "FLOAT",
+              {
+                "default": 0,
+                "min": -1,
+                "max": 1,
+                "step": 0.1
+              }
+            ]
+          }
+        },
+        {
+          "name": "e7",
+          "type": "FLOAT",
+          "link": null,
+          "widget": {
+            "name": "e7",
+            "config": [
+              "FLOAT",
+              {
+                "default": 0,
+                "min": 0,
+                "max": 100,
+                "step": 5
+              }
+            ]
+          }
+        },
+        {
+          "name": "e8",
+          "type": "FLOAT",
+          "link": null,
+          "widget": {
+            "name": "e8",
+            "config": [
+              "FLOAT",
+              {
+                "default": 0,
+                "min": -100,
+                "max": 100,
+                "step": 5
+              }
+            ]
+          }
+        },
+        {
+          "name": "e9",
+          "type": "FLOAT",
+          "link": null,
+          "widget": {
+            "name": "e9",
+            "config": [
+              "FLOAT",
+              {
+                "default": 0,
+                "min": -100,
+                "max": 100,
+                "step": 5
+              }
+            ]
+          }
         }
       ],
       "outputs": [
@@ -1110,7 +1229,16 @@
         "Node name for S&R": "BSZPixelbuster"
       },
       "widgets_values": [
-        "LCH\n\nl / 65\nl ^ 1.2\nl * 65"
+        "# Contrast booster\n# E1 power\n# E6 neutral\n\nLCH\n\ne1 + 1\n\nl / e6\nl ^ e1\nl * e6",
+        0.2,
+        0,
+        0,
+        0,
+        0,
+        65,
+        0,
+        0,
+        0
       ]
     }
   ],
