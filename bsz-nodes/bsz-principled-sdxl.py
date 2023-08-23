@@ -48,7 +48,7 @@ class BSZPrincipledSDXL:
                 "scale_method": (["disable"] + list(METHODS_LATENT.keys()) + list(METHODS_PIXEL.keys()),),
                 "scale_target_width": ("INT", {"default": 1024, "min": 64, "max": nodes.MAX_RESOLUTION, "step": 8}),
                 "scale_target_height": ("INT", {"default": 1024, "min": 64, "max": nodes.MAX_RESOLUTION, "step": 8}),
-                "scale_denoise": ("FLOAT", {"default": 0.2, "min": 0.0, "max": 1.0, "step": 0.01}),
+                "scale_denoise": ("FLOAT", {"default": 0.3, "min": 0.0, "max": 1.0, "step": 0.01}),
                 "scale_steps": ("INT", {"default": 30, "min": 0, "max": 10000}),
                 "scale_iterations": ("INT", {"default": 1, "min": 1, "max": 9}),
                 "vae_tile": (["disable", "encode", "decode", "enable"],),
