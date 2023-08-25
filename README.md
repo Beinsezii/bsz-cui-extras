@@ -115,6 +115,5 @@ Demonstration of the bsz-principled-sdxl node
 Question|Answer
 ---|---
 Why is there a separate VAE loader instead of using the VAE directly from the main checkpoint?|I personally find it desireable to have the VAE decoupled from the checkpoint so you can change it without re-baking the models. If this isn't desirable to you yourself, simply remove the Load VAE node and reconnect the traces into the main Load Checkpoint node instead.
-Why are the KSAmpler nodes so long?|To show live previews of each stage. I strongly recommend you do the same by launching ComfyUI with `--preview-method latent2rgb` or similar.
+Why are the KSampler nodes so long?|To show live previews of each stage. I strongly recommend you do the same by launching ComfyUI with `--preview-method latent2rgb` or similar.
 Why is *this* setting the default instead of *that* setting?|It just happens to look better on my benchmark images. If you think it's objectively wrong, open an issue with a compelling case on why it should be changed.
-You should add the refiner 1 step detail trick|No. That "trick" really just causes the refiner to interpret latent noise as "details" it should refine, which hurts the overall image quality. If you render an image and really really think it needs it, just load the most recent history item and adjust the refiner steps as needed. ComfyUI caches the previous latents so you won't have to re-render the whole image, just the part that changed.
