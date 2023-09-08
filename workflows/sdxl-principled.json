@@ -579,7 +579,7 @@
         "Node name for S&R": "CheckpointLoaderSimple"
       },
       "widgets_values": [
-        "sdxl-v1-refiner.safetensors"
+        "sdxl/sdxl-v1-refiner.safetensors"
       ],
       "color": "#233",
       "bgcolor": "#355"
@@ -627,7 +627,7 @@
         "Node name for S&R": "CheckpointLoaderSimple"
       },
       "widgets_values": [
-        "sdxl-v1.safetensors"
+        "sdxl/sdxl-v1.safetensors"
       ],
       "color": "#223",
       "bgcolor": "#335"
@@ -891,7 +891,7 @@
         "Node name for S&R": "VAELoader"
       },
       "widgets_values": [
-        "sdxl-vae.safetensors"
+        "sdxl/sdxl-vae.safetensors"
       ],
       "color": "#432",
       "bgcolor": "#653"

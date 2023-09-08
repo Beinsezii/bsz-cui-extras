@@ -1,10 +1,12 @@
-import nodes
+import nodes, folder_paths
 import comfy_extras.nodes_clip_sdxl as nodes_xl
+import comfy_extras.nodes_upscale_model as nodes_scale
 import comfy.samplers as samplers
 
 DEBUG=False
 METHODS_LATENT = { f"latent {x}": x for x in nodes.LatentUpscale.upscale_methods }
 METHODS_PIXEL = { f"pixel {x}": x for x in nodes.ImageScale.upscale_methods }
+METHODS_MODEL = { f"model {x}": x for x in folder_paths.get_filename_list("upscale_models")}
 
 def roundint(n: int, step: int) -> int:
     if n % step >= step/2:
@@ -27,11 +29,11 @@ class BSZPrincipledSDXL:
                 "latent_image": ("LATENT",),
                 "positive_prompt_G": ("STRING", {
                     "multiline": True,
-                    "default": "photograph of a kitten"
+                    "default": "analogue photograph of a kitten"
                 }),
                 "positive_prompt_L": ("STRING", {
                     "multiline": True,
-                    "default": "analogue film"
+                    "default": "kitten, photograph, analogue film"
                 }),
                 "negative_prompt": ("STRING", {
                     "multiline": True,
@@ -45,7 +47,7 @@ class BSZPrincipledSDXL:
                 "refiner_ascore_negative": ("FLOAT", {"default": 2.5, "min": 0.0, "max": 1000.0, "step": 0.01}),
                 "sampler": (samplers.KSampler.SAMPLERS, {"default": "ddim"}),
                 "scheduler": (samplers.KSampler.SCHEDULERS,),
-                "scale_method": (["disable"] + list(METHODS_LATENT.keys()) + list(METHODS_PIXEL.keys()),),
+                "scale_method": (["disable"] + list(METHODS_LATENT.keys()) + list(METHODS_PIXEL.keys()) + list(METHODS_MODEL.keys()),),
                 "scale_target_width": ("INT", {"default": 1024, "min": 64, "max": nodes.MAX_RESOLUTION, "step": 8}),
                 "scale_target_height": ("INT", {"default": 1024, "min": 64, "max": nodes.MAX_RESOLUTION, "step": 8}),
                 "scale_denoise": ("FLOAT", {"default": 0.3, "min": 0.0, "max": 1.0, "step": 0.01}),
@@ -222,6 +224,9 @@ class BSZPrincipledSDXL:
             if DEBUG: print(f"Running initial low-res pass")
             if scale_method not in METHODS_LATENT and pixel_scale_vae is None:
                 raise Exception(f'To use scale method "{scale_method}" you must provide a VAE')
+            scale_model = None
+            if scale_method in METHODS_MODEL:
+                scale_model = nodes_scale.UpscaleModelLoader.load_model(None, METHODS_MODEL[scale_method])[0]
 
             wfactor = (scale_target_height / height) ** (1/scale_iterations)
             hfactor = (scale_target_width / width) ** (1/scale_iterations)
@@ -238,7 +243,14 @@ class BSZPrincipledSDXL:
                     decoder = nodes.VAEDecodeTiled() if vae_tile == "enable" or vae_tile == "decode" else nodes.VAEDecode()
                     pixels = decoder.decode(pixel_scale_vae, latent_image)[0]
                     del decoder
-                    pixels = nodes.ImageScale.upscale(None, pixels, METHODS_PIXEL[scale_method], scale_target_width, scale_target_height, "disabled")[0]
+                    if scale_method in METHODS_PIXEL:
+                        pixels = nodes.ImageScale.upscale(None, pixels, METHODS_PIXEL[scale_method], scale_target_width, scale_target_height, "disabled")[0]
+                    elif scale_method in METHODS_MODEL:
+                        pixels = nodes_scale.ImageUpscaleWithModel.upscale(None, scale_model, pixels)[0]
+                        pixels = nodes.ImageScale.upscale(None, pixels, 'bicubic', scale_target_width, scale_target_height, "disabled")[0]
+                    else:
+                        raise ValueError("Unreachable!")
+
                     encoder = nodes.VAEEncodeTiled() if vae_tile == "enable" or vae_tile == "encode" else nodes.VAEEncode()
                     latent_image = encoder.encode(pixel_scale_vae, pixels)[0]
                     del pixels, encoder
@@ -246,6 +258,9 @@ class BSZPrincipledSDXL:
                 denoise = scale_denoise
                 steps = scale_steps
                 width, height = scale_target_width, scale_target_height
+
+            # might not be necessary
+            # del scale_model
 
         if DEBUG: print(f"Running main pass")
         latent_image = maybe_refine(latent_image)
