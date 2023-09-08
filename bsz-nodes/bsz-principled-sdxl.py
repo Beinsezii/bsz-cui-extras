@@ -52,7 +52,6 @@ class BSZPrincipledSDXL:
                 "scale_target_height": ("INT", {"default": 1024, "min": 64, "max": nodes.MAX_RESOLUTION, "step": 8}),
                 "scale_denoise": ("FLOAT", {"default": 0.3, "min": 0.0, "max": 1.0, "step": 0.01}),
                 "scale_steps": ("INT", {"default": 30, "min": 0, "max": 10000}),
-                "scale_iterations": ("INT", {"default": 1, "min": 1, "max": 9}),
                 "vae_tile": (["disable", "encode", "decode", "enable"],),
                 "seed": ("INT", {"default": 0, "min": 0, "max": 0xffffffffffffffff}),
             },
@@ -88,7 +87,6 @@ class BSZPrincipledSDXL:
         scale_target_height: int,
         scale_denoise: float,
         scale_steps: int,
-        scale_iterations: int,
         vae_tile: str,
         seed: int,
         refiner_model=None,
@@ -99,8 +97,6 @@ class BSZPrincipledSDXL:
         height, width = latent_image["samples"].size()[2:4]
         height *= 8
         width *= 8
-
-        og_width, og_height = width, height
 
         # target base resolution for least jank
         ratio = width/height
@@ -217,50 +213,43 @@ class BSZPrincipledSDXL:
             return latent_image
         # }}}
 
-        latent_h, latent_w = latent_image["samples"].size()[2:4]
-
         # High Res Fix. Can technically do low res too I guess, so it's "scale" not "upscale"
-        if scale_method != "disable" and (width != scale_target_width or height != scale_target_height or latent_w * 8 != width or latent_h * 8 != height):
+        if scale_method != "disable" and (width != scale_target_width or height != scale_target_height):
             if DEBUG: print(f"Running initial low-res pass")
             if scale_method not in METHODS_LATENT and pixel_scale_vae is None:
                 raise Exception(f'To use scale method "{scale_method}" you must provide a VAE')
+
             scale_model = None
             if scale_method in METHODS_MODEL:
                 scale_model = nodes_scale.UpscaleModelLoader.load_model(None, METHODS_MODEL[scale_method])[0]
 
-            wfactor = (scale_target_height / height) ** (1/scale_iterations)
-            hfactor = (scale_target_width / width) ** (1/scale_iterations)
+            latent_image = maybe_refine(latent_image)
 
-            for i in range(scale_iterations):
-                scale_target_width, scale_target_height = roundint(og_width * wfactor ** (i + 1), 8), roundint(og_height * hfactor ** (i + 1), 8)
-
-                latent_image = maybe_refine(latent_image)
-
-                if DEBUG: print(f"Upscaling with method {scale_method}")
-                if scale_method in METHODS_LATENT:
-                    latent_image = nodes.LatentUpscale.upscale(None, latent_image, METHODS_LATENT[scale_method], scale_target_width, scale_target_height, "disabled")[0]
+            if DEBUG: print(f"Upscaling with method {scale_method}")
+            if scale_method in METHODS_LATENT:
+                latent_image = nodes.LatentUpscale.upscale(None, latent_image, METHODS_LATENT[scale_method], scale_target_width, scale_target_height, "disabled")[0]
+            else:
+                decoder = nodes.VAEDecodeTiled() if vae_tile == "enable" or vae_tile == "decode" else nodes.VAEDecode()
+                pixels = decoder.decode(pixel_scale_vae, latent_image)[0]
+                del decoder
+                if scale_method in METHODS_PIXEL:
+                    pixels = nodes.ImageScale.upscale(None, pixels, METHODS_PIXEL[scale_method], scale_target_width, scale_target_height, "disabled")[0]
+                elif scale_method in METHODS_MODEL:
+                    pixels = nodes_scale.ImageUpscaleWithModel.upscale(None, scale_model, pixels)[0]
+                    pixels = nodes.ImageScale.upscale(None, pixels, 'bicubic', scale_target_width, scale_target_height, "disabled")[0]
                 else:
-                    decoder = nodes.VAEDecodeTiled() if vae_tile == "enable" or vae_tile == "decode" else nodes.VAEDecode()
-                    pixels = decoder.decode(pixel_scale_vae, latent_image)[0]
-                    del decoder
-                    if scale_method in METHODS_PIXEL:
-                        pixels = nodes.ImageScale.upscale(None, pixels, METHODS_PIXEL[scale_method], scale_target_width, scale_target_height, "disabled")[0]
-                    elif scale_method in METHODS_MODEL:
-                        pixels = nodes_scale.ImageUpscaleWithModel.upscale(None, scale_model, pixels)[0]
-                        pixels = nodes.ImageScale.upscale(None, pixels, 'bicubic', scale_target_width, scale_target_height, "disabled")[0]
-                    else:
-                        raise ValueError("Unreachable!")
+                    raise ValueError("Unreachable!")
 
-                    encoder = nodes.VAEEncodeTiled() if vae_tile == "enable" or vae_tile == "encode" else nodes.VAEEncode()
-                    latent_image = encoder.encode(pixel_scale_vae, pixels)[0]
-                    del pixels, encoder
+                encoder = nodes.VAEEncodeTiled() if vae_tile == "enable" or vae_tile == "encode" else nodes.VAEEncode()
+                latent_image = encoder.encode(pixel_scale_vae, pixels)[0]
+                del pixels, encoder
 
-                denoise = scale_denoise
-                steps = scale_steps
-                width, height = scale_target_width, scale_target_height
+            denoise = scale_denoise
+            steps = scale_steps
+            width, height = scale_target_width, scale_target_height
 
             # might not be necessary
-            # del scale_model
+            del scale_model
 
         if DEBUG: print(f"Running main pass")
         latent_image = maybe_refine(latent_image)

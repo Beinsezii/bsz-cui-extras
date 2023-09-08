@@ -65,7 +65,6 @@ Input fields
   - `scale_target_height` : If `scale_method` is enabled, image will be resized to this
   - `scale_denoise` : Denoise amount for scaled passes
   - `scale_steps` : Steps for scaled passes
-  - `scale_iterations` : Amount of scaling passes to run. Experimental and very expensive
   - `vae_tile` : Whether to used tiled vae during pixel scaling
   - `seed` : Seedy.
 
