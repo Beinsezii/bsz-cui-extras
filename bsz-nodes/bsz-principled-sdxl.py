@@ -50,8 +50,9 @@ class BSZPrincipledSDXL:
                 "scale_method": (["disable"] + list(METHODS_LATENT.keys()) + list(METHODS_PIXEL.keys()) + list(METHODS_MODEL.keys()),),
                 "scale_target_width": ("INT", {"default": 1024, "min": 64, "max": nodes.MAX_RESOLUTION, "step": 8}),
                 "scale_target_height": ("INT", {"default": 1024, "min": 64, "max": nodes.MAX_RESOLUTION, "step": 8}),
-                "scale_denoise": ("FLOAT", {"default": 0.3, "min": 0.0, "max": 1.0, "step": 0.01}),
                 "scale_steps": ("INT", {"default": 30, "min": 0, "max": 10000}),
+                "scale_denoise": ("FLOAT", {"default": 0.3, "min": 0.0, "max": 1.0, "step": 0.01}),
+                "scale_refiner_amount": ("FLOAT", {"default": 0.15, "min": 0.0, "max": 1.0, "step": 0.01}),
                 "vae_tile": (["disable", "encode", "decode", "enable"],),
                 "seed": ("INT", {"default": 0, "min": 0, "max": 0xffffffffffffffff}),
             },
@@ -85,8 +86,9 @@ class BSZPrincipledSDXL:
         scale_method,
         scale_target_width: int,
         scale_target_height: int,
-        scale_denoise: float,
         scale_steps: int,
+        scale_denoise: float,
+        scale_refiner_amount: float,
         vae_tile: str,
         seed: int,
         refiner_model=None,
@@ -107,6 +109,7 @@ class BSZPrincipledSDXL:
         # disable refiner if not provided
         if refiner_model is None and refiner_clip is None:
             refiner_amount = 0
+            scale_refiner_amount = 0
         elif refiner_model is not None and refiner_clip is not None:
             pass
         else:
@@ -245,6 +248,7 @@ class BSZPrincipledSDXL:
                 del pixels, encoder
 
             denoise = scale_denoise
+            refiner_amount = scale_refiner_amount
             steps = scale_steps
             width, height = scale_target_width, scale_target_height
 

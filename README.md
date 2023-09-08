@@ -63,8 +63,9 @@ Input fields
   - `scale_method` : If set, will scale image to match target sizes using the provided algorithm
   - `scale_target_width` : If `scale_method` is enabled, image will be resized to this
   - `scale_target_height` : If `scale_method` is enabled, image will be resized to this
-  - `scale_denoise` : Denoise amount for scaled passes
   - `scale_steps` : Steps for scaled passes
+  - `scale_denoise` : Denoise amount for scaled passes
+  - `scale_refiner_amount` : Refiner amount for scaled passes
   - `vae_tile` : Whether to used tiled vae during pixel scaling
   - `seed` : Seedy.
 
