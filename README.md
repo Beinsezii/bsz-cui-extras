@@ -46,9 +46,9 @@ Input fields
   - `base_model` : Model from base checkpoint
   - `base_clip` : CLIP from base checkpoint
   - `latent_image` : Latent image to start from
-  - `refiner_model` : Model from refiner checkpoint. Optional
-  - `refiner_clip` : CLIP from refiner checkpoint. Optional
-  - `pixel_scale_vae` : VAE used for pixel scaling methods. Optional, only needed if they're being used
+  - `refiner_model` : Model from refiner checkpoint. **Optional**
+  - `refiner_clip` : CLIP from refiner checkpoint. **Optional**
+  - `pixel_scale_vae` : VAE used for pixel scaling methods. **Optional**, only needed if they're being used
   - `positive_prompt_G` : Positive prompt for base CLIP G and refiner
   - `positive_prompt_L` : Positive prompt for base CLIP L. Usually either set to the same as CLIP G but sometimes is used for supporting terms
   - `negative_prompt` : Negative prompt
@@ -65,13 +65,15 @@ Input fields
   - `scale_target_height` : If `scale_method` is enabled, image will be resized to this
   - `scale_steps` : Steps for scaled passes
   - `scale_denoise` : Denoise amount for scaled passes
-  - `scale_refiner_amount` : Refiner amount for scaled passes
-  - `vae_tile` : Whether to used tiled vae during pixel scaling
+  - `scale_refiner_amount` : Refiner amount for scaled passes. Note the refiner performs **very poorly** on higher resolutions.
   - `seed` : Seedy.
 
 Recommended settings for various workflows...
 
-  - Text2Image: default
+  - Text2Image: defaults
+  - Text2Image no refiner:
+    - `sampler`: `dpmpp_2m`
+    - `scheduler`: `karras`
   - Text2Image w/latent upscale:
     - `scale_method`:`latent bicubic`
     - `scale_denoise` : `0.6`
@@ -105,7 +107,7 @@ Personal flair of the SDXL "partial diffusion" workflow with added "High res fix
   - `bsz-auto-hires.py` : Workflow is painful without it.
 
 ### sdxl-principled.json
-Demonstration of the bsz-principled-sdxl node
+Complete demonstration of nodes in a compact workflow
 
 #### Dependencies
   - `bsz-auto-hires.py` : Principled can use hi res sizes
