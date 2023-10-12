@@ -1,6 +1,6 @@
 {
-  "last_node_id": 150,
-  "last_link_id": 450,
+  "last_node_id": 151,
+  "last_link_id": 454,
   "nodes": [
     {
       "id": 136,
@@ -269,14 +269,7 @@
           ],
           "slot_index": 0,
           "widget": {
-            "name": "negative_prompt",
-            "config": [
-              "STRING",
-              {
-                "multiline": true,
-                "default": "cropped, blurry"
-              }
-            ]
+            "name": "negative_prompt"
           }
         }
       ],
@@ -312,14 +305,7 @@
           ],
           "slot_index": 0,
           "widget": {
-            "name": "positive_prompt_G",
-            "config": [
-              "STRING",
-              {
-                "multiline": true,
-                "default": "photograph of a kitten"
-              }
-            ]
+            "name": "positive_prompt_G"
           }
         }
       ],
@@ -332,119 +318,11 @@
       "bgcolor": "#353"
     },
     {
-      "id": 147,
-      "type": "Reroute",
-      "pos": [
-        270,
-        500
-      ],
-      "size": [
-        75,
-        26
-      ],
-      "flags": {},
-      "order": 10,
-      "mode": 0,
-      "inputs": [
-        {
-          "name": "",
-          "type": "*",
-          "link": 435
-        }
-      ],
-      "outputs": [
-        {
-          "name": "INT",
-          "type": "INT",
-          "links": [
-            436
-          ],
-          "slot_index": 0
-        }
-      ],
-      "properties": {
-        "showOutputText": true,
-        "horizontal": false
-      }
-    },
-    {
-      "id": 146,
-      "type": "Reroute",
-      "pos": [
-        280,
-        470
-      ],
-      "size": [
-        75,
-        26
-      ],
-      "flags": {},
-      "order": 9,
-      "mode": 0,
-      "inputs": [
-        {
-          "name": "",
-          "type": "*",
-          "link": 438
-        }
-      ],
-      "outputs": [
-        {
-          "name": "INT",
-          "type": "INT",
-          "links": [
-            444
-          ],
-          "slot_index": 0
-        }
-      ],
-      "properties": {
-        "showOutputText": true,
-        "horizontal": false
-      }
-    },
-    {
-      "id": 148,
-      "type": "Reroute",
-      "pos": [
-        390,
-        500
-      ],
-      "size": [
-        75,
-        26
-      ],
-      "flags": {},
-      "order": 14,
-      "mode": 0,
-      "inputs": [
-        {
-          "name": "",
-          "type": "*",
-          "link": 436
-        }
-      ],
-      "outputs": [
-        {
-          "name": "INT",
-          "type": "INT",
-          "links": [
-            437
-          ],
-          "slot_index": 0
-        }
-      ],
-      "properties": {
-        "showOutputText": true,
-        "horizontal": false
-      }
-    },
-    {
       "id": 149,
       "type": "Reroute",
       "pos": [
-        400,
-        470
+        410,
+        480
       ],
       "size": [
         75,
@@ -474,154 +352,6 @@
         "showOutputText": true,
         "horizontal": false
       }
-    },
-    {
-      "id": 24,
-      "type": "VAELoader",
-      "pos": [
-        120,
-        180
-      ],
-      "size": {
-        "0": 360,
-        "1": 60
-      },
-      "flags": {},
-      "order": 5,
-      "mode": 0,
-      "outputs": [
-        {
-          "name": "VAE",
-          "type": "VAE",
-          "links": [
-            405,
-            432
-          ],
-          "shape": 3,
-          "slot_index": 0
-        }
-      ],
-      "properties": {
-        "Node name for S&R": "VAELoader"
-      },
-      "widgets_values": [
-        "sdxl/sdxl-vae.safetensors"
-      ],
-      "color": "#432",
-      "bgcolor": "#653"
-    },
-    {
-      "id": 145,
-      "type": "LatentFromBatch",
-      "pos": [
-        270,
-        390
-      ],
-      "size": {
-        "0": 210,
-        "1": 82
-      },
-      "flags": {},
-      "order": 12,
-      "mode": 0,
-      "inputs": [
-        {
-          "name": "samples",
-          "type": "LATENT",
-          "link": 433
-        }
-      ],
-      "outputs": [
-        {
-          "name": "LATENT",
-          "type": "LATENT",
-          "links": null,
-          "shape": 3,
-          "slot_index": 0
-        }
-      ],
-      "properties": {
-        "Node name for S&R": "LatentFromBatch"
-      },
-      "widgets_values": [
-        0,
-        1
-      ],
-      "color": "#323",
-      "bgcolor": "#535"
-    },
-    {
-      "id": 144,
-      "type": "EmptyLatentImage",
-      "pos": [
-        270,
-        270
-      ],
-      "size": {
-        "0": 210,
-        "1": 80
-      },
-      "flags": {},
-      "order": 8,
-      "mode": 0,
-      "inputs": [
-        {
-          "name": "width",
-          "type": "INT",
-          "link": 430,
-          "widget": {
-            "name": "width",
-            "config": [
-              "INT",
-              {
-                "default": 512,
-                "min": 64,
-                "max": 8192,
-                "step": 8
-              }
-            ]
-          }
-        },
-        {
-          "name": "height",
-          "type": "INT",
-          "link": 431,
-          "widget": {
-            "name": "height",
-            "config": [
-              "INT",
-              {
-                "default": 512,
-                "min": 64,
-                "max": 8192,
-                "step": 8
-              }
-            ]
-          }
-        }
-      ],
-      "outputs": [
-        {
-          "name": "LATENT",
-          "type": "LATENT",
-          "links": [
-            429,
-            433
-          ],
-          "shape": 3,
-          "slot_index": 0
-        }
-      ],
-      "properties": {
-        "Node name for S&R": "EmptyLatentImage"
-      },
-      "widgets_values": [
-        512,
-        512,
-        1
-      ],
-      "color": "#323",
-      "bgcolor": "#535"
     },
     {
       "id": 141,
@@ -803,16 +533,7 @@
           "type": "FLOAT",
           "link": null,
           "widget": {
-            "name": "e2",
-            "config": [
-              "FLOAT",
-              {
-                "default": 0,
-                "min": 0,
-                "max": 1,
-                "step": 0.1
-              }
-            ]
+            "name": "e2"
           }
         },
         {
@@ -820,16 +541,7 @@
           "type": "FLOAT",
           "link": null,
           "widget": {
-            "name": "e3",
-            "config": [
-              "FLOAT",
-              {
-                "default": 0,
-                "min": 0,
-                "max": 1,
-                "step": 0.1
-              }
-            ]
+            "name": "e3"
           }
         },
         {
@@ -837,16 +549,7 @@
           "type": "FLOAT",
           "link": null,
           "widget": {
-            "name": "e4",
-            "config": [
-              "FLOAT",
-              {
-                "default": 0,
-                "min": -1,
-                "max": 1,
-                "step": 0.1
-              }
-            ]
+            "name": "e4"
           }
         },
         {
@@ -854,16 +557,7 @@
           "type": "FLOAT",
           "link": null,
           "widget": {
-            "name": "e5",
-            "config": [
-              "FLOAT",
-              {
-                "default": 0,
-                "min": -1,
-                "max": 1,
-                "step": 0.1
-              }
-            ]
+            "name": "e5"
           }
         },
         {
@@ -871,16 +565,7 @@
           "type": "FLOAT",
           "link": null,
           "widget": {
-            "name": "e7",
-            "config": [
-              "FLOAT",
-              {
-                "default": 0,
-                "min": 0,
-                "max": 100,
-                "step": 5
-              }
-            ]
+            "name": "e7"
           }
         },
         {
@@ -888,16 +573,7 @@
           "type": "FLOAT",
           "link": null,
           "widget": {
-            "name": "e8",
-            "config": [
-              "FLOAT",
-              {
-                "default": 0,
-                "min": -100,
-                "max": 100,
-                "step": 5
-              }
-            ]
+            "name": "e8"
           }
         },
         {
@@ -905,16 +581,7 @@
           "type": "FLOAT",
           "link": null,
           "widget": {
-            "name": "e9",
-            "config": [
-              "FLOAT",
-              {
-                "default": 0,
-                "min": -100,
-                "max": 100,
-                "step": 5
-              }
-            ]
+            "name": "e9"
           }
         }
       ],
@@ -943,71 +610,6 @@
         0,
         0,
         0
-      ]
-    },
-    {
-      "id": 121,
-      "type": "BSZCombinedHires",
-      "pos": [
-        30,
-        270
-      ],
-      "size": {
-        "0": 220,
-        "1": 262
-      },
-      "flags": {},
-      "order": 6,
-      "mode": 0,
-      "outputs": [
-        {
-          "name": "Lo Res Width",
-          "type": "INT",
-          "links": [
-            430
-          ],
-          "shape": 3,
-          "slot_index": 0
-        },
-        {
-          "name": "Lo Res Height",
-          "type": "INT",
-          "links": [
-            431
-          ],
-          "shape": 3,
-          "slot_index": 1
-        },
-        {
-          "name": "Hi Res Width",
-          "type": "INT",
-          "links": [
-            438
-          ],
-          "shape": 3,
-          "slot_index": 2
-        },
-        {
-          "name": "Hi Res Height",
-          "type": "INT",
-          "links": [
-            435
-          ],
-          "shape": 3,
-          "slot_index": 3
-        }
-      ],
-      "properties": {
-        "Node name for S&R": "BSZCombinedHires"
-      },
-      "widgets_values": [
-        1024,
-        3840,
-        2160,
-        false,
-        1,
-        1,
-        1.5
       ]
     },
     {
@@ -1108,7 +710,7 @@
         {
           "name": "latent_image",
           "type": "LATENT",
-          "link": 429,
+          "link": 453,
           "slot_index": 2
         },
         {
@@ -1131,14 +733,7 @@
           "type": "STRING",
           "link": 425,
           "widget": {
-            "name": "positive_prompt_G",
-            "config": [
-              "STRING",
-              {
-                "multiline": true,
-                "default": "photograph of a kitten"
-              }
-            ]
+            "name": "positive_prompt_G"
           }
         },
         {
@@ -1146,14 +741,7 @@
           "type": "STRING",
           "link": 427,
           "widget": {
-            "name": "positive_prompt_L",
-            "config": [
-              "STRING",
-              {
-                "multiline": true,
-                "default": "analogue film"
-              }
-            ]
+            "name": "positive_prompt_L"
           }
         },
         {
@@ -1161,14 +749,7 @@
           "type": "STRING",
           "link": 428,
           "widget": {
-            "name": "negative_prompt",
-            "config": [
-              "STRING",
-              {
-                "multiline": true,
-                "default": "cropped, blurry"
-              }
-            ]
+            "name": "negative_prompt"
           }
         },
         {
@@ -1176,16 +757,7 @@
           "type": "INT",
           "link": 441,
           "widget": {
-            "name": "scale_target_width",
-            "config": [
-              "INT",
-              {
-                "default": 1024,
-                "min": 64,
-                "max": 8192,
-                "step": 8
-              }
-            ]
+            "name": "scale_target_width"
           }
         },
         {
@@ -1193,16 +765,7 @@
           "type": "INT",
           "link": 437,
           "widget": {
-            "name": "scale_target_height",
-            "config": [
-              "INT",
-              {
-                "default": 1024,
-                "min": 64,
-                "max": 8192,
-                "step": 8
-              }
-            ]
+            "name": "scale_target_height"
           }
         }
       ],
@@ -1242,6 +805,311 @@
         493987568146269,
         "randomize"
       ]
+    },
+    {
+      "id": 146,
+      "type": "Reroute",
+      "pos": [
+        290,
+        480
+      ],
+      "size": [
+        75,
+        26
+      ],
+      "flags": {},
+      "order": 9,
+      "mode": 0,
+      "inputs": [
+        {
+          "name": "",
+          "type": "*",
+          "link": 438
+        }
+      ],
+      "outputs": [
+        {
+          "name": "INT",
+          "type": "INT",
+          "links": [
+            444
+          ],
+          "slot_index": 0
+        }
+      ],
+      "properties": {
+        "showOutputText": true,
+        "horizontal": false
+      }
+    },
+    {
+      "id": 147,
+      "type": "Reroute",
+      "pos": [
+        280,
+        500
+      ],
+      "size": [
+        75,
+        26
+      ],
+      "flags": {},
+      "order": 10,
+      "mode": 0,
+      "inputs": [
+        {
+          "name": "",
+          "type": "*",
+          "link": 435
+        }
+      ],
+      "outputs": [
+        {
+          "name": "INT",
+          "type": "INT",
+          "links": [
+            436
+          ],
+          "slot_index": 0
+        }
+      ],
+      "properties": {
+        "showOutputText": true,
+        "horizontal": false
+      }
+    },
+    {
+      "id": 145,
+      "type": "LatentFromBatch",
+      "pos": [
+        270,
+        400
+      ],
+      "size": {
+        "0": 210,
+        "1": 82
+      },
+      "flags": {},
+      "order": 12,
+      "mode": 0,
+      "inputs": [
+        {
+          "name": "samples",
+          "type": "LATENT",
+          "link": 454
+        }
+      ],
+      "outputs": [
+        {
+          "name": "LATENT",
+          "type": "LATENT",
+          "links": null,
+          "shape": 3,
+          "slot_index": 0
+        }
+      ],
+      "properties": {
+        "Node name for S&R": "LatentFromBatch"
+      },
+      "widgets_values": [
+        0,
+        1
+      ],
+      "color": "#323",
+      "bgcolor": "#535"
+    },
+    {
+      "id": 24,
+      "type": "VAELoader",
+      "pos": [
+        130,
+        160
+      ],
+      "size": {
+        "0": 360,
+        "1": 60
+      },
+      "flags": {},
+      "order": 5,
+      "mode": 0,
+      "outputs": [
+        {
+          "name": "VAE",
+          "type": "VAE",
+          "links": [
+            405,
+            432
+          ],
+          "shape": 3,
+          "slot_index": 0
+        }
+      ],
+      "properties": {
+        "Node name for S&R": "VAELoader"
+      },
+      "widgets_values": [
+        "sdxl/sdxl-vae.safetensors"
+      ],
+      "color": "#432",
+      "bgcolor": "#653"
+    },
+    {
+      "id": 148,
+      "type": "Reroute",
+      "pos": [
+        400,
+        500
+      ],
+      "size": [
+        75,
+        26
+      ],
+      "flags": {},
+      "order": 14,
+      "mode": 0,
+      "inputs": [
+        {
+          "name": "",
+          "type": "*",
+          "link": 436
+        }
+      ],
+      "outputs": [
+        {
+          "name": "INT",
+          "type": "INT",
+          "links": [
+            437
+          ],
+          "slot_index": 0
+        }
+      ],
+      "properties": {
+        "showOutputText": true,
+        "horizontal": false
+      }
+    },
+    {
+      "id": 121,
+      "type": "BSZCombinedHires",
+      "pos": [
+        30,
+        260
+      ],
+      "size": {
+        "0": 220,
+        "1": 262
+      },
+      "flags": {},
+      "order": 6,
+      "mode": 0,
+      "outputs": [
+        {
+          "name": "Lo Res Width",
+          "type": "INT",
+          "links": [
+            451
+          ],
+          "shape": 3,
+          "slot_index": 0
+        },
+        {
+          "name": "Lo Res Height",
+          "type": "INT",
+          "links": [
+            452
+          ],
+          "shape": 3,
+          "slot_index": 1
+        },
+        {
+          "name": "Hi Res Width",
+          "type": "INT",
+          "links": [
+            438
+          ],
+          "shape": 3,
+          "slot_index": 2
+        },
+        {
+          "name": "Hi Res Height",
+          "type": "INT",
+          "links": [
+            435
+          ],
+          "shape": 3,
+          "slot_index": 3
+        }
+      ],
+      "properties": {
+        "Node name for S&R": "BSZCombinedHires"
+      },
+      "widgets_values": [
+        1024,
+        3840,
+        2160,
+        false,
+        1,
+        1,
+        1.5
+      ]
+    },
+    {
+      "id": 151,
+      "type": "BSZColoredLatentImageXL",
+      "pos": [
+        260,
+        250
+      ],
+      "size": [
+        226.8000030517578,
+        126
+      ],
+      "flags": {},
+      "order": 8,
+      "mode": 0,
+      "inputs": [
+        {
+          "name": "width",
+          "type": "INT",
+          "link": 451,
+          "widget": {
+            "name": "width"
+          }
+        },
+        {
+          "name": "height",
+          "type": "INT",
+          "link": 452,
+          "widget": {
+            "name": "height"
+          }
+        }
+      ],
+      "outputs": [
+        {
+          "name": "LATENT",
+          "type": "LATENT",
+          "links": [
+            453,
+            454
+          ],
+          "shape": 3,
+          "slot_index": 0
+        }
+      ],
+      "properties": {
+        "Node name for S&R": "BSZColoredLatentImageXL"
+      },
+      "widgets_values": [
+        "black",
+        0,
+        1024,
+        1024,
+        1
+      ],
+      "color": "#323",
+      "bgcolor": "#535"
     }
   ],
   "links": [
@@ -1358,44 +1226,12 @@
       "STRING"
     ],
     [
-      429,
-      144,
-      0,
-      143,
-      2,
-      "LATENT"
-    ],
-    [
-      430,
-      121,
-      0,
-      144,
-      0,
-      "INT"
-    ],
-    [
-      431,
-      121,
-      1,
-      144,
-      1,
-      "INT"
-    ],
-    [
       432,
       24,
       0,
       143,
       5,
       "VAE"
-    ],
-    [
-      433,
-      144,
-      0,
-      145,
-      0,
-      "LATENT"
     ],
     [
       435,
@@ -1484,6 +1320,38 @@
       141,
       0,
       "*"
+    ],
+    [
+      451,
+      121,
+      0,
+      151,
+      0,
+      "INT"
+    ],
+    [
+      452,
+      121,
+      1,
+      151,
+      1,
+      "INT"
+    ],
+    [
+      453,
+      151,
+      0,
+      143,
+      2,
+      "LATENT"
+    ],
+    [
+      454,
+      151,
+      0,
+      145,
+      0,
+      "LATENT"
     ]
   ],
   "groups": [],
