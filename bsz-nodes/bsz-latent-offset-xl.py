@@ -41,7 +41,7 @@ class BSZLatentOffsetXL:
                 batch[1].add_(XL_BLACK[1] * abs(offset))
                 batch[2].add_(XL_BLACK[2] * abs(offset))
                 batch[3].add_(XL_BLACK[3] * abs(offset))
-        return ({'samples': samples},)
+        return (latent_image | {'samples': samples},)
 # }}}
 
 

@@ -48,7 +48,7 @@ class BSZLatentFill:
             batch[1].fill_(b)
             batch[2].fill_(c)
             batch[3].fill_(d)
-        return ({'samples': samples},)
+        return (latent_image | {'samples': samples},)
 # }}}
 
 
