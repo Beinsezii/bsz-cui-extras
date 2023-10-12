@@ -37,13 +37,6 @@ A unique node that functions both as BSZAbsoluteHires and BSZAspectHires with a 
   - Input
     - `use_aspect_scale` : Use aspect & scale inputs instead of desired width/height inputs
 
-### bsz-latent-offset-xl.py
-Offset the latent image towards black or white. Use *before* sampling.
-
-  - Input
-    - `latent_image` : Latent image(s).
-    - `offset` : 0.0 is unchanged, -1.0 is black, 1.0 is white.
-
 ### bsz-principled-sdxl.py
 All-in-one solution for SDXL text2img, img2img and scaling/hi res fix. Essentially the sdxl and sdxl-upscale workflows both in one node. Do note that while this node shouldn't be any slower than the regular workflow, due to ComfyUI caching latent results **per-node**, even changing just a refiner setting on this node will result in sampling starting over from the first base pass. There are at least some minimal internal optimizations to skip passes that aren't needed.
 
@@ -92,15 +85,37 @@ Recommended settings for various workflows...
     - Same as text2img upscaling
     - `steps` : `0`
 
+### bsz-latent-manipulation.py
+Nodes for manipulating the color of latent images.
+
+#### BSZColoredLatentImageXL
+Creates an colored (non-empty) latent image according to the SDXL VAE
+  - Input
+    - `color` : Choice of color.
+    - `strength` : Color strength/opacity over zero/gray
+    - `width/height/batch_size`: Same as EmptyLatentImage
+
+#### BSZLatentOffsetXL
+Offsets the latent image(s) value towards black/white according to the SDXL VAE
+  - Input
+    - `latent` : Latent image(s).
+    - `offset` : 0.0 is unchanged, -1.0 is black, 1.0 is white.
+
+#### BSZLatentFill
+Fill the four latent channels with arbitrary values.
+  - Input
+    - `latent` : Latent image(s).
+    - `a/b/c/d` : Values for the four channels
+
+#### BSZLatentDebug
+Output information about the latent tensor into stdout
+
 ### bsz-pixelbuster.py
 Node that loads the [Pixelbuster library](https://github.com/Beinsezii/pixelbuster). Linux and Windows libraries are included directly in the tree
 
 Input fields
   - `image` : Image[s] to work on
   - `code` : Pixelbuster code. See [the help](https://github.com/Beinsezii/pixelbuster/blob/master/src/lib.rs#L10) for reference
-
-### bsz-latent-fill.py
-Fills the latent color channels with values of your choice. Works on any latent. Note that latent is 4 channels of "latent color", not RGB. Mostly a debug tool.
 
 ## Workflows
 
