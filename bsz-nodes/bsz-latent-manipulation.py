@@ -107,7 +107,7 @@ class BSZLatentOffsetXL:
                     "default": 0.0,
                     "min": -1.0,
                     "max": 1.0,
-                    "step": 0.1,
+                    "step": 0.05,
                 }),
             }
         }
@@ -144,7 +144,7 @@ class BSZColoredLatentImageXL:
     def INPUT_TYPES(s):
         return {"required": {
             "color": (list(XL_CONSTS.keys()),),
-            "strength": ("FLOAT", {"default": 0.5, "min": 0.0, "max": 1.0, "step": 0.1}),
+            "strength": ("FLOAT", {"default": 0.5, "min": 0.0, "max": 1.0, "step": 0.05}),
             "width": ("INT", {"default": 1024, "min": 16, "max": nodes.MAX_RESOLUTION, "step": 8}),
             "height": ("INT", {"default": 1024, "min": 16, "max": nodes.MAX_RESOLUTION, "step": 8}),
             "batch_size": ("INT", {"default": 1, "min": 1, "max": 4096}),
@@ -171,10 +171,10 @@ class BSZLatentRGBAImage:
     def INPUT_TYPES(s):
         return {"required": {
             "vae": ("VAE", ),
-            "r": ("FLOAT", {"default": 0.0, "min": 0.0, "max": 1.0, "step": 0.1}),
-            "g": ("FLOAT", {"default": 0.0, "min": 0.0, "max": 1.0, "step": 0.1}),
-            "b": ("FLOAT", {"default": 0.0, "min": 0.0, "max": 1.0, "step": 0.1}),
-            "a": ("FLOAT", {"default": 0.5, "min": 0.0, "max": 1.0, "step": 0.1}),
+            "r": ("FLOAT", {"default": 0.0, "min": 0.0, "max": 1.0, "step": 0.05}),
+            "g": ("FLOAT", {"default": 0.0, "min": 0.0, "max": 1.0, "step": 0.05}),
+            "b": ("FLOAT", {"default": 0.0, "min": 0.0, "max": 1.0, "step": 0.05}),
+            "a": ("FLOAT", {"default": 0.5, "min": 0.0, "max": 1.0, "step": 0.05}),
             "width": ("INT", {"default": 1024, "min": 16, "max": nodes.MAX_RESOLUTION, "step": 8}),
             "height": ("INT", {"default": 1024, "min": 16, "max": nodes.MAX_RESOLUTION, "step": 8}),
             "batch_size": ("INT", {"default": 1, "min": 1, "max": 4096}),
