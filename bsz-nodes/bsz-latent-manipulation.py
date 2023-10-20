@@ -144,7 +144,7 @@ class BSZColoredLatentImageXL:
     def INPUT_TYPES(s):
         return {"required": {
             "color": (list(XL_CONSTS.keys()),),
-            "strength": ("FLOAT", {"default": 1.0, "min": 0.0, "max": 1.0, "step": 0.1}),
+            "strength": ("FLOAT", {"default": 0.5, "min": 0.0, "max": 1.0, "step": 0.1}),
             "width": ("INT", {"default": 1024, "min": 16, "max": nodes.MAX_RESOLUTION, "step": 8}),
             "height": ("INT", {"default": 1024, "min": 16, "max": nodes.MAX_RESOLUTION, "step": 8}),
             "batch_size": ("INT", {"default": 1, "min": 1, "max": 4096}),
@@ -165,15 +165,16 @@ class BSZColoredLatentImageXL:
         return ({"samples":samples},)
     # }}}
 
-class BSZLatentRGBImage:
+class BSZLatentRGBAImage:
     # {{{
     @classmethod
     def INPUT_TYPES(s):
         return {"required": {
             "vae": ("VAE", ),
-            "r": ("FLOAT", {"default": 0.5, "min": 0.0, "max": 1.0, "step": 0.1}),
-            "g": ("FLOAT", {"default": 0.5, "min": 0.0, "max": 1.0, "step": 0.1}),
-            "b": ("FLOAT", {"default": 0.5, "min": 0.0, "max": 1.0, "step": 0.1}),
+            "r": ("FLOAT", {"default": 0.0, "min": 0.0, "max": 1.0, "step": 0.1}),
+            "g": ("FLOAT", {"default": 0.0, "min": 0.0, "max": 1.0, "step": 0.1}),
+            "b": ("FLOAT", {"default": 0.0, "min": 0.0, "max": 1.0, "step": 0.1}),
+            "a": ("FLOAT", {"default": 0.5, "min": 0.0, "max": 1.0, "step": 0.1}),
             "width": ("INT", {"default": 1024, "min": 16, "max": nodes.MAX_RESOLUTION, "step": 8}),
             "height": ("INT", {"default": 1024, "min": 16, "max": nodes.MAX_RESOLUTION, "step": 8}),
             "batch_size": ("INT", {"default": 1, "min": 1, "max": 4096}),
@@ -183,7 +184,9 @@ class BSZLatentRGBImage:
 
     CATEGORY = "latent"
 
-    def generate(self, vae, r: float, g: float, b: float, width: int, height: int, batch_size: int):
+    def generate(self, vae, r: float, g: float, b: float, a: float, width: int, height: int, batch_size: int):
+        if a < 0.01:
+            return ({'samples': torch.zeros([batch_size, 4, height // 8, width // 8])},)
         pixels = torch.empty([1, height, width, 3])
         view = pixels.permute(0, 3, 1, 2)
         view[0][0].fill_(r)
@@ -192,7 +195,7 @@ class BSZLatentRGBImage:
         del view
         encoder = nodes.VAEEncode()
         latent = encoder.encode(vae, pixels)[0]
-        latent['samples'] = latent['samples'].expand([batch_size, 4, height // 8, width // 8])
+        latent['samples'] = latent['samples'].mul(a).expand([batch_size, 4, height // 8, width // 8])
         return (latent,)
     # }}}
 
@@ -201,7 +204,7 @@ NODE_CLASS_MAPPINGS = {
     "BSZLatentFill": BSZLatentFill,
     "BSZLatentOffsetXL": BSZLatentOffsetXL,
     "BSZColoredLatentImageXL": BSZColoredLatentImageXL,
-    "BSZLatentRGBImage": BSZLatentRGBImage,
+    "BSZLatentRGBAImage": BSZLatentRGBAImage,
 }
 
 NODE_DISPLAY_NAME_MAPPINGS = {
@@ -209,5 +212,5 @@ NODE_DISPLAY_NAME_MAPPINGS = {
     "BSZLatentFill": "BSZ Latent Fill",
     "BSZLatentOffsetXL": "BSZ Latent Offset XL",
     "BSZColoredLatentImageXL": "BSZ Colored Latent Image XL",
-    "BSZLatentRGBImage": "BSZ Latent RGB Image",
+    "BSZLatentRGBAImage": "BSZ Latent RGBA Image",
 }

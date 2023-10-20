@@ -102,9 +102,10 @@ Offsets the latent image(s) value towards black/white according to the SDXL VAE
     - `offset` : 0.0 is unchanged, -1.0 is black, 1.0 is white.
 
 #### BSZLatentRGBImage
-Creates a latent of arbitrary color by encoding it with the provided VAE. Note that even though `0.5, 0.5, 0.5` seems like it should be equal to an empty latent, in reality it is not and seeds will be very different. If you just want fast and easy tinting relative to the empty latent, it's recommended to use `BSZColoredLatentImageXL` or `BSZLatentOffsetXL` instead
+Creates a latent of arbitrary color by encoding it with the provided VAE. Note that even though `0.5, 0.5, 0.5` seems like it should be equal to an empty latent, in reality it is not and seeds will be very different.
   - Input
-    - `r/g/b` : RGB in 0.0 -> 1.0 scale.
+    - `r/g/b` : RGB in 0.0 -> 1.0 scale
+    - `a` : Alpha. 0.0 for empty latent, 1.0 for entirely colored
     - `width/height/batch_size`: Same as EmptyLatentImage
 
 #### BSZLatentFill
