@@ -155,7 +155,7 @@ class BSZColoredLatentImageXL:
     CATEGORY = "latent"
 
     def generate(self, color: str, strength: float, width: int, height: int, batch_size: int):
-        samples = torch.zeros([batch_size, 4, height // 8, width // 8])
+        samples = torch.empty([batch_size, 4, height // 8, width // 8])
         cols = XL_CONSTS[color]
         for batch in samples:
             batch[0].fill_(cols[0] * strength)
@@ -165,11 +165,43 @@ class BSZColoredLatentImageXL:
         return ({"samples":samples},)
     # }}}
 
+class BSZLatentRGBImage:
+    # {{{
+    @classmethod
+    def INPUT_TYPES(s):
+        return {"required": {
+            "vae": ("VAE", ),
+            "r": ("FLOAT", {"default": 0.5, "min": 0.0, "max": 1.0, "step": 0.1}),
+            "g": ("FLOAT", {"default": 0.5, "min": 0.0, "max": 1.0, "step": 0.1}),
+            "b": ("FLOAT", {"default": 0.5, "min": 0.0, "max": 1.0, "step": 0.1}),
+            "width": ("INT", {"default": 1024, "min": 16, "max": nodes.MAX_RESOLUTION, "step": 8}),
+            "height": ("INT", {"default": 1024, "min": 16, "max": nodes.MAX_RESOLUTION, "step": 8}),
+            "batch_size": ("INT", {"default": 1, "min": 1, "max": 4096}),
+        }}
+    RETURN_TYPES = ("LATENT",)
+    FUNCTION = "generate"
+
+    CATEGORY = "latent"
+
+    def generate(self, vae, r: float, g: float, b: float, width: int, height: int, batch_size: int):
+        pixels = torch.empty([1, height, width, 3])
+        view = pixels.permute(0, 3, 1, 2)
+        view[0][0].fill_(r)
+        view[0][1].fill_(g)
+        view[0][2].fill_(b)
+        del view
+        encoder = nodes.VAEEncode()
+        latent = encoder.encode(vae, pixels)[0]
+        latent['samples'] = latent['samples'].expand([batch_size, 4, height // 8, width // 8])
+        return (latent,)
+    # }}}
+
 NODE_CLASS_MAPPINGS = {
     "BSZLatentDebug": BSZLatentDebug,
     "BSZLatentFill": BSZLatentFill,
     "BSZLatentOffsetXL": BSZLatentOffsetXL,
     "BSZColoredLatentImageXL": BSZColoredLatentImageXL,
+    "BSZLatentRGBImage": BSZLatentRGBImage,
 }
 
 NODE_DISPLAY_NAME_MAPPINGS = {
@@ -177,4 +209,5 @@ NODE_DISPLAY_NAME_MAPPINGS = {
     "BSZLatentFill": "BSZ Latent Fill",
     "BSZLatentOffsetXL": "BSZ Latent Offset XL",
     "BSZColoredLatentImageXL": "BSZ Colored Latent Image XL",
+    "BSZLatentRGBImage": "BSZ Latent RGB Image",
 }
