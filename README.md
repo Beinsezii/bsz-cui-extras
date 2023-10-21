@@ -37,53 +37,36 @@ A unique node that functions both as BSZAbsoluteHires and BSZAspectHires with a 
   - Input
     - `use_aspect_scale` : Use aspect & scale inputs instead of desired width/height inputs
 
-### bsz-principled-sdxl.py
-All-in-one solution for SDXL text2img, img2img and scaling/hi res fix. Essentially the sdxl and sdxl-upscale workflows both in one node. Do note that while this node shouldn't be any slower than the regular workflow, due to ComfyUI caching latent results **per-node**, even changing just a refiner setting on this node will result in sampling starting over from the first base pass. There are at least some minimal internal optimizations to skip passes that aren't needed.
+### bsz-principled.py
+All-in-one nodes for SDXL and Scaling pipelines.
 
-Scaling works by running initial scaling passes before running the final pass at `target` size
-
+#### BSZPrincipledSDXL:
+Text2Image, Image2Image pipeline workflows with optional refiner.
 Input fields
   - `base_model` : Model from base checkpoint
   - `base_clip` : CLIP from base checkpoint
-  - `latent_image` : Latent image to start from
+  - `latent` : Latent image to start from
   - `refiner_model` : Model from refiner checkpoint. **Optional**
   - `refiner_clip` : CLIP from refiner checkpoint. **Optional**
-  - `pixel_scale_vae` : VAE used for pixel scaling methods. **Optional**, only needed if they're being used
-  - `positive_prompt_G` : Positive prompt for base CLIP G and refiner
-  - `positive_prompt_L` : Positive prompt for base CLIP L. Usually either set to the same as CLIP G but sometimes is used for supporting terms
+  - `positive_prompt` : Positive prompt
   - `negative_prompt` : Negative prompt
   - `steps` : Steps for non-scaled pass
-  - `denoise` : Denoise amount for latent input
+  - `denoise` : Denoise amount for latent input. Recommend 0.3 for img2img/pixel scale, 0.6 for latent scale
   - `cfg` : CFG scale
   - `refiner_amount` : Refiner to base ratio. Requires refiner model and refiner clip to function
   - `refiner_ascore_positive` : Refiner aesthetic score for positive prompt
   - `refiner_ascore_negative` : Refiner aesthetic score for negative prompt
-  - `sampler` : Sampler
-  - `scheduler` : Scheduler
-  - `scale_method` : If set, will scale image to match target sizes using the provided algorithm
-  - `scale_target_width` : If `scale_method` is enabled, image will be resized to this
-  - `scale_target_height` : If `scale_method` is enabled, image will be resized to this
-  - `scale_steps` : Steps for scaled passes
-  - `scale_denoise` : Denoise amount for scaled passes
-  - `scale_refiner_amount` : Refiner amount for scaled passes. Note the refiner performs **very poorly** on higher resolutions.
+  - `sampler` : Sampler. DDIM or Euler needed for proper refiner usage
+  - `scheduler` : Scheduler. Normal needed for proper refiner usage
   - `seed` : Seedy.
 
-Recommended settings for various workflows...
-
-  - Text2Image: defaults
-  - Text2Image no refiner:
-    - `sampler`: `dpmpp_2m`
-    - `scheduler`: `karras`
-  - Text2Image w/latent upscale:
-    - `scale_method`:`latent bicubic`
-    - `scale_denoise` : `0.6`
-  - Text2Image w/pixel upscale:
-    - `scale_method` : `pixel bicubic`
-    - `scale_denoise` : `0.3`
-    - `vae_tile` : `encode` if scaling to a very large resolution
-  - Img2Img w/upscale:
-    - Same as text2img upscaling
-    - `steps` : `0`
+#### BSZPrincipledScale:
+Up/downscaling with either pixel, latent, or model methods. Pixel and model methods first decode with the VAE before scaling and re-encoding.
+ - `vae` : VAE to use when converting to pixel space and back
+ - `latent` : Latnet image
+ - `width` : New width
+ - `height` : New height
+ - `method` : Scaling method to use
 
 ### bsz-latent-manipulation.py
 Nodes for manipulating the color of latent images.
@@ -149,6 +132,7 @@ Complete demonstration of nodes in a compact workflow
 ## F.A.Q.
 Question|Answer
 ---|---
+What happened to the all-in-one XL node with upscaling and hires fix?|That design was inherently flawed due to ComfyUI's caching system. Now that ComfyUI has bypasses (CTRL+B) I re-wrote it into the single-stage chainable node you see now. This allows the same functionality while not having to restart the whole image when only changing the 2nd stage. Yes it's slightly messier looking but the time savings is huge. Please look at the `sdxl-principled.json` workflow for an example of how to most optimally use the new chained node.
 Why is there a separate VAE loader instead of using the VAE directly from the main checkpoint?|I personally find it desireable to have the VAE decoupled from the checkpoint so you can change it without re-baking the models. If this isn't desirable to you yourself, simply remove the Load VAE node and reconnect the traces into the main Load Checkpoint node instead.
 Why are the KSampler nodes so long?|To show live previews of each stage. I strongly recommend you do the same by launching ComfyUI with `--preview-method latent2rgb` or similar.
 Why is *this* setting the default instead of *that* setting?|It just happens to look better on my benchmark images. If you think it's objectively wrong, open an issue with a compelling case on why it should be changed.

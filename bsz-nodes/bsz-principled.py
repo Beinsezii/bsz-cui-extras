@@ -81,7 +81,7 @@ class BSZPrincipledSDXL:
                 }),
                 "negative_prompt": ("STRING", {
                     "multiline": True,
-                    "default": "cropped, blurry"
+                    "default": "blurry, cropped, text"
                 }),
                 "steps": ("INT", {"default": 30, "min": 0, "max": 10000}),
                 "denoise": ("FLOAT", {"default": 1.0, "min": 0.0, "max": 1.0, "step": 0.01}),

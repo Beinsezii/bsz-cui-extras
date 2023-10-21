@@ -1108,7 +1108,7 @@
       "title": "Negative Prompt",
       "properties": {},
       "widgets_values": [
-        "cropped, blurry"
+        "blurry, cropped, text"
       ],
       "color": "#322",
       "bgcolor": "#533"
