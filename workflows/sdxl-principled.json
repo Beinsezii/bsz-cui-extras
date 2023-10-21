@@ -6,7 +6,7 @@
       "id": 24,
       "type": "VAELoader",
       "pos": [
-        -10,
+        -20,
         400
       ],
       "size": {
@@ -40,7 +40,7 @@
       "id": 18,
       "type": "VAEDecode",
       "pos": [
-        530,
+        520,
         810
       ],
       "size": {
@@ -83,7 +83,7 @@
       "id": 138,
       "type": "VAEDecodeTiled",
       "pos": [
-        500,
+        490,
         840
       ],
       "size": {
@@ -124,124 +124,10 @@
       ]
     },
     {
-      "id": 149,
-      "type": "Reroute",
-      "pos": [
-        710,
-        730
-      ],
-      "size": [
-        75,
-        26
-      ],
-      "flags": {},
-      "order": 14,
-      "mode": 0,
-      "inputs": [
-        {
-          "name": "",
-          "type": "*",
-          "link": 594
-        }
-      ],
-      "outputs": [
-        {
-          "name": "",
-          "type": "INT",
-          "links": [
-            567
-          ],
-          "slot_index": 0
-        }
-      ],
-      "properties": {
-        "showOutputText": false,
-        "horizontal": false
-      },
-      "color": "#2a363b",
-      "bgcolor": "#3f5159"
-    },
-    {
-      "id": 171,
-      "type": "Reroute",
-      "pos": [
-        730,
-        710
-      ],
-      "size": [
-        75,
-        26
-      ],
-      "flags": {},
-      "order": 11,
-      "mode": 0,
-      "inputs": [
-        {
-          "name": "",
-          "type": "*",
-          "link": 577
-        }
-      ],
-      "outputs": [
-        {
-          "name": "",
-          "type": "VAE",
-          "links": [
-            578
-          ],
-          "slot_index": 0
-        }
-      ],
-      "properties": {
-        "showOutputText": false,
-        "horizontal": false
-      },
-      "color": "#432",
-      "bgcolor": "#653"
-    },
-    {
-      "id": 148,
-      "type": "Reroute",
-      "pos": [
-        690,
-        750
-      ],
-      "size": [
-        75,
-        26
-      ],
-      "flags": {},
-      "order": 15,
-      "mode": 0,
-      "inputs": [
-        {
-          "name": "",
-          "type": "*",
-          "link": 593
-        }
-      ],
-      "outputs": [
-        {
-          "name": "",
-          "type": "INT",
-          "links": [
-            568
-          ],
-          "slot_index": 0
-        }
-      ],
-      "properties": {
-        "showOutputText": false,
-        "horizontal": false
-      },
-      "color": "#2a363b",
-      "bgcolor": "#3f5159"
-    },
-    {
       "id": 159,
       "type": "Reroute",
       "pos": [
-        410,
+        400,
         770
       ],
       "size": [
@@ -280,7 +166,7 @@
       "id": 160,
       "type": "Reroute",
       "pos": [
-        410,
+        400,
         790
       ],
       "size": [
@@ -320,7 +206,7 @@
       "id": 131,
       "type": "PrimitiveNode",
       "pos": [
-        -10,
+        -20,
         490
       ],
       "size": {
@@ -355,7 +241,7 @@
       "id": 132,
       "type": "PrimitiveNode",
       "pos": [
-        -10,
+        -20,
         630
       ],
       "size": {
@@ -390,7 +276,7 @@
       "id": 151,
       "type": "BSZColoredLatentImageXL",
       "pos": [
-        140,
+        130,
         770
       ],
       "size": {
@@ -447,7 +333,7 @@
       "id": 175,
       "type": "LatentFromBatch",
       "pos": [
-        160,
+        150,
         930
       ],
       "size": {
@@ -486,7 +372,7 @@
       "id": 147,
       "type": "Reroute",
       "pos": [
-        160,
+        150,
         1050
       ],
       "size": [
@@ -524,7 +410,7 @@
       "id": 146,
       "type": "Reroute",
       "pos": [
-        170,
+        160,
         1020
       ],
       "size": [
@@ -562,7 +448,7 @@
       "id": 4,
       "type": "CheckpointLoaderSimple",
       "pos": [
-        -10,
+        -20,
         140
       ],
       "size": {
@@ -570,7 +456,7 @@
         "1": 100
       },
       "flags": {},
-      "order": 5,
+      "order": 3,
       "mode": 0,
       "outputs": [
         {
@@ -612,7 +498,7 @@
       "id": 11,
       "type": "CheckpointLoaderSimple",
       "pos": [
-        -10,
+        -20,
         270
       ],
       "size": {
@@ -622,7 +508,7 @@
       "flags": {
         "collapsed": false
       },
-      "order": 6,
+      "order": 4,
       "mode": 2,
       "outputs": [
         {
@@ -664,15 +550,303 @@
       "bgcolor": "#355"
     },
     {
+      "id": 168,
+      "type": "BSZPrincipledScale",
+      "pos": [
+        690,
+        430
+      ],
+      "size": {
+        "0": 260,
+        "1": 120
+      },
+      "flags": {},
+      "order": 16,
+      "mode": 4,
+      "inputs": [
+        {
+          "name": "vae",
+          "type": "VAE",
+          "link": 578
+        },
+        {
+          "name": "latent",
+          "type": "LATENT",
+          "link": 622
+        },
+        {
+          "name": "width",
+          "type": "INT",
+          "link": 567,
+          "widget": {
+            "name": "width"
+          }
+        },
+        {
+          "name": "height",
+          "type": "INT",
+          "link": 568,
+          "widget": {
+            "name": "height"
+          }
+        }
+      ],
+      "outputs": [
+        {
+          "name": "LATENT",
+          "type": "LATENT",
+          "links": [
+            623
+          ],
+          "shape": 3,
+          "slot_index": 0
+        }
+      ],
+      "properties": {
+        "Node name for S&R": "BSZPrincipledScale"
+      },
+      "widgets_values": [
+        "model 4x-UltraSharp.pth",
+        1024,
+        1024
+      ]
+    },
+    {
+      "id": 150,
+      "type": "BSZPixelbuster",
+      "pos": [
+        670,
+        810
+      ],
+      "size": {
+        "0": 210,
+        "1": 470
+      },
+      "flags": {},
+      "order": 22,
+      "mode": 0,
+      "inputs": [
+        {
+          "name": "image",
+          "type": "IMAGE",
+          "link": 637,
+          "slot_index": 0
+        },
+        {
+          "name": "e2",
+          "type": "FLOAT",
+          "link": null,
+          "widget": {
+            "name": "e2"
+          }
+        },
+        {
+          "name": "e3",
+          "type": "FLOAT",
+          "link": null,
+          "widget": {
+            "name": "e3"
+          }
+        },
+        {
+          "name": "e4",
+          "type": "FLOAT",
+          "link": null,
+          "widget": {
+            "name": "e4"
+          }
+        },
+        {
+          "name": "e5",
+          "type": "FLOAT",
+          "link": null,
+          "widget": {
+            "name": "e5"
+          }
+        },
+        {
+          "name": "e7",
+          "type": "FLOAT",
+          "link": null,
+          "widget": {
+            "name": "e7"
+          }
+        },
+        {
+          "name": "e8",
+          "type": "FLOAT",
+          "link": null,
+          "widget": {
+            "name": "e8"
+          }
+        },
+        {
+          "name": "e9",
+          "type": "FLOAT",
+          "link": null,
+          "widget": {
+            "name": "e9"
+          }
+        }
+      ],
+      "outputs": [
+        {
+          "name": "IMAGE",
+          "type": "IMAGE",
+          "links": [
+            473
+          ],
+          "shape": 3,
+          "slot_index": 0
+        }
+      ],
+      "properties": {
+        "Node name for S&R": "BSZPixelbuster"
+      },
+      "widgets_values": [
+        "# Contrast booster\n# E1 power\n# E6 neutral\n\nLCH\n\ne1 + 1\n\nl / e6\nl ^ e1\nl * e6",
+        0.2,
+        0,
+        0,
+        0,
+        0,
+        80,
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "id": 19,
+      "type": "SaveImage",
+      "pos": [
+        890,
+        810
+      ],
+      "size": {
+        "0": 500,
+        "1": 470
+      },
+      "flags": {},
+      "order": 23,
+      "mode": 0,
+      "inputs": [
+        {
+          "name": "images",
+          "type": "IMAGE",
+          "link": 473,
+          "slot_index": 0
+        }
+      ],
+      "title": "Principled Image Output",
+      "properties": {},
+      "widgets_values": [
+        "principled"
+      ],
+      "shape": 1
+    },
+    {
+      "id": 121,
+      "type": "BSZCombinedHires",
+      "pos": [
+        -100,
+        770
+      ],
+      "size": {
+        "0": 210,
+        "1": 262
+      },
+      "flags": {
+        "collapsed": false
+      },
+      "order": 5,
+      "mode": 0,
+      "outputs": [
+        {
+          "name": "Lo Res Width",
+          "type": "INT",
+          "links": [
+            451
+          ],
+          "shape": 3,
+          "slot_index": 0
+        },
+        {
+          "name": "Lo Res Height",
+          "type": "INT",
+          "links": [
+            452
+          ],
+          "shape": 3,
+          "slot_index": 1
+        },
+        {
+          "name": "Hi Res Width",
+          "type": "INT",
+          "links": [
+            595
+          ],
+          "shape": 3,
+          "slot_index": 2
+        },
+        {
+          "name": "Hi Res Height",
+          "type": "INT",
+          "links": [
+            435
+          ],
+          "shape": 3,
+          "slot_index": 3
+        }
+      ],
+      "properties": {
+        "Node name for S&R": "BSZCombinedHires"
+      },
+      "widgets_values": [
+        1024,
+        3840,
+        2160,
+        false,
+        1,
+        1,
+        1.5
+      ],
+      "color": "#2a363b",
+      "bgcolor": "#3f5159"
+    },
+    {
+      "id": 125,
+      "type": "Note",
+      "pos": [
+        370,
+        1060
+      ],
+      "size": {
+        "0": 280,
+        "1": 60
+      },
+      "flags": {},
+      "order": 6,
+      "mode": 0,
+      "properties": {
+        "text": ""
+      },
+      "widgets_values": [
+        "Missing nodes? Find them here:\nhttps://github.com/Beinsezii/bsz-cui-extras"
+      ],
+      "color": "#222",
+      "bgcolor": "#000"
+    },
+    {
       "id": 181,
       "type": "BSZPrincipledSDXL",
       "pos": [
-        980,
+        970,
         140
       ],
       "size": {
         "0": 262,
-        "1": 620
+        "1": 630
       },
       "flags": {},
       "order": 17,
@@ -859,7 +1033,7 @@
         2.5,
         "ddim",
         "normal",
-        510239839112958,
+        637089952773719,
         "randomize"
       ]
     },
@@ -867,7 +1041,7 @@
       "id": 158,
       "type": "Reroute",
       "pos": [
-        1290,
+        1300,
         750
       ],
       "size": [
@@ -902,280 +1076,15 @@
       "bgcolor": "#535"
     },
     {
-      "id": 168,
-      "type": "BSZPrincipledScale",
-      "pos": [
-        700,
-        430
-      ],
-      "size": {
-        "0": 260,
-        "1": 120
-      },
-      "flags": {},
-      "order": 16,
-      "mode": 4,
-      "inputs": [
-        {
-          "name": "vae",
-          "type": "VAE",
-          "link": 578
-        },
-        {
-          "name": "latent",
-          "type": "LATENT",
-          "link": 622
-        },
-        {
-          "name": "width",
-          "type": "INT",
-          "link": 567,
-          "widget": {
-            "name": "width"
-          }
-        },
-        {
-          "name": "height",
-          "type": "INT",
-          "link": 568,
-          "widget": {
-            "name": "height"
-          }
-        }
-      ],
-      "outputs": [
-        {
-          "name": "LATENT",
-          "type": "LATENT",
-          "links": [
-            623
-          ],
-          "shape": 3,
-          "slot_index": 0
-        }
-      ],
-      "properties": {
-        "Node name for S&R": "BSZPrincipledScale"
-      },
-      "widgets_values": [
-        "model 4x-UltraSharp.pth",
-        1024,
-        1024
-      ]
-    },
-    {
-      "id": 150,
-      "type": "BSZPixelbuster",
-      "pos": [
-        680,
-        810
-      ],
-      "size": {
-        "0": 210,
-        "1": 470
-      },
-      "flags": {},
-      "order": 22,
-      "mode": 0,
-      "inputs": [
-        {
-          "name": "image",
-          "type": "IMAGE",
-          "link": 637,
-          "slot_index": 0
-        },
-        {
-          "name": "e2",
-          "type": "FLOAT",
-          "link": null,
-          "widget": {
-            "name": "e2"
-          }
-        },
-        {
-          "name": "e3",
-          "type": "FLOAT",
-          "link": null,
-          "widget": {
-            "name": "e3"
-          }
-        },
-        {
-          "name": "e4",
-          "type": "FLOAT",
-          "link": null,
-          "widget": {
-            "name": "e4"
-          }
-        },
-        {
-          "name": "e5",
-          "type": "FLOAT",
-          "link": null,
-          "widget": {
-            "name": "e5"
-          }
-        },
-        {
-          "name": "e7",
-          "type": "FLOAT",
-          "link": null,
-          "widget": {
-            "name": "e7"
-          }
-        },
-        {
-          "name": "e8",
-          "type": "FLOAT",
-          "link": null,
-          "widget": {
-            "name": "e8"
-          }
-        },
-        {
-          "name": "e9",
-          "type": "FLOAT",
-          "link": null,
-          "widget": {
-            "name": "e9"
-          }
-        }
-      ],
-      "outputs": [
-        {
-          "name": "IMAGE",
-          "type": "IMAGE",
-          "links": [
-            473
-          ],
-          "shape": 3,
-          "slot_index": 0
-        }
-      ],
-      "properties": {
-        "Node name for S&R": "BSZPixelbuster"
-      },
-      "widgets_values": [
-        "# Contrast booster\n# E1 power\n# E6 neutral\n\nLCH\n\ne1 + 1\n\nl / e6\nl ^ e1\nl * e6",
-        0.2,
-        0,
-        0,
-        0,
-        0,
-        80,
-        0,
-        0,
-        0
-      ]
-    },
-    {
-      "id": 19,
-      "type": "SaveImage",
-      "pos": [
-        900,
-        810
-      ],
-      "size": {
-        "0": 500,
-        "1": 470
-      },
-      "flags": {},
-      "order": 23,
-      "mode": 0,
-      "inputs": [
-        {
-          "name": "images",
-          "type": "IMAGE",
-          "link": 473,
-          "slot_index": 0
-        }
-      ],
-      "title": "Principled Image Output",
-      "properties": {},
-      "widgets_values": [
-        "principled"
-      ],
-      "shape": 1
-    },
-    {
-      "id": 121,
-      "type": "BSZCombinedHires",
-      "pos": [
-        -90,
-        770
-      ],
-      "size": [
-        210,
-        260
-      ],
-      "flags": {
-        "collapsed": false
-      },
-      "order": 3,
-      "mode": 0,
-      "outputs": [
-        {
-          "name": "Lo Res Width",
-          "type": "INT",
-          "links": [
-            451
-          ],
-          "shape": 3,
-          "slot_index": 0
-        },
-        {
-          "name": "Lo Res Height",
-          "type": "INT",
-          "links": [
-            452
-          ],
-          "shape": 3,
-          "slot_index": 1
-        },
-        {
-          "name": "Hi Res Width",
-          "type": "INT",
-          "links": [
-            595
-          ],
-          "shape": 3,
-          "slot_index": 2
-        },
-        {
-          "name": "Hi Res Height",
-          "type": "INT",
-          "links": [
-            435
-          ],
-          "shape": 3,
-          "slot_index": 3
-        }
-      ],
-      "properties": {
-        "Node name for S&R": "BSZCombinedHires"
-      },
-      "widgets_values": [
-        1024,
-        3840,
-        2160,
-        false,
-        1,
-        1,
-        1.5
-      ],
-      "color": "#2a363b",
-      "bgcolor": "#3f5159"
-    },
-    {
       "id": 180,
       "type": "BSZPrincipledSDXL",
       "pos": [
-        420,
+        410,
         140
       ],
       "size": {
         "0": 262,
-        "1": 620
+        "1": 630
       },
       "flags": {},
       "order": 13,
@@ -1340,31 +1249,122 @@
         "ddim",
         "normal",
         1,
-        "fixed"
+        "randomize"
       ]
     },
     {
-      "id": 125,
-      "type": "Note",
+      "id": 148,
+      "type": "Reroute",
       "pos": [
-        380,
-        1060
+        720,
+        750
       ],
-      "size": {
-        "0": 280,
-        "1": 60
-      },
+      "size": [
+        75,
+        26
+      ],
       "flags": {},
-      "order": 4,
+      "order": 15,
       "mode": 0,
-      "properties": {
-        "text": ""
-      },
-      "widgets_values": [
-        "Missing nodes? Find them here:\nhttps://github.com/Beinsezii/bsz-cui-extras"
+      "inputs": [
+        {
+          "name": "",
+          "type": "*",
+          "link": 593
+        }
       ],
-      "color": "#222",
-      "bgcolor": "#000"
+      "outputs": [
+        {
+          "name": "",
+          "type": "INT",
+          "links": [
+            568
+          ],
+          "slot_index": 0
+        }
+      ],
+      "properties": {
+        "showOutputText": false,
+        "horizontal": false
+      },
+      "color": "#2a363b",
+      "bgcolor": "#3f5159"
+    },
+    {
+      "id": 149,
+      "type": "Reroute",
+      "pos": [
+        720,
+        730
+      ],
+      "size": [
+        75,
+        26
+      ],
+      "flags": {},
+      "order": 14,
+      "mode": 0,
+      "inputs": [
+        {
+          "name": "",
+          "type": "*",
+          "link": 594
+        }
+      ],
+      "outputs": [
+        {
+          "name": "",
+          "type": "INT",
+          "links": [
+            567
+          ],
+          "slot_index": 0
+        }
+      ],
+      "properties": {
+        "showOutputText": false,
+        "horizontal": false
+      },
+      "color": "#2a363b",
+      "bgcolor": "#3f5159"
+    },
+    {
+      "id": 171,
+      "type": "Reroute",
+      "pos": [
+        720,
+        710
+      ],
+      "size": [
+        75,
+        26
+      ],
+      "flags": {},
+      "order": 11,
+      "mode": 0,
+      "inputs": [
+        {
+          "name": "",
+          "type": "*",
+          "link": 577
+        }
+      ],
+      "outputs": [
+        {
+          "name": "",
+          "type": "VAE",
+          "links": [
+            578
+          ],
+          "slot_index": 0
+        }
+      ],
+      "properties": {
+        "showOutputText": false,
+        "horizontal": false
+      },
+      "color": "#432",
+      "bgcolor": "#653"
     }
   ],
   "links": [
