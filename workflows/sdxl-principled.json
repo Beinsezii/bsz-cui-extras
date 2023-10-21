@@ -7,7 +7,7 @@
       "type": "VAELoader",
       "pos": [
         -10,
-        410
+        400
       ],
       "size": {
         "0": 360,
@@ -40,8 +40,8 @@
       "id": 18,
       "type": "VAEDecode",
       "pos": [
-        550,
-        820
+        530,
+        810
       ],
       "size": {
         "0": 210,
@@ -83,8 +83,8 @@
       "id": 138,
       "type": "VAEDecodeTiled",
       "pos": [
-        520,
-        850
+        500,
+        840
       ],
       "size": {
         "0": 210,
@@ -127,8 +127,8 @@
       "id": 149,
       "type": "Reroute",
       "pos": [
-        730,
-        740
+        710,
+        730
       ],
       "size": [
         75,
@@ -165,8 +165,8 @@
       "id": 171,
       "type": "Reroute",
       "pos": [
-        750,
-        720
+        730,
+        710
       ],
       "size": [
         75,
@@ -203,8 +203,8 @@
       "id": 148,
       "type": "Reroute",
       "pos": [
-        710,
-        760
+        690,
+        750
       ],
       "size": [
         75,
@@ -241,8 +241,8 @@
       "id": 159,
       "type": "Reroute",
       "pos": [
-        430,
-        780
+        410,
+        770
       ],
       "size": [
         75,
@@ -280,8 +280,8 @@
       "id": 160,
       "type": "Reroute",
       "pos": [
-        430,
-        800
+        410,
+        790
       ],
       "size": [
         75,
@@ -321,7 +321,7 @@
       "type": "PrimitiveNode",
       "pos": [
         -10,
-        500
+        490
       ],
       "size": {
         "0": 360,
@@ -356,7 +356,7 @@
       "type": "PrimitiveNode",
       "pos": [
         -10,
-        640
+        630
       ],
       "size": {
         "0": 360,
@@ -391,7 +391,7 @@
       "type": "BSZColoredLatentImageXL",
       "pos": [
         140,
-        780
+        770
       ],
       "size": {
         "0": 230,
@@ -448,7 +448,7 @@
       "type": "LatentFromBatch",
       "pos": [
         160,
-        940
+        930
       ],
       "size": {
         "0": 210,
@@ -483,101 +483,11 @@
       "bgcolor": "#535"
     },
     {
-      "id": 121,
-      "type": "BSZCombinedHires",
-      "pos": [
-        -110,
-        780
-      ],
-      "size": {
-        "0": 210,
-        "1": 262
-      },
-      "flags": {},
-      "order": 3,
-      "mode": 0,
-      "outputs": [
-        {
-          "name": "Lo Res Width",
-          "type": "INT",
-          "links": [
-            451
-          ],
-          "shape": 3,
-          "slot_index": 0
-        },
-        {
-          "name": "Lo Res Height",
-          "type": "INT",
-          "links": [
-            452
-          ],
-          "shape": 3,
-          "slot_index": 1
-        },
-        {
-          "name": "Hi Res Width",
-          "type": "INT",
-          "links": [
-            595
-          ],
-          "shape": 3,
-          "slot_index": 2
-        },
-        {
-          "name": "Hi Res Height",
-          "type": "INT",
-          "links": [
-            435
-          ],
-          "shape": 3,
-          "slot_index": 3
-        }
-      ],
-      "properties": {
-        "Node name for S&R": "BSZCombinedHires"
-      },
-      "widgets_values": [
-        1024,
-        3840,
-        2160,
-        false,
-        1,
-        1,
-        1.5
-      ],
-      "color": "#2a363b",
-      "bgcolor": "#3f5159"
-    },
-    {
-      "id": 125,
-      "type": "Note",
-      "pos": [
-        400,
-        1010
-      ],
-      "size": {
-        "0": 280,
-        "1": 60
-      },
-      "flags": {},
-      "order": 4,
-      "mode": 0,
-      "properties": {
-        "text": ""
-      },
-      "widgets_values": [
-        "Missing nodes? Find them here:\nhttps://github.com/Beinsezii/bsz-cui-extras"
-      ],
-      "color": "#222",
-      "bgcolor": "#000"
-    },
-    {
       "id": 147,
       "type": "Reroute",
       "pos": [
         160,
-        1060
+        1050
       ],
       "size": [
         75,
@@ -615,7 +525,7 @@
       "type": "Reroute",
       "pos": [
         170,
-        1030
+        1020
       ],
       "size": [
         75,
@@ -653,7 +563,7 @@
       "type": "CheckpointLoaderSimple",
       "pos": [
         -10,
-        150
+        140
       ],
       "size": {
         "0": 360,
@@ -703,7 +613,7 @@
       "type": "CheckpointLoaderSimple",
       "pos": [
         -10,
-        280
+        270
       ],
       "size": {
         "0": 360,
@@ -757,8 +667,8 @@
       "id": 181,
       "type": "BSZPrincipledSDXL",
       "pos": [
-        1000,
-        150
+        980,
+        140
       ],
       "size": {
         "0": 262,
@@ -957,8 +867,8 @@
       "id": 158,
       "type": "Reroute",
       "pos": [
-        1310,
-        760
+        1290,
+        750
       ],
       "size": [
         75,
@@ -995,8 +905,8 @@
       "id": 168,
       "type": "BSZPrincipledScale",
       "pos": [
-        720,
-        440
+        700,
+        430
       ],
       "size": {
         "0": 260,
@@ -1057,8 +967,8 @@
       "id": 150,
       "type": "BSZPixelbuster",
       "pos": [
-        700,
-        820
+        680,
+        810
       ],
       "size": {
         "0": 210,
@@ -1162,8 +1072,8 @@
       "id": 19,
       "type": "SaveImage",
       "pos": [
-        920,
-        820
+        900,
+        810
       ],
       "size": {
         "0": 500,
@@ -1188,11 +1098,80 @@
       "shape": 1
     },
     {
+      "id": 121,
+      "type": "BSZCombinedHires",
+      "pos": [
+        -90,
+        770
+      ],
+      "size": [
+        210,
+        260
+      ],
+      "flags": {
+        "collapsed": false
+      },
+      "order": 3,
+      "mode": 0,
+      "outputs": [
+        {
+          "name": "Lo Res Width",
+          "type": "INT",
+          "links": [
+            451
+          ],
+          "shape": 3,
+          "slot_index": 0
+        },
+        {
+          "name": "Lo Res Height",
+          "type": "INT",
+          "links": [
+            452
+          ],
+          "shape": 3,
+          "slot_index": 1
+        },
+        {
+          "name": "Hi Res Width",
+          "type": "INT",
+          "links": [
+            595
+          ],
+          "shape": 3,
+          "slot_index": 2
+        },
+        {
+          "name": "Hi Res Height",
+          "type": "INT",
+          "links": [
+            435
+          ],
+          "shape": 3,
+          "slot_index": 3
+        }
+      ],
+      "properties": {
+        "Node name for S&R": "BSZCombinedHires"
+      },
+      "widgets_values": [
+        1024,
+        3840,
+        2160,
+        false,
+        1,
+        1,
+        1.5
+      ],
+      "color": "#2a363b",
+      "bgcolor": "#3f5159"
+    },
+    {
       "id": 180,
       "type": "BSZPrincipledSDXL",
       "pos": [
-        440,
-        150
+        420,
+        140
       ],
       "size": {
         "0": 262,
@@ -1363,6 +1342,29 @@
         1,
         "fixed"
       ]
+    },
+    {
+      "id": 125,
+      "type": "Note",
+      "pos": [
+        380,
+        1060
+      ],
+      "size": {
+        "0": 280,
+        "1": 60
+      },
+      "flags": {},
+      "order": 4,
+      "mode": 0,
+      "properties": {
+        "text": ""
+      },
+      "widgets_values": [
+        "Missing nodes? Find them here:\nhttps://github.com/Beinsezii/bsz-cui-extras"
+      ],
+      "color": "#222",
+      "bgcolor": "#000"
     }
   ],
   "links": [
