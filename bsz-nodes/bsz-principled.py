@@ -105,8 +105,8 @@ class BSZPrincipledSDXL:
         "FLOAT", # ref
         "FLOAT", # ascp
         "FLOAT", # ascn
-        # "COMBO", # sampler
-        # "COMBO", # scheduler
+        samplers.KSampler.SAMPLERS, # sampler
+        samplers.KSampler.SCHEDULERS, # scheduler
         "INT", # seed
     )
     RETURN_NAMES = (
@@ -119,8 +119,8 @@ class BSZPrincipledSDXL:
         "refiner_amount",
         "refiner_asc_pos",
         "refiner_asc_neg",
-        # "sampler",
-        # "scheduler",
+        "sampler",
+        "scheduler",
         "seed",
     )
 
@@ -267,8 +267,8 @@ class BSZPrincipledSDXL:
             refiner_amount,
             refiner_asc_pos,
             refiner_asc_neg,
-            # sampler,
-            # scheduler,
+            sampler,
+            scheduler,
             seed,
         )
     #}}}
