@@ -62,7 +62,7 @@ h = v1
 h * 240"""
 
 DEFAULT_LATENT="""\
-# Do not use change colorspace! Latent ≠ pixels.
+# Do not change colorspace! Latent ≠ pixels
 # Use c1, c2, c3, c4 for channels instead of RGBA
 
 c1 = xnorm
