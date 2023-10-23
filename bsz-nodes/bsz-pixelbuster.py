@@ -148,7 +148,7 @@ class BSZPixelbuster:
 
     #OUTPUT_NODE = False
 
-    CATEGORY = "image/postprocessing"
+    CATEGORY = "beinsezii/image"
 
     def pixelbuster(
         self, image, code: str,
@@ -252,7 +252,7 @@ class BSZLatentbuster:
 
     #OUTPUT_NODE = False
 
-    CATEGORY = "beinsezii/latent"
+    CATEGORY = "beinsezii/latent/advanced"
 
     def latentbuster(
         self, latent, code: str,

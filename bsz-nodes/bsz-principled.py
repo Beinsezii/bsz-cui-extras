@@ -32,7 +32,7 @@ class BSZPrincipledScale:
 
     RETURN_TYPES = ("LATENT",)
     FUNCTION = "scale"
-    CATEGORY = "image"
+    CATEGORY = "beinsezii/image"
 
     def scale(self, vae, latent, method, width, height):
         latent_height, latent_width = latent["samples"].size()[2:4]
@@ -128,7 +128,7 @@ class BSZPrincipledSDXL:
 
     #OUTPUT_NODE = False
 
-    CATEGORY = "sampling"
+    CATEGORY = "beinsezii/sampling"
 
     def principled_sdxl(
         self,

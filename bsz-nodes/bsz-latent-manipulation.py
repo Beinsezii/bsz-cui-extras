@@ -29,7 +29,7 @@ class BSZLatentDebug:
 
     OUTPUT_NODE = True
 
-    CATEGORY = "latent/advanced"
+    CATEGORY = "beinsezii/latent/advanced"
 
     def log(self, latent):
         samples = latent['samples']
@@ -84,7 +84,7 @@ class BSZLatentFill:
 
     #OUTPUT_NODE = False
 
-    CATEGORY = "latent/advanced"
+    CATEGORY = "beinsezii/latent/advanced"
 
     def fill(self, latent, a: float, b: float, c: float, d: float):
         samples = latent['samples'].clone();
@@ -119,7 +119,7 @@ class BSZLatentOffsetXL:
 
     #OUTPUT_NODE = False
 
-    CATEGORY = "latent"
+    CATEGORY = "beinsezii/latent"
 
     def offset(self, latent, offset: float):
         samples = latent['samples'].clone();
@@ -152,7 +152,7 @@ class BSZColoredLatentImageXL:
     RETURN_TYPES = ("LATENT",)
     FUNCTION = "generate"
 
-    CATEGORY = "latent"
+    CATEGORY = "beinsezii/latent"
 
     def generate(self, color: str, strength: float, width: int, height: int, batch_size: int):
         samples = torch.empty([batch_size, 4, height // 8, width // 8])
@@ -182,7 +182,7 @@ class BSZLatentRGBAImage:
     RETURN_TYPES = ("LATENT",)
     FUNCTION = "generate"
 
-    CATEGORY = "latent"
+    CATEGORY = "beinsezii/latent"
 
     def generate(self, vae, r: float, g: float, b: float, a: float, width: int, height: int, batch_size: int):
         if a < 0.01:

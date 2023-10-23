@@ -34,7 +34,7 @@ class BSZAbsoluteHires:
     RETURN_TYPES = ("INT", "INT", "INT", "INT")
     RETURN_NAMES = ("Lo Res Width", "Lo Res Height", "Hi Res Width", "Hi Res Height")
     FUNCTION = "hiresify"
-    CATEGORY = "utils"
+    CATEGORY = "beinsezii/utils"
 
     def hiresify(self, base_model_res: int, desired_width: int, desired_height: int) -> (int, int, int, int):
         mpx: int = base_model_res**2
@@ -88,7 +88,7 @@ class BSZAspectHires:
     RETURN_TYPES = ("INT", "INT", "INT", "INT")
     RETURN_NAMES = ("Lo Res Width", "Lo Res Height", "Hi Res Width", "Hi Res Height")
     FUNCTION = "hiresify"
-    CATEGORY = "utils"
+    CATEGORY = "beinsezii/utils"
 
     def hiresify(self, base_model_res: int, desired_aspect_x: float, desired_aspect_y: float, scale: float) -> (int, int, int, int):
         mpx: int = base_model_res**2
@@ -157,7 +157,7 @@ class BSZCombinedHires:
     RETURN_TYPES = ("INT", "INT", "INT", "INT")
     RETURN_NAMES = ("Lo Res Width", "Lo Res Height", "Hi Res Width", "Hi Res Height")
     FUNCTION = "hiresify"
-    CATEGORY = "utils"
+    CATEGORY = "beinsezii/utils"
 
     def hiresify(self, base_model_res: int, desired_width: int, desired_height: int, use_aspect_scale: bool, desired_aspect_x: float, desired_aspect_y: float, scale: float) -> (int, int, int, int):
         if use_aspect_scale:
