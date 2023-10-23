@@ -61,7 +61,18 @@ v1 * v2
 h = v1
 h * 240"""
 
+DEFAULT_LATENT="""\
+# Do not use change colorspace! Latent ≠ pixels.
+# Use c1, c2, c3, c4 for channels instead of RGBA
+
+c1 = xnorm
+c1 * pi
+c1 cos c1
+c1 * 15
+"""
+
 class BSZPixelbuster:
+    # {{{
     @classmethod
     def INPUT_TYPES(s):
         return {
@@ -162,10 +173,116 @@ class BSZPixelbuster:
             ndarr[:] = buff.reshape(height, width, channels+1)[:, :, :-1]
             del buff
         return (image,)
+    # }}}
+
+class BSZLatentbuster:
+    # {{{
+    @classmethod
+    def INPUT_TYPES(s):
+        return {
+            "optional": {
+                "e1": ("FLOAT", {
+                    "default": 0.0,
+                    "min": 0.0,
+                    "max": 1.0,
+                    "step": 0.1
+                }),
+                "e2": ("FLOAT", {
+                    "default": 0.0,
+                    "min": 0.0,
+                    "max": 1.0,
+                    "step": 0.1
+                }),
+                "e3": ("FLOAT", {
+                    "default": 0.0,
+                    "min": 0.0,
+                    "max": 1.0,
+                    "step": 0.1
+                }),
+                "e4": ("FLOAT", {
+                    "default": 0.0,
+                    "min": -1.0,
+                    "max": 1.0,
+                    "step": 0.1
+                }),
+                "e5": ("FLOAT", {
+                    "default": 0.0,
+                    "min": -1.0,
+                    "max": 1.0,
+                    "step": 0.1
+                }),
+                "e6": ("FLOAT", {
+                    "default": 0.0,
+                    "min": 0.0,
+                    "max": 100.0,
+                    "step": 5.0
+                }),
+                "e7": ("FLOAT", {
+                    "default": 0.0,
+                    "min": 0.0,
+                    "max": 100.0,
+                    "step": 5.0
+                }),
+                "e8": ("FLOAT", {
+                    "default": 0.0,
+                    "min": -100.0,
+                    "max": 100.0,
+                    "step": 5.0
+                }),
+                "e9": ("FLOAT", {
+                    "default": 0.0,
+                    "min": -100.0,
+                    "max": 100.0,
+                    "step": 5.0
+                }),
+            },
+            "required": {
+                "latent": ("LATENT",),
+                "code": ("STRING", {
+                    "multiline": True,
+                    "default": DEFAULT_LATENT,
+                }),
+            },
+        }
+
+    RETURN_TYPES = ("LATENT",)
+    # RETURN_NAMES = ("image",)
+
+    FUNCTION = "latentbuster"
+
+    #OUTPUT_NODE = False
+
+    CATEGORY = "beinsezii/latent"
+
+    def latentbuster(
+        self, latent, code: str,
+        e1=None, e2=None, e3=None, e4=None, e5=None, e6=None, e7=None, e8=None, e9=None
+    ):
+        if len(code.strip()) == 0:
+            return (latent,)
+        externals = [e if e is not None else 0.0 for e in [e1, e2, e3, e4, e5, e6, e7, e8, e9]]
+        latent = latent.copy()
+        samples = latent['samples'].cpu().clone()
+        batch_size, channels, height, width = samples.shape
+        for batch in samples:
+            ndarr = batch.numpy()
+            buff = ndarr.swapaxes(1, 2).reshape(channels*height*width, order='F')
+            pb_lib.pixelbuster_ffi_ext(
+                code.encode('UTF-8'),
+                "lrgba".encode('UTF-8'),
+                buff,
+                buff.nbytes,
+                width,
+                *externals
+            )
+            ndarr[:] = buff.reshape(channels, height, width, order='F').swapaxes(1, 2)
+        latent['samples'] = samples
+        return (latent,)
+    # }}}
 
 class BSZPixelbusterHelp:
     RETURN_TYPES = ()
-    CATEGORY = "image/postprocessing"
+    CATEGORY = "beinsezii/image"
     # FUNCTION = "pixelbuster"
     @classmethod
     def INPUT_TYPES(s):
@@ -178,5 +295,13 @@ class BSZPixelbusterHelp:
             },
         }
 
-NODE_CLASS_MAPPINGS = {"BSZPixelbuster": BSZPixelbuster, "BSZPixelbusterHelp": BSZPixelbusterHelp}
-NODE_DISPLAY_NAME_MAPPINGS = {"BSZPixelbuster": "BSZ Pixelbuster", "BSZPixelbusterHelp": "BSZ Pixelbuster Help"}
+NODE_CLASS_MAPPINGS = {
+    "BSZPixelbuster": BSZPixelbuster,
+    "BSZLatentbuster": BSZLatentbuster,
+    "BSZPixelbusterHelp": BSZPixelbusterHelp
+}
+NODE_DISPLAY_NAME_MAPPINGS = {
+    "BSZPixelbuster": "BSZ Pixelbuster",
+    "BSZLatentbuster": "BSZ Latentbuster",
+    "BSZPixelbusterHelp": "BSZ Pixelbuster Help"
+}
