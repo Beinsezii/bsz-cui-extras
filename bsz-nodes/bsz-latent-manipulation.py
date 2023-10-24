@@ -275,6 +275,7 @@ class BSZLatentGradient:
         if pattern == "sine" or pattern == "sine2":
             factor = ynorm().add(yoffset).mul(yfrequency) if pattern == "sine" else ynorm().mul(-1).add(1+yoffset).mul(yfrequency)
             factor += xnorm().add(xoffset).mul(xfrequency)
+            factor.div_(2 - abs(xfrequency / 10 - yfrequency / 10))
             factor.mul_(pi)
             factor.cos_()
             factor.add_(1)
