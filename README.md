@@ -91,6 +91,22 @@ Creates a latent of arbitrary color by encoding it with the provided VAE. Note t
     - `a` : Alpha. 0.0 for empty latent, 1.0 for entirely colored
     - `width/height/batch_size`: Same as EmptyLatentImage
 
+#### BSZLatentGardient
+Blend two latents together in a gradient pattern
+  - Input
+    - `a` : First latent; will copy params from this
+    - `b` : Second latent
+    - `pattern` : Gradient pattern
+      - `sine` : Typical banded gradient. Both horizontal, vertial, diagonal depneding on frequency
+      - `sine2` : Same as `sine` but the y axis is flipped
+      - `circle` : Produces circles packed in a honeycomb shape
+      - `squircle` : Produces squircles packed in a grid
+    - `xfrequency` : Pattern repetitions along X axis; horizontal gradient
+    - `yfrequency` : Pattern repetitions along Y axis; vertical gradient
+    - `xoffset` : Pattern start offset for X frequencies
+    - `yoffset` : Pattern start offset for Y frequencies
+    - `invert` : Invert A/B colors. Will still take params from A
+
 #### BSZLatentFill
 Fill the four latent channels with arbitrary values.
   - Input

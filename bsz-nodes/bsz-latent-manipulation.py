@@ -1,5 +1,6 @@
 import torch
 import nodes
+from math import pi
 
 XL_CONSTS = {
     "black" : [-21.675981521606445, 3.864609956741333, 2.4103028774261475, 2.579195261001587],
@@ -199,12 +200,123 @@ class BSZLatentRGBAImage:
         return (latent,)
     # }}}
 
+class BSZLatentGradient:
+    # {{{
+    @classmethod
+    def INPUT_TYPES(s):
+        return {
+            "required": {
+                "a": ("LATENT",),
+                "b": ("LATENT",),
+                "pattern": ([
+                    "sine",
+                    "sine2",
+                    "circle",
+                    "squircle",
+                ],),
+                "xfrequency": ("FLOAT", {
+                    "default": 1.0,
+                    "min": 0.0,
+                    "max": 10.0,
+                    "step": 0.05,
+                }),
+                "yfrequency": ("FLOAT", {
+                    "default": 0.0,
+                    "min": 0.0,
+                    "max": 10.0,
+                    "step": 0.05,
+                }),
+                "xoffset": ("FLOAT", {
+                    "default": 0.0,
+                    "min": -1.0,
+                    "max": 1.0,
+                    "step": 0.05,
+                }),
+                "yoffset": ("FLOAT", {
+                    "default": 0.0,
+                    "min": -1.0,
+                    "max": 1.0,
+                    "step": 0.05,
+                }),
+                "invert": ("BOOLEAN", {"default": False},),
+            }
+        }
+
+    RETURN_TYPES = ("LATENT",)
+    # RETURN_NAMES = ("latent",)
+
+    FUNCTION = "gradient"
+
+    #OUTPUT_NODE = False
+
+    CATEGORY = "beinsezii/latent"
+
+    def gradient(
+        self,
+        a,
+        b,
+        pattern: str,
+        xfrequency: float,
+        yfrequency: float,
+        xoffset: float,
+        yoffset: float,
+        invert: bool
+    ):
+        if a['samples'].shape != b['samples'].shape:
+            raise ValueError(f"Latents must have equivalent shapes!\nA: {a['samples'].shape}\nB: {b['samples'].shape}")
+        aamples = a['samples'].clone();
+        bamples = b['samples'].clone();
+        smallest = min(len(aamples), len(bamples))
+        batch, channels, height, width = aamples.shape
+
+        xnorm = lambda: torch.tensor([n / (width-1) for n in reversed(range(width))]).expand([channels, height, width]).clone()
+        ynorm = lambda: torch.tensor([n / (height-1) for n in reversed(range(height))]).expand([channels, width, height]).swapaxes(1, 2).clone()
+
+        if pattern == "sine" or pattern == "sine2":
+            factor = ynorm().add(yoffset).mul(yfrequency) if pattern == "sine" else ynorm().mul(-1).add(1+yoffset).mul(yfrequency)
+            factor += xnorm().add(xoffset).mul(xfrequency)
+            factor.div_(max(1, xfrequency / 10 + yfrequency / 10))
+            factor.mul_(pi)
+            factor.cos_()
+            factor.add_(1)
+            factor.div_(2)
+        elif pattern == "circle":
+            factor = xnorm().add(xoffset).mul(pi).mul(xfrequency).sin()
+            factor += ynorm().add(yoffset).mul(pi).mul(yfrequency).sin()
+            factor.div_(2)
+            factor.abs_()
+        elif pattern == "squircle":
+            factor = xnorm().add(xoffset).mul(pi).mul(xfrequency).sin()
+            factor *= ynorm().add(yoffset).mul(pi).mul(yfrequency).sin()
+            factor.abs_()
+        else:
+            raise ValueError("Invalid gradient pattern!")
+
+        for na, nb in zip(aamples, bamples):
+            batchfac = factor.clone()
+            if invert:
+                na *= batchfac
+                batchfac.mul_(-1)
+                batchfac.add_(1)
+                nb *= batchfac
+            else:
+                nb *= batchfac
+                batchfac.mul_(-1)
+                batchfac.add_(1)
+                na *= batchfac
+            na += nb
+            del batchfac
+
+        return (a | {'samples': aamples},)
+# }}}
+
 NODE_CLASS_MAPPINGS = {
     "BSZLatentDebug": BSZLatentDebug,
     "BSZLatentFill": BSZLatentFill,
     "BSZLatentOffsetXL": BSZLatentOffsetXL,
     "BSZColoredLatentImageXL": BSZColoredLatentImageXL,
     "BSZLatentRGBAImage": BSZLatentRGBAImage,
+    "BSZLatentGradient": BSZLatentGradient,
 }
 
 NODE_DISPLAY_NAME_MAPPINGS = {
@@ -213,4 +325,5 @@ NODE_DISPLAY_NAME_MAPPINGS = {
     "BSZLatentOffsetXL": "BSZ Latent Offset XL",
     "BSZColoredLatentImageXL": "BSZ Colored Latent Image XL",
     "BSZLatentRGBAImage": "BSZ Latent RGBA Image",
+    "BSZLatentGradient": "BSZ Latent Gradient",
 }
