@@ -1,6 +1,7 @@
 import torch
 import nodes
 from math import pi
+from colorsys import hsv_to_rgb
 
 XL_CONSTS = {
     "black" : [-21.675981521606445, 3.864609956741333, 2.4103028774261475, 2.579195261001587],
@@ -200,6 +201,30 @@ class BSZLatentRGBAImage:
         return (latent,)
     # }}}
 
+class BSZLatentHSVAImage:
+    # {{{
+    @classmethod
+    def INPUT_TYPES(s):
+        return {"required": {
+            "vae": ("VAE", ),
+            "h": ("INT", {"default": 0, "min": 0, "max": 360, "step": 5}),
+            "s": ("FLOAT", {"default": 0.0, "min": 0.0, "max": 1.0, "step": 0.05}),
+            "v": ("FLOAT", {"default": 0.0, "min": 0.0, "max": 1.0, "step": 0.05}),
+            "a": ("FLOAT", {"default": 0.5, "min": 0.0, "max": 1.0, "step": 0.05}),
+            "width": ("INT", {"default": 1024, "min": 16, "max": nodes.MAX_RESOLUTION, "step": 8}),
+            "height": ("INT", {"default": 1024, "min": 16, "max": nodes.MAX_RESOLUTION, "step": 8}),
+            "batch_size": ("INT", {"default": 1, "min": 1, "max": 4096}),
+        }}
+    RETURN_TYPES = ("LATENT",)
+    FUNCTION = "generate"
+
+    CATEGORY = "beinsezii/latent"
+
+    def generate(self, vae, h: float, s: float, v: float, a: float, width: int, height: int, batch_size: int):
+        r, g, b = hsv_to_rgb(h / 360, s, v)
+        return BSZLatentRGBAImage.generate(self, vae, r, g, b, a, width, height, batch_size)
+    # }}}
+
 class BSZLatentGradient:
     # {{{
     @classmethod
@@ -316,6 +341,7 @@ NODE_CLASS_MAPPINGS = {
     "BSZLatentOffsetXL": BSZLatentOffsetXL,
     "BSZColoredLatentImageXL": BSZColoredLatentImageXL,
     "BSZLatentRGBAImage": BSZLatentRGBAImage,
+    "BSZLatentHSVAImage": BSZLatentHSVAImage,
     "BSZLatentGradient": BSZLatentGradient,
 }
 
@@ -325,5 +351,6 @@ NODE_DISPLAY_NAME_MAPPINGS = {
     "BSZLatentOffsetXL": "BSZ Latent Offset XL",
     "BSZColoredLatentImageXL": "BSZ Colored Latent Image XL",
     "BSZLatentRGBAImage": "BSZ Latent RGBA Image",
+    "BSZLatentHSVAImage": "BSZ Latent HSVA Image",
     "BSZLatentGradient": "BSZ Latent Gradient",
 }
