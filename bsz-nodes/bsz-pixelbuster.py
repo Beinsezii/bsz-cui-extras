@@ -164,7 +164,7 @@ class BSZPixelbuster:
             buff = numpy.pad(ndarr, pad_width=((0, 0), (0, 0), (0, 1)), constant_values=1).flatten()
             pb_lib.pixelbuster_ffi_ext(
                 code.encode('UTF-8'),
-                "lrgba".encode('UTF-8'),
+                "srgba".encode('UTF-8'),
                 buff,
                 buff.nbytes,
                 width,
