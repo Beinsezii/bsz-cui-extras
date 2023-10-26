@@ -84,8 +84,8 @@ Offsets the latent image(s) value towards black/white according to the SDXL VAE
     - `latent` : Latent image(s).
     - `offset` : 0.0 is unchanged, -1.0 is black, 1.0 is white.
 
-#### BSZLatentRGBImage
-Creates a latent of arbitrary color by encoding it with the provided VAE. Note that even though `0.5, 0.5, 0.5` seems like it should be equal to an empty latent, in reality it is not and seeds will be very different.
+#### BSZLatentRGBAImage
+Creates a latent of arbitrary color by encoding it with the provided VAE. Note that even though `0.5, 0.5, 0.5` seems like it should be equal to an empty latent, in reality it is not and seeds will be very different. Also comes in HSVA flavor.
   - Input
     - `r/g/b` : RGB in 0.0 -> 1.0 scale
     - `a` : Alpha. 0.0 for empty latent, 1.0 for entirely colored
