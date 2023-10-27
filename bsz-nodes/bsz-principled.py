@@ -6,6 +6,9 @@ import comfy_extras.nodes_clip_sdxl as nodes_xl
 import folder_paths
 import comfy_extras.nodes_upscale_model as nodes_scale
 
+# maintain pointer to the old FN so it's never lost in errs
+OLD_PREPARE_NOISE = comfy.sample.prepare_noise
+
 DEBUG=False
 METHODS_LATENT = { f"latent {x}": x for x in nodes.LatentUpscale.upscale_methods }
 METHODS_PIXEL = { f"pixel {x}": x for x in nodes.ImageScale.upscale_methods }
@@ -163,7 +166,6 @@ class BSZPrincipledSDXL:
     ):
     #{{{
         # hot patch function before sampling
-        noise_fn_old = comfy.sample.prepare_noise
         comfy.sample.prepare_noise = _prepare_noise
 
         height, width = latent["samples"].size()[2:4]
@@ -240,41 +242,51 @@ class BSZPrincipledSDXL:
         if DEBUG: print(f"Sampling start - seed: {seed} cfg: {cfg}\npositive: {positive_prompt}\nnegative: {negative_prompt}")
         if base_start < base_end:
             if DEBUG: print(f"Running Base - total: {steps} start: {base_start} end: {base_end}")
-            latent = nodes.common_ksampler(
-                base_model,
-                seed,
-                steps,
-                cfg,
-                sampler,
-                scheduler,
-                base_pos_cond(),
-                base_neg_cond(),
-                latent,
-                start_step=base_start,
-                last_step=None if base_end == steps else base_end,
-                force_full_denoise=False if base_end < steps else True,
-            )[0]
+            try:
+                latent = nodes.common_ksampler(
+                    base_model,
+                    seed,
+                    steps,
+                    cfg,
+                    sampler,
+                    scheduler,
+                    base_pos_cond(),
+                    base_neg_cond(),
+                    latent,
+                    start_step=base_start,
+                    last_step=None if base_end == steps else base_end,
+                    force_full_denoise=False if base_end < steps else True,
+                )[0]
+            except Exception as e:
+                # restore patched function if canceled before forwarding err
+                comfy.sample.prepare_noise = OLD_PREPARE_NOISE
+                raise e
             base_run = True
 
         if base_end < steps:
             if DEBUG: print(f"Running Refiner - total: {steps} start: {base_end} ascore: +{refiner_asc_pos} -{refiner_neg_cond}")
-            latent = nodes.common_ksampler(
-                refiner_model,
-                seed,
-                steps,
-                cfg,
-                sampler,
-                scheduler,
-                refiner_pos_cond(),
-                refiner_neg_cond(),
-                latent,
-                start_step=base_end,
-                force_full_denoise=True,
-                disable_noise=base_run
-            )[0]
+            try:
+                latent = nodes.common_ksampler(
+                    refiner_model,
+                    seed,
+                    steps,
+                    cfg,
+                    sampler,
+                    scheduler,
+                    refiner_pos_cond(),
+                    refiner_neg_cond(),
+                    latent,
+                    start_step=base_end,
+                    force_full_denoise=True,
+                    disable_noise=base_run
+                )[0]
+            except Exception as e:
+                # restore patched function if canceled before forwarding err
+                comfy.sample.prepare_noise = OLD_PREPARE_NOISE
+                raise e
 
-        # restore patched function
-        comfy.sample.prepare_noise = noise_fn_old
+        # restore patched function on successfuly finish
+        comfy.sample.prepare_noise = OLD_PREPARE_NOISE
 
         return (
             latent,
