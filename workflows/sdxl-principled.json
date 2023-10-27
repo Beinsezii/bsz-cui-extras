@@ -31,7 +31,7 @@
         "Node name for S&R": "VAELoader"
       },
       "widgets_values": [
-        "sdxl/sdxl-vae.safetensors"
+        "sdxl-v09.safetensors"
       ],
       "color": "#432",
       "bgcolor": "#653"
