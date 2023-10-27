@@ -1,6 +1,6 @@
 {
-  "last_node_id": 183,
-  "last_link_id": 637,
+  "last_node_id": 185,
+  "last_link_id": 643,
   "nodes": [
     {
       "id": 24,
@@ -50,7 +50,7 @@
       "flags": {
         "collapsed": true
       },
-      "order": 20,
+      "order": 21,
       "mode": 0,
       "inputs": [
         {
@@ -93,7 +93,7 @@
       "flags": {
         "collapsed": true
       },
-      "order": 21,
+      "order": 22,
       "mode": 0,
       "inputs": [
         {
@@ -135,7 +135,7 @@
         26
       ],
       "flags": {},
-      "order": 19,
+      "order": 20,
       "mode": 0,
       "inputs": [
         {
@@ -309,7 +309,6 @@
           "name": "LATENT",
           "type": "LATENT",
           "links": [
-            592,
             617
           ],
           "shape": 3,
@@ -328,121 +327,6 @@
       ],
       "color": "#323",
       "bgcolor": "#535"
-    },
-    {
-      "id": 175,
-      "type": "LatentFromBatch",
-      "pos": [
-        150,
-        930
-      ],
-      "size": {
-        "0": 210,
-        "1": 82
-      },
-      "flags": {},
-      "order": 12,
-      "mode": 0,
-      "inputs": [
-        {
-          "name": "samples",
-          "type": "LATENT",
-          "link": 592
-        }
-      ],
-      "outputs": [
-        {
-          "name": "LATENT",
-          "type": "LATENT",
-          "links": null,
-          "shape": 3
-        }
-      ],
-      "properties": {
-        "Node name for S&R": "LatentFromBatch"
-      },
-      "widgets_values": [
-        0,
-        1
-      ],
-      "color": "#323",
-      "bgcolor": "#535"
-    },
-    {
-      "id": 147,
-      "type": "Reroute",
-      "pos": [
-        150,
-        1050
-      ],
-      "size": [
-        75,
-        26
-      ],
-      "flags": {},
-      "order": 10,
-      "mode": 0,
-      "inputs": [
-        {
-          "name": "",
-          "type": "*",
-          "link": 435
-        }
-      ],
-      "outputs": [
-        {
-          "name": "",
-          "type": "INT",
-          "links": [
-            593
-          ],
-          "slot_index": 0
-        }
-      ],
-      "properties": {
-        "showOutputText": false,
-        "horizontal": false
-      },
-      "color": "#2a363b",
-      "bgcolor": "#3f5159"
-    },
-    {
-      "id": 146,
-      "type": "Reroute",
-      "pos": [
-        160,
-        1020
-      ],
-      "size": [
-        75,
-        26
-      ],
-      "flags": {},
-      "order": 9,
-      "mode": 0,
-      "inputs": [
-        {
-          "name": "",
-          "type": "*",
-          "link": 595
-        }
-      ],
-      "outputs": [
-        {
-          "name": "",
-          "type": "INT",
-          "links": [
-            594
-          ],
-          "slot_index": 0
-        }
-      ],
-      "properties": {
-        "showOutputText": false,
-        "horizontal": false
-      },
-      "color": "#2a363b",
-      "bgcolor": "#3f5159"
     },
     {
       "id": 4,
@@ -561,7 +445,7 @@
         "1": 120
       },
       "flags": {},
-      "order": 16,
+      "order": 17,
       "mode": 4,
       "inputs": [
         {
@@ -623,7 +507,7 @@
         "1": 470
       },
       "flags": {},
-      "order": 22,
+      "order": 23,
       "mode": 0,
       "inputs": [
         {
@@ -728,7 +612,7 @@
         "1": 470
       },
       "flags": {},
-      "order": 23,
+      "order": 24,
       "mode": 0,
       "inputs": [
         {
@@ -849,7 +733,7 @@
         "1": 630
       },
       "flags": {},
-      "order": 17,
+      "order": 18,
       "mode": 4,
       "inputs": [
         {
@@ -1049,7 +933,7 @@
         26
       ],
       "flags": {},
-      "order": 18,
+      "order": 19,
       "mode": 0,
       "inputs": [
         {
@@ -1087,7 +971,7 @@
         "1": 630
       },
       "flags": {},
-      "order": 13,
+      "order": 12,
       "mode": 0,
       "inputs": [
         {
@@ -1264,13 +1148,13 @@
         26
       ],
       "flags": {},
-      "order": 15,
+      "order": 16,
       "mode": 0,
       "inputs": [
         {
           "name": "",
           "type": "*",
-          "link": 593
+          "link": 643
         }
       ],
       "outputs": [
@@ -1302,13 +1186,13 @@
         26
       ],
       "flags": {},
-      "order": 14,
+      "order": 15,
       "mode": 0,
       "inputs": [
         {
           "name": "",
           "type": "*",
-          "link": 594
+          "link": 642
         }
       ],
       "outputs": [
@@ -1365,6 +1249,158 @@
       },
       "color": "#432",
       "bgcolor": "#653"
+    },
+    {
+      "id": 146,
+      "type": "Reroute",
+      "pos": [
+        130,
+        900
+      ],
+      "size": [
+        75,
+        26
+      ],
+      "flags": {},
+      "order": 9,
+      "mode": 0,
+      "inputs": [
+        {
+          "name": "",
+          "type": "*",
+          "link": 595
+        }
+      ],
+      "outputs": [
+        {
+          "name": "",
+          "type": "INT",
+          "links": [
+            640
+          ],
+          "slot_index": 0
+        }
+      ],
+      "properties": {
+        "showOutputText": false,
+        "horizontal": false
+      },
+      "color": "#2a363b",
+      "bgcolor": "#3f5159"
+    },
+    {
+      "id": 147,
+      "type": "Reroute",
+      "pos": [
+        130,
+        920
+      ],
+      "size": [
+        75,
+        26
+      ],
+      "flags": {},
+      "order": 10,
+      "mode": 0,
+      "inputs": [
+        {
+          "name": "",
+          "type": "*",
+          "link": 435
+        }
+      ],
+      "outputs": [
+        {
+          "name": "",
+          "type": "INT",
+          "links": [
+            641
+          ],
+          "slot_index": 0
+        }
+      ],
+      "properties": {
+        "showOutputText": false,
+        "horizontal": false
+      },
+      "color": "#2a363b",
+      "bgcolor": "#3f5159"
+    },
+    {
+      "id": 184,
+      "type": "Reroute",
+      "pos": [
+        280,
+        900
+      ],
+      "size": [
+        75,
+        26
+      ],
+      "flags": {},
+      "order": 13,
+      "mode": 0,
+      "inputs": [
+        {
+          "name": "",
+          "type": "*",
+          "link": 640
+        }
+      ],
+      "outputs": [
+        {
+          "name": "",
+          "type": "INT",
+          "links": [
+            642
+          ],
+          "slot_index": 0
+        }
+      ],
+      "properties": {
+        "showOutputText": false,
+        "horizontal": false
+      },
+      "color": "#2a363b",
+      "bgcolor": "#3f5159"
+    },
+    {
+      "id": 185,
+      "type": "Reroute",
+      "pos": [
+        280,
+        920
+      ],
+      "size": [
+        75,
+        26
+      ],
+      "flags": {},
+      "order": 14,
+      "mode": 0,
+      "inputs": [
+        {
+          "name": "",
+          "type": "*",
+          "link": 641
+        }
+      ],
+      "outputs": [
+        {
+          "name": "",
+          "type": "INT",
+          "links": [
+            643
+          ],
+          "slot_index": 0
+        }
+      ],
+      "properties": {
+        "showOutputText": false,
+        "horizontal": false
+      },
+      "color": "#2a363b",
+      "bgcolor": "#3f5159"
     }
   ],
   "links": [
@@ -1479,30 +1515,6 @@
       168,
       0,
       "VAE"
-    ],
-    [
-      592,
-      151,
-      0,
-      175,
-      0,
-      "LATENT"
-    ],
-    [
-      593,
-      147,
-      0,
-      148,
-      0,
-      "*"
-    ],
-    [
-      594,
-      146,
-      0,
-      149,
-      0,
-      "*"
     ],
     [
       595,
@@ -1695,6 +1707,38 @@
       150,
       0,
       "IMAGE"
+    ],
+    [
+      640,
+      146,
+      0,
+      184,
+      0,
+      "*"
+    ],
+    [
+      641,
+      147,
+      0,
+      185,
+      0,
+      "*"
+    ],
+    [
+      642,
+      184,
+      0,
+      149,
+      0,
+      "*"
+    ],
+    [
+      643,
+      185,
+      0,
+      148,
+      0,
+      "*"
     ]
   ],
   "groups": [],

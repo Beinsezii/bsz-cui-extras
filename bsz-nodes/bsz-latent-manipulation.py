@@ -34,14 +34,13 @@ class BSZLatentDebug:
     CATEGORY = "beinsezii/latent/advanced"
 
     def log(self, latent):
+        print("\nLatent structure:", latent)
         samples = latent['samples']
-        print("\nLatent size:", list(samples.size()))
+        print("Sample size:", list(samples.size()))
         wh = samples.size()[-1] * samples.size()[-2]
-        a = samples[0][0].sum().item() / wh
-        b = samples[0][1].sum().item() / wh
-        c = samples[0][2].sum().item() / wh
-        d = samples[0][3].sum().item() / wh
-        print(f"Tensor 0 Averages:\n{[a, b, c, d]}\n")
+        for n, c in enumerate(samples[0]):
+            print(f"Tensor 0 Channel {n} Min: {c.min().item()} Max: {c.max().item()} Avg: {c.sum().item() / wh}")
+        print()
         return ()
 # }}}
 

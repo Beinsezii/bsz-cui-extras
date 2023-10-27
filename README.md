@@ -59,6 +59,7 @@ Input fields
   - `sampler` : Sampler. DDIM or Euler needed for proper refiner usage
   - `scheduler` : Scheduler. Normal needed for proper refiner usage
   - `seed` : Seedy.
+Additionally, it produces batches by seed increment instead of whatever the hell ComfyUI does by default. This means seed 4 batch index 3 is equivalent to seed 7, making it much easier to reproduce images from batches.
 
 #### BSZPrincipledScale:
 Up/downscaling with either pixel, latent, or model methods. Pixel and model methods first decode with the VAE before scaling and re-encoding.

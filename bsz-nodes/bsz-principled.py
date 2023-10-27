@@ -1,6 +1,7 @@
+import torch
+import comfy
 import nodes
 import comfy_extras.nodes_clip_sdxl as nodes_xl
-import comfy.samplers as samplers
 # Scale
 import folder_paths
 import comfy_extras.nodes_upscale_model as nodes_scale
@@ -9,6 +10,17 @@ DEBUG=False
 METHODS_LATENT = { f"latent {x}": x for x in nodes.LatentUpscale.upscale_methods }
 METHODS_PIXEL = { f"pixel {x}": x for x in nodes.ImageScale.upscale_methods }
 METHODS_MODEL = { f"model {x}": x for x in folder_paths.get_filename_list("upscale_models")}
+
+def _prepare_noise(latent_image, seed, noise_inds=None):
+    b, c, h, w = latent_image.shape
+    slices = []
+    if noise_inds is not None:
+        for n in noise_inds:
+            slices.append(torch.randn([1, c, h, w], dtype=latent_image.dtype, layout=latent_image.layout, generator=torch.manual_seed(seed+n), device="cpu"))
+    else:
+        for n in range(seed, seed+b):
+            slices.append(torch.randn([1, c, h, w], dtype=latent_image.dtype, layout=latent_image.layout, generator=torch.manual_seed(n), device="cpu"))
+    return torch.cat(slices, axis=0)
 
 def roundint(n: int, step: int) -> int:
     if n % step >= step/2:
@@ -89,8 +101,8 @@ class BSZPrincipledSDXL:
                 "refiner_amount": ("FLOAT", {"default": 0.15, "min": 0.0, "max": 1.0, "step": 0.01}),
                 "refiner_asc_pos": ("FLOAT", {"default": 6.0, "min": 0.0, "max": 1000.0, "step": 0.01}),
                 "refiner_asc_neg": ("FLOAT", {"default": 2.5, "min": 0.0, "max": 1000.0, "step": 0.01}),
-                "sampler": (samplers.KSampler.SAMPLERS, {"default": "ddim"}),
-                "scheduler": (samplers.KSampler.SCHEDULERS,),
+                "sampler": (comfy.samplers.KSampler.SAMPLERS, {"default": "ddim"}),
+                "scheduler": (comfy.samplers.KSampler.SCHEDULERS,),
                 "seed": ("INT", {"default": 0, "min": 0, "max": 0xffffffffffffffff}),
             },
         }
@@ -105,8 +117,8 @@ class BSZPrincipledSDXL:
         "FLOAT", # ref
         "FLOAT", # ascp
         "FLOAT", # ascn
-        samplers.KSampler.SAMPLERS, # sampler
-        samplers.KSampler.SCHEDULERS, # scheduler
+        comfy.samplers.KSampler.SAMPLERS, # sampler
+        comfy.samplers.KSampler.SCHEDULERS, # scheduler
         "INT", # seed
     )
     RETURN_NAMES = (
@@ -150,6 +162,10 @@ class BSZPrincipledSDXL:
         refiner_clip=None,
     ):
     #{{{
+        # hot patch function before sampling
+        noise_fn_old = comfy.sample.prepare_noise
+        comfy.sample.prepare_noise = _prepare_noise
+
         height, width = latent["samples"].size()[2:4]
         height *= 8
         width *= 8
@@ -256,6 +272,9 @@ class BSZPrincipledSDXL:
                 force_full_denoise=True,
                 disable_noise=base_run
             )[0]
+
+        # restore patched function
+        comfy.sample.prepare_noise = noise_fn_old
 
         return (
             latent,
