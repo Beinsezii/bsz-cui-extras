@@ -189,7 +189,7 @@ class BSZPrincipledSampler:
 
         # put conditioning in lambdas so they lazy-load
         # {{{
-        base_pos_cond = lambda: nodes_xl.CLIPTextEncodeSDXL.encode(
+        base_cond = lambda prompt: nodes_xl.CLIPTextEncodeSDXL.encode(
             None,
             base_clip,
             width,
@@ -198,55 +198,25 @@ class BSZPrincipledSampler:
             0,
             target_width,
             target_height,
-            positive_prompt,
-            positive_prompt,
+            prompt,
+            prompt,
         )[0] if isinstance(base_clip.cond_stage_model, comfy.sdxl_clip.SDXLClipModel) else nodes.CLIPTextEncode.encode(
             None,
             base_clip,
-            positive_prompt,
+            prompt,
         )[0]
 
-        base_neg_cond = lambda: nodes_xl.CLIPTextEncodeSDXL.encode(
-            None,
-            base_clip,
-            width,
-            height,
-            0,
-            0,
-            target_width,
-            target_height,
-            negative_prompt,
-            negative_prompt,
-        )[0] if isinstance(base_clip.cond_stage_model, comfy.sdxl_clip.SDXLClipModel) else nodes.CLIPTextEncode.encode(
-            None,
-            base_clip,
-            negative_prompt,
-        )[0]
-
-        refiner_pos_cond = lambda: nodes_xl.CLIPTextEncodeSDXLRefiner.encode(
+        refiner_cond = lambda prompt: nodes_xl.CLIPTextEncodeSDXLRefiner.encode(
             None,
             refiner_clip,
             refiner_asc_pos,
             width, # should these be target?
             height,
-            positive_prompt
+            prompt
         )[0] if isinstance(refiner_clip.cond_stage_model, comfy.sdxl_clip.SDXLRefinerClipModel) else nodes.CLIPTextEncode.encode(
             None,
             refiner_clip,
-            positive_prompt,
-        )[0]
-
-        refiner_neg_cond = lambda: nodes_xl.CLIPTextEncodeSDXLRefiner.encode(
-            None,
-            refiner_clip,
-            refiner_asc_neg,
-            width,
-            height,
-            negative_prompt
-        )[0] if isinstance(refiner_clip.cond_stage_model, comfy.sdxl_clip.SDXLRefinerClipModel) else nodes.CLIPTextEncode.encode(
-            None,
-            refiner_clip,
-            negative_prompt,
+            prompt,
         )[0]
         # }}}
 
@@ -269,8 +239,8 @@ class BSZPrincipledSampler:
                     cfg,
                     sampler,
                     scheduler,
-                    base_pos_cond(),
-                    base_neg_cond(),
+                    base_cond(positive_prompt),
+                    base_cond(negative_prompt),
                     latent,
                     start_step=base_start,
                     last_step=None if base_end == steps else base_end,
@@ -292,8 +262,8 @@ class BSZPrincipledSampler:
                     cfg,
                     sampler,
                     scheduler,
-                    refiner_pos_cond(),
-                    refiner_neg_cond(),
+                    refiner_cond(positive_prompt),
+                    refiner_cond(negative_prompt),
                     latent,
                     start_step=base_end,
                     force_full_denoise=True,
