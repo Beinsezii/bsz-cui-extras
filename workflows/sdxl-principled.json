@@ -7,7 +7,7 @@
       "type": "VAELoader",
       "pos": [
         -20,
-        400
+        440
       ],
       "size": {
         "0": 360,
@@ -37,54 +37,11 @@
       "bgcolor": "#653"
     },
     {
-      "id": 18,
-      "type": "VAEDecode",
-      "pos": [
-        520,
-        810
-      ],
-      "size": {
-        "0": 210,
-        "1": 46
-      },
-      "flags": {
-        "collapsed": true
-      },
-      "order": 21,
-      "mode": 0,
-      "inputs": [
-        {
-          "name": "samples",
-          "type": "LATENT",
-          "link": 509
-        },
-        {
-          "name": "vae",
-          "type": "VAE",
-          "link": 514
-        }
-      ],
-      "outputs": [
-        {
-          "name": "IMAGE",
-          "type": "IMAGE",
-          "links": [
-            637
-          ],
-          "shape": 3,
-          "slot_index": 0
-        }
-      ],
-      "properties": {
-        "Node name for S&R": "VAEDecode"
-      }
-    },
-    {
       "id": 159,
       "type": "Reroute",
       "pos": [
         400,
-        770
+        810
       ],
       "size": [
         75,
@@ -122,7 +79,7 @@
       "type": "Reroute",
       "pos": [
         400,
-        790
+        830
       ],
       "size": [
         75,
@@ -161,7 +118,7 @@
       "type": "PrimitiveNode",
       "pos": [
         -20,
-        490
+        530
       ],
       "size": {
         "0": 360,
@@ -196,7 +153,7 @@
       "type": "PrimitiveNode",
       "pos": [
         -20,
-        630
+        670
       ],
       "size": {
         "0": 360,
@@ -231,7 +188,7 @@
       "type": "BSZColoredLatentImageXL",
       "pos": [
         130,
-        770
+        810
       ],
       "size": {
         "0": 230,
@@ -287,7 +244,7 @@
       "type": "CheckpointLoaderSimple",
       "pos": [
         -20,
-        140
+        180
       ],
       "size": {
         "0": 360,
@@ -337,7 +294,7 @@
       "type": "CheckpointLoaderSimple",
       "pos": [
         -20,
-        270
+        310
       ],
       "size": {
         "0": 360,
@@ -392,7 +349,7 @@
       "type": "BSZPrincipledScale",
       "pos": [
         690,
-        430
+        470
       ],
       "size": {
         "0": 260,
@@ -453,8 +410,8 @@
       "id": 150,
       "type": "BSZPixelbuster",
       "pos": [
-        670,
-        810
+        630,
+        850
       ],
       "size": {
         "0": 210,
@@ -555,40 +512,11 @@
       ]
     },
     {
-      "id": 19,
-      "type": "SaveImage",
-      "pos": [
-        890,
-        810
-      ],
-      "size": {
-        "0": 500,
-        "1": 470
-      },
-      "flags": {},
-      "order": 23,
-      "mode": 0,
-      "inputs": [
-        {
-          "name": "images",
-          "type": "IMAGE",
-          "link": 473,
-          "slot_index": 0
-        }
-      ],
-      "title": "Principled Image Output",
-      "properties": {},
-      "widgets_values": [
-        "principled"
-      ],
-      "shape": 1
-    },
-    {
       "id": 121,
       "type": "BSZCombinedHires",
       "pos": [
         -100,
-        770
+        810
       ],
       "size": {
         "0": 210,
@@ -653,34 +581,11 @@
       "bgcolor": "#3f5159"
     },
     {
-      "id": 125,
-      "type": "Note",
-      "pos": [
-        370,
-        1060
-      ],
-      "size": {
-        "0": 280,
-        "1": 60
-      },
-      "flags": {},
-      "order": 6,
-      "mode": 0,
-      "properties": {
-        "text": ""
-      },
-      "widgets_values": [
-        "Missing nodes? Find them here:\nhttps://github.com/Beinsezii/bsz-cui-extras"
-      ],
-      "color": "#222",
-      "bgcolor": "#000"
-    },
-    {
       "id": 181,
       "type": "BSZPrincipledSDXL",
       "pos": [
         970,
-        140
+        180
       ],
       "size": {
         "0": 262,
@@ -880,7 +785,7 @@
       "type": "Reroute",
       "pos": [
         1300,
-        750
+        790
       ],
       "size": [
         75,
@@ -918,7 +823,7 @@
       "type": "BSZPrincipledSDXL",
       "pos": [
         410,
-        140
+        180
       ],
       "size": {
         "0": 262,
@@ -1095,7 +1000,7 @@
       "type": "Reroute",
       "pos": [
         720,
-        750
+        790
       ],
       "size": [
         75,
@@ -1133,7 +1038,7 @@
       "type": "Reroute",
       "pos": [
         720,
-        730
+        770
       ],
       "size": [
         75,
@@ -1171,7 +1076,7 @@
       "type": "Reroute",
       "pos": [
         720,
-        710
+        750
       ],
       "size": [
         75,
@@ -1209,7 +1114,7 @@
       "type": "Reroute",
       "pos": [
         130,
-        900
+        940
       ],
       "size": [
         75,
@@ -1247,7 +1152,7 @@
       "type": "Reroute",
       "pos": [
         130,
-        920
+        960
       ],
       "size": [
         75,
@@ -1285,7 +1190,7 @@
       "type": "Reroute",
       "pos": [
         280,
-        900
+        940
       ],
       "size": [
         75,
@@ -1323,7 +1228,7 @@
       "type": "Reroute",
       "pos": [
         280,
-        920
+        960
       ],
       "size": [
         75,
@@ -1355,6 +1260,101 @@
       },
       "color": "#2a363b",
       "bgcolor": "#3f5159"
+    },
+    {
+      "id": 18,
+      "type": "VAEDecode",
+      "pos": [
+        490,
+        850
+      ],
+      "size": {
+        "0": 210,
+        "1": 46
+      },
+      "flags": {
+        "collapsed": true
+      },
+      "order": 21,
+      "mode": 0,
+      "inputs": [
+        {
+          "name": "samples",
+          "type": "LATENT",
+          "link": 509
+        },
+        {
+          "name": "vae",
+          "type": "VAE",
+          "link": 514
+        }
+      ],
+      "outputs": [
+        {
+          "name": "IMAGE",
+          "type": "IMAGE",
+          "links": [
+            637
+          ],
+          "shape": 3,
+          "slot_index": 0
+        }
+      ],
+      "properties": {
+        "Node name for S&R": "VAEDecode"
+      }
+    },
+    {
+      "id": 19,
+      "type": "SaveImage",
+      "pos": [
+        850,
+        850
+      ],
+      "size": {
+        "0": 500,
+        "1": 470
+      },
+      "flags": {},
+      "order": 23,
+      "mode": 0,
+      "inputs": [
+        {
+          "name": "images",
+          "type": "IMAGE",
+          "link": 473,
+          "slot_index": 0
+        }
+      ],
+      "title": "Principled Image Output",
+      "properties": {},
+      "widgets_values": [
+        "principled"
+      ],
+      "shape": 1
+    },
+    {
+      "id": 125,
+      "type": "Note",
+      "pos": [
+        320,
+        1030
+      ],
+      "size": {
+        "0": 280,
+        "1": 60
+      },
+      "flags": {},
+      "order": 6,
+      "mode": 0,
+      "properties": {
+        "text": ""
+      },
+      "widgets_values": [
+        "Missing nodes? Find them here:\nhttps://github.com/Beinsezii/bsz-cui-extras"
+      ],
+      "color": "#222",
+      "bgcolor": "#000"
     }
   ],
   "links": [
