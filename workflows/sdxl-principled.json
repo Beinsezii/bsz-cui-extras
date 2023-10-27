@@ -80,50 +80,6 @@
       }
     },
     {
-      "id": 138,
-      "type": "VAEDecodeTiled",
-      "pos": [
-        490,
-        840
-      ],
-      "size": {
-        "0": 210,
-        "1": 78
-      },
-      "flags": {
-        "collapsed": true
-      },
-      "order": 22,
-      "mode": 0,
-      "inputs": [
-        {
-          "name": "samples",
-          "type": "LATENT",
-          "link": 510
-        },
-        {
-          "name": "vae",
-          "type": "VAE",
-          "link": 515
-        }
-      ],
-      "outputs": [
-        {
-          "name": "IMAGE",
-          "type": "IMAGE",
-          "links": [],
-          "shape": 3,
-          "slot_index": 0
-        }
-      ],
-      "properties": {
-        "Node name for S&R": "VAEDecodeTiled"
-      },
-      "widgets_values": [
-        1536
-      ]
-    },
-    {
       "id": 159,
       "type": "Reroute",
       "pos": [
@@ -149,8 +105,7 @@
           "name": "",
           "type": "LATENT",
           "links": [
-            509,
-            510
+            509
           ],
           "slot_index": 0
         }
@@ -189,7 +144,6 @@
           "type": "VAE",
           "links": [
             514,
-            515,
             577
           ],
           "slot_index": 0
@@ -507,7 +461,7 @@
         "1": 470
       },
       "flags": {},
-      "order": 23,
+      "order": 22,
       "mode": 0,
       "inputs": [
         {
@@ -612,7 +566,7 @@
         "1": 470
       },
       "flags": {},
-      "order": 24,
+      "order": 23,
       "mode": 0,
       "inputs": [
         {
@@ -1453,26 +1407,10 @@
       "LATENT"
     ],
     [
-      510,
-      159,
-      0,
-      138,
-      0,
-      "LATENT"
-    ],
-    [
       514,
       160,
       0,
       18,
-      1,
-      "VAE"
-    ],
-    [
-      515,
-      160,
-      0,
-      138,
       1,
       "VAE"
     ],
