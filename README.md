@@ -38,10 +38,10 @@ A unique node that functions both as BSZAbsoluteHires and BSZAspectHires with a 
     - `use_aspect_scale` : Use aspect & scale inputs instead of desired width/height inputs
 
 ### bsz-principled.py
-All-in-one nodes for SDXL and Scaling pipelines.
+All-in-one nodes for sampling and scaling pipelines.
 
-#### BSZPrincipledSDXL:
-Text2Image, Image2Image pipeline workflows with optional refiner.
+#### BSZPrincipledSampler:
+Text2Image, Image2Image pipeline workflows with optional refiner
 Input fields
   - `base_model` : Model from base checkpoint
   - `base_clip` : CLIP from base checkpoint
@@ -54,8 +54,8 @@ Input fields
   - `denoise` : Denoise amount for latent input. Recommend 0.3 for img2img/pixel scale, 0.6 for latent scale
   - `cfg` : CFG scale
   - `refiner_amount` : Refiner to base ratio. Requires refiner model and refiner clip to function
-  - `refiner_ascore_positive` : Refiner aesthetic score for positive prompt
-  - `refiner_ascore_negative` : Refiner aesthetic score for negative prompt
+  - `refiner_ascore_positive` : Refiner aesthetic score for positive prompt. Ignored if refiner is not XL architecture
+  - `refiner_ascore_negative` : Refiner aesthetic score for negative prompt. Ignored if refiner is not XL architecture
   - `sampler` : Sampler. DDIM or Euler needed for proper refiner usage
   - `scheduler` : Scheduler. Normal needed for proper refiner usage
   - `seed` : Seedy.
@@ -142,8 +142,7 @@ Personal flair of the SDXL "partial diffusion" workflow with added "High res fix
 Complete demonstration of nodes in a compact workflow
 
 #### Dependencies
-  - `bsz-auto-hires.py` : Principled can use hi res sizes
-  - `bsz-principled-sdxl.py` : Yes.
+Everything except `bsz-experimental.py`
 
 
 ## F.A.Q.

@@ -77,7 +77,7 @@ class BSZPrincipledScale:
         return (latent,)
     # }}}
 
-class BSZPrincipledSDXL:
+class BSZPrincipledSampler:
     # {{{
     @classmethod
     def INPUT_TYPES(s):
@@ -139,13 +139,13 @@ class BSZPrincipledSDXL:
         "seed",
     )
 
-    FUNCTION = "principled_sdxl"
+    FUNCTION = "principled"
 
     #OUTPUT_NODE = False
 
     CATEGORY = "beinsezii/sampling"
 
-    def principled_sdxl(
+    def principled(
         self,
         base_model,
         base_clip,
@@ -200,7 +200,12 @@ class BSZPrincipledSDXL:
             target_height,
             positive_prompt,
             positive_prompt,
+        )[0] if isinstance(base_clip.cond_stage_model, comfy.sdxl_clip.SDXLClipModel) else nodes.CLIPTextEncode.encode(
+            None,
+            base_clip,
+            positive_prompt,
         )[0]
+
         base_neg_cond = lambda: nodes_xl.CLIPTextEncodeSDXL.encode(
             None,
             base_clip,
@@ -212,7 +217,12 @@ class BSZPrincipledSDXL:
             target_height,
             negative_prompt,
             negative_prompt,
+        )[0] if isinstance(base_clip.cond_stage_model, comfy.sdxl_clip.SDXLClipModel) else nodes.CLIPTextEncode.encode(
+            None,
+            base_clip,
+            negative_prompt,
         )[0]
+
         refiner_pos_cond = lambda: nodes_xl.CLIPTextEncodeSDXLRefiner.encode(
             None,
             refiner_clip,
@@ -220,7 +230,12 @@ class BSZPrincipledSDXL:
             width, # should these be target?
             height,
             positive_prompt
+        )[0] if isinstance(refiner_clip.cond_stage_model, comfy.sdxl_clip.SDXLRefinerClipModel) else nodes.CLIPTextEncode.encode(
+            None,
+            refiner_clip,
+            positive_prompt,
         )[0]
+
         refiner_neg_cond = lambda: nodes_xl.CLIPTextEncodeSDXLRefiner.encode(
             None,
             refiner_clip,
@@ -228,6 +243,10 @@ class BSZPrincipledSDXL:
             width,
             height,
             negative_prompt
+        )[0] if isinstance(refiner_clip.cond_stage_model, comfy.sdxl_clip.SDXLRefinerClipModel) else nodes.CLIPTextEncode.encode(
+            None,
+            refiner_clip,
+            negative_prompt,
         )[0]
         # }}}
 
@@ -306,10 +325,10 @@ class BSZPrincipledSDXL:
     #}}}
 
 NODE_CLASS_MAPPINGS = {
-    "BSZPrincipledSDXL": BSZPrincipledSDXL,
+    "BSZPrincipledSampler": BSZPrincipledSampler,
     "BSZPrincipledScale": BSZPrincipledScale,
 }
 NODE_DISPLAY_NAME_MAPPINGS = {
-    "BSZPrincipledSDXL": "BSZ Principled SDXL",
+    "BSZPrincipledSampler": "BSZ Principled Sampler",
     "BSZPrincipledScale": "BSZ Principled Scale",
 }

@@ -582,7 +582,7 @@
     },
     {
       "id": 181,
-      "type": "BSZPrincipledSDXL",
+      "type": "BSZPrincipledSampler",
       "pos": [
         970,
         180
@@ -763,7 +763,7 @@
         }
       ],
       "properties": {
-        "Node name for S&R": "BSZPrincipledSDXL"
+        "Node name for S&R": "BSZPrincipledSampler"
       },
       "widgets_values": [
         "analogue photograph of a kitten",
@@ -820,7 +820,7 @@
     },
     {
       "id": 180,
-      "type": "BSZPrincipledSDXL",
+      "type": "BSZPrincipledSampler",
       "pos": [
         410,
         180
@@ -978,7 +978,7 @@
         }
       ],
       "properties": {
-        "Node name for S&R": "BSZPrincipledSDXL"
+        "Node name for S&R": "BSZPrincipledSampler"
       },
       "widgets_values": [
         "analogue photograph of a kitten",
