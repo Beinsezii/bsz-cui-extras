@@ -239,7 +239,7 @@ class BSZLatentGradient:
                     "squircle",
                 ],),
                 "xfrequency": ("FLOAT", {
-                    "default": 1.0,
+                    "default": 2.0,
                     "min": 0.0,
                     "max": 10.0,
                     "step": 0.05,
