@@ -77,6 +77,82 @@ class BSZPrincipledScale:
         return (latent,)
     # }}}
 
+class BSZPrincipledConditioning:
+    # {{{
+    @classmethod
+    def INPUT_TYPES(s):
+        return {
+            "required": {
+                "latent": ("LATENT",),
+                "clip": ("CLIP",),
+                "text": ("STRING", {"multiline": True}),
+                "xl_target": (["1k", "full", "4k"],),
+                "refiner_asc": ("FLOAT", {"default": 6.0, "min": 0.0, "max": 1000.0, "step": 0.01}),
+            }
+        }
+    RETURN_TYPES = ("CONDITIONING",)
+    CATEGORY = "beinsezii/conditioning"
+    FUNCTION = "encode"
+    def encode(self, latent, clip, text: str, xl_target="1k", refiner_asc=6.0):
+
+        height, width = latent["samples"].size()[2:4]
+        height *= 8
+        width *= 8
+
+        # target base resolution for least jank
+        ratio = width/height
+        target_width, target_height = width, height
+        if xl_target == "1k":
+            target_width = roundint((1024 ** 2 * ratio) ** 0.5, 8)
+            target_height = roundint((1024 ** 2 / ratio) ** 0.5, 8)
+        elif xl_target == "4k":
+            if width > height:
+                target_width = 4096
+                target_height = roundint(4096 / ratio, 8)
+            elif height > width:
+                target_height = 4096
+                target_width = roundint(4096 * ratio, 8)
+            else:
+                target_width, target_height = 4096, 4096
+
+        XL = isinstance(clip.cond_stage_model, comfy.sdxl_clip.SDXLClipModel)
+        REF = isinstance(clip.cond_stage_model, comfy.sdxl_clip.SDXLRefinerClipModel)
+
+        if DEBUG: print(f"\nText:\n{text}")
+        if DEBUG: print(f"\nXL: {XL}\nREF: {REF}\nW / H: {width} / {height}\nTW / TH: {target_width} / {target_height}\nASC: {refiner_asc}\n")
+
+        conditioning = None
+        if XL:
+            conditioning = nodes_xl.CLIPTextEncodeSDXL.encode(
+                None,
+                clip,
+                width,
+                height,
+                0,
+                0,
+                target_width,
+                target_height,
+                text,
+                text,
+            )[0]
+        elif REF:
+            conditioning = nodes_xl.CLIPTextEncodeSDXLRefiner.encode(
+                None,
+                clip,
+                refiner_asc,
+                width, # should these be target?
+                height,
+                text,
+            )[0]
+        else:
+            conditioning = nodes.CLIPTextEncode.encode(
+                None,
+                clip,
+                text,
+            )[0]
+        return (conditioning,)
+    # }}}
+
 class BSZPrincipledSampler:
     # {{{
     @classmethod
@@ -168,16 +244,6 @@ class BSZPrincipledSampler:
         # hot patch function before sampling
         comfy.sample.prepare_noise = _prepare_noise
 
-        height, width = latent["samples"].size()[2:4]
-        height *= 8
-        width *= 8
-
-        # target base resolution for least jank
-        ratio = width/height
-        target_width = roundint((1024 ** 2 * ratio) ** 0.5, 8)
-        target_height = roundint((1024 ** 2 / ratio) ** 0.5, 8)
-
-
         # disable refiner if not provided
         if refiner_model is None and refiner_clip is None:
             refiner_amount = 0
@@ -186,39 +252,6 @@ class BSZPrincipledSampler:
             pass
         else:
             raise Exception("You must provide both refiner model and refiner clip to use the refiner")
-
-        # put conditioning in lambdas so they lazy-load
-        # {{{
-        base_cond = lambda prompt: nodes_xl.CLIPTextEncodeSDXL.encode(
-            None,
-            base_clip,
-            width,
-            height,
-            0,
-            0,
-            target_width,
-            target_height,
-            prompt,
-            prompt,
-        )[0] if isinstance(base_clip.cond_stage_model, comfy.sdxl_clip.SDXLClipModel) else nodes.CLIPTextEncode.encode(
-            None,
-            base_clip,
-            prompt,
-        )[0]
-
-        refiner_cond = lambda prompt: nodes_xl.CLIPTextEncodeSDXLRefiner.encode(
-            None,
-            refiner_clip,
-            refiner_asc_pos,
-            width, # should these be target?
-            height,
-            prompt
-        )[0] if isinstance(refiner_clip.cond_stage_model, comfy.sdxl_clip.SDXLRefinerClipModel) else nodes.CLIPTextEncode.encode(
-            None,
-            refiner_clip,
-            prompt,
-        )[0]
-        # }}}
 
         # steps skipped by img2img are effectively base steps as far
         # as the refiner is concerned
@@ -239,8 +272,8 @@ class BSZPrincipledSampler:
                     cfg,
                     sampler,
                     scheduler,
-                    base_cond(positive_prompt),
-                    base_cond(negative_prompt),
+                    BSZPrincipledConditioning.encode(None, latent, base_clip, positive_prompt)[0],
+                    BSZPrincipledConditioning.encode(None, latent, base_clip, negative_prompt)[0],
                     latent,
                     start_step=base_start,
                     last_step=None if base_end == steps else base_end,
@@ -253,7 +286,7 @@ class BSZPrincipledSampler:
             base_run = True
 
         if base_end < steps:
-            if DEBUG: print(f"Running Refiner - total: {steps} start: {base_end} ascore: +{refiner_asc_pos} -{refiner_neg_cond}")
+            if DEBUG: print(f"Running Refiner - total: {steps} start: {base_end} ascore: +{refiner_asc_pos} -{refiner_asc_neg}")
             try:
                 latent = nodes.common_ksampler(
                     refiner_model,
@@ -262,8 +295,8 @@ class BSZPrincipledSampler:
                     cfg,
                     sampler,
                     scheduler,
-                    refiner_cond(positive_prompt),
-                    refiner_cond(negative_prompt),
+                    BSZPrincipledConditioning.encode(None, latent, refiner_clip, positive_prompt, refiner_asc=refiner_asc_pos)[0],
+                    BSZPrincipledConditioning.encode(None, latent, refiner_clip, negative_prompt, refiner_asc=refiner_asc_neg)[0],
                     latent,
                     start_step=base_end,
                     force_full_denoise=True,
@@ -297,8 +330,10 @@ class BSZPrincipledSampler:
 NODE_CLASS_MAPPINGS = {
     "BSZPrincipledSampler": BSZPrincipledSampler,
     "BSZPrincipledScale": BSZPrincipledScale,
+    "BSZPrincipledConditioning": BSZPrincipledConditioning,
 }
 NODE_DISPLAY_NAME_MAPPINGS = {
     "BSZPrincipledSampler": "BSZ Principled Sampler",
     "BSZPrincipledScale": "BSZ Principled Scale",
+    "BSZPrincipledConditioning": "BSZ Principled Conditioning",
 }
