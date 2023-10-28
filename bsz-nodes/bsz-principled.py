@@ -6,10 +6,13 @@ import comfy_extras.nodes_clip_sdxl as nodes_xl
 import folder_paths
 import comfy_extras.nodes_upscale_model as nodes_scale
 
+from os import getenv
+
+DEBUG = getenv('BSZ_CUI_DEBUG', False)
+
 # maintain pointer to the old FN so it's never lost in errs
 OLD_PREPARE_NOISE = comfy.sample.prepare_noise
 
-DEBUG=False
 METHODS_LATENT = { f"latent {x}": x for x in nodes.LatentUpscale.upscale_methods }
 METHODS_PIXEL = { f"pixel {x}": x for x in nodes.ImageScale.upscale_methods }
 METHODS_MODEL = { f"model {x}": x for x in folder_paths.get_filename_list("upscale_models")}
@@ -30,6 +33,80 @@ def roundint(n: int, step: int) -> int:
         return int(n + step - (n % step))
     else:
         return int(n - (n % step))
+
+class CondStage:
+    def __init__(self, text: str, xl_target="1k", refiner_asc=6.0):
+        self.text = text
+        self.xl_target = xl_target
+        self.refiner_asc = refiner_asc
+
+    def process(self, latent, clip, other):
+        return self._encode(latent, clip)
+
+    def _encode(self, latent, clip):
+        # {{{
+        height, width = latent["samples"].size()[2:4]
+        height *= 8
+        width *= 8
+
+        # target base resolution for least jank
+        ratio = width/height
+        target_width, target_height = width, height
+        if self.xl_target == "1k":
+            target_width = roundint((1024 ** 2 * ratio) ** 0.5, 8)
+            target_height = roundint((1024 ** 2 / ratio) ** 0.5, 8)
+        elif self.xl_target == "4k":
+            if width > height:
+                target_width = 4096
+                target_height = roundint(4096 / ratio, 8)
+            elif height > width:
+                target_height = 4096
+                target_width = roundint(4096 * ratio, 8)
+            else:
+                target_width, target_height = 4096, 4096
+
+        XL = isinstance(clip.cond_stage_model, comfy.sdxl_clip.SDXLClipModel)
+        REF = isinstance(clip.cond_stage_model, comfy.sdxl_clip.SDXLRefinerClipModel)
+
+        if DEBUG: print(f"\nText:\n{self.text}")
+        if DEBUG: print(f"\nXL: {XL}\nREF: {REF}\nW / H: {width} / {height}\nTW / TH: {target_width} / {target_height}\nASC: {self.refiner_asc}\n")
+
+        if XL: return nodes_xl.CLIPTextEncodeSDXL.encode(
+            None,
+            clip,
+            width,
+            height,
+            0,
+            0,
+            target_width,
+            target_height,
+            self.text,
+            self.text,
+        )[0]
+        elif REF: return nodes_xl.CLIPTextEncodeSDXLRefiner.encode(
+            None,
+            clip,
+            self.refiner_asc,
+            width, # should these be target?
+            height,
+            self.text,
+        )[0]
+        else: return nodes.CLIPTextEncode.encode(
+            None,
+            clip,
+            self.text,
+        )[0]
+        # }}}
+
+class CondAnd(CondStage):
+    def process(self, latent, clip, other):
+        cond = self._encode(latent, clip)
+        return nodes.ConditioningCombine.combine(None, other, cond)[0]
+
+class CondBreak(CondStage):
+    def process(self, latent, clip, other):
+        cond = self._encode(latent, clip)
+        return nodes.ConditioningConcat.concat(None, other, cond)[0]
 
 class BSZPrincipledScale:
     #{{{
@@ -94,63 +171,7 @@ class BSZPrincipledConditioning:
     CATEGORY = "beinsezii/conditioning"
     FUNCTION = "encode"
     def encode(self, latent, clip, text: str, xl_target="1k", refiner_asc=6.0):
-
-        height, width = latent["samples"].size()[2:4]
-        height *= 8
-        width *= 8
-
-        # target base resolution for least jank
-        ratio = width/height
-        target_width, target_height = width, height
-        if xl_target == "1k":
-            target_width = roundint((1024 ** 2 * ratio) ** 0.5, 8)
-            target_height = roundint((1024 ** 2 / ratio) ** 0.5, 8)
-        elif xl_target == "4k":
-            if width > height:
-                target_width = 4096
-                target_height = roundint(4096 / ratio, 8)
-            elif height > width:
-                target_height = 4096
-                target_width = roundint(4096 * ratio, 8)
-            else:
-                target_width, target_height = 4096, 4096
-
-        XL = isinstance(clip.cond_stage_model, comfy.sdxl_clip.SDXLClipModel)
-        REF = isinstance(clip.cond_stage_model, comfy.sdxl_clip.SDXLRefinerClipModel)
-
-        if DEBUG: print(f"\nText:\n{text}")
-        if DEBUG: print(f"\nXL: {XL}\nREF: {REF}\nW / H: {width} / {height}\nTW / TH: {target_width} / {target_height}\nASC: {refiner_asc}\n")
-
-        conditioning = None
-        if XL:
-            conditioning = nodes_xl.CLIPTextEncodeSDXL.encode(
-                None,
-                clip,
-                width,
-                height,
-                0,
-                0,
-                target_width,
-                target_height,
-                text,
-                text,
-            )[0]
-        elif REF:
-            conditioning = nodes_xl.CLIPTextEncodeSDXLRefiner.encode(
-                None,
-                clip,
-                refiner_asc,
-                width, # should these be target?
-                height,
-                text,
-            )[0]
-        else:
-            conditioning = nodes.CLIPTextEncode.encode(
-                None,
-                clip,
-                text,
-            )[0]
-        return (conditioning,)
+        return (CondStage(text, xl_target, refiner_asc).process(latent, clip, None),)
     # }}}
 
 class BSZPrincipledSampler:
