@@ -102,6 +102,7 @@ Blend two latents together in a gradient pattern
       - `sine2` : Same as `sine` but the y axis is flipped
       - `circle` : Produces circles packed in a honeycomb shape
       - `squircle` : Produces squircles packed in a grid
+      - `rings` : Produces rings centered on offsets. Circle but recursive instead of tiling
     - `xfrequency` : Pattern repetitions along X axis; horizontal gradient
     - `yfrequency` : Pattern repetitions along Y axis; vertical gradient
     - `xoffset` : Pattern start offset for X frequencies

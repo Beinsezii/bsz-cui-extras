@@ -237,6 +237,7 @@ class BSZLatentGradient:
                     "sine2",
                     "circle",
                     "squircle",
+                    "rings",
                 ],),
                 "xfrequency": ("FLOAT", {
                     "default": 2.0,
@@ -312,6 +313,11 @@ class BSZLatentGradient:
         elif pattern == "squircle":
             factor = xnorm().add(xoffset).mul(pi).mul(xfrequency).sin()
             factor *= ynorm().add(yoffset).mul(pi).mul(yfrequency).sin()
+            factor.abs_()
+        elif pattern == "rings":
+            factor = xnorm().add(xoffset).mul(pi).sin().mul(xfrequency)
+            factor += ynorm().add(yoffset).mul(pi).sin().mul(yfrequency)
+            factor.sin_()
             factor.abs_()
         else:
             raise ValueError("Invalid gradient pattern!")
