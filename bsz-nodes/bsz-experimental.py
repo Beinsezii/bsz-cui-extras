@@ -37,11 +37,29 @@ class BSZInjectionKSampler:
 
     #}}}
 
+class BSZMakeVPred:
+    # {{{
+    @classmethod
+    def INPUT_TYPES(s):
+        return {"required": {
+            "model": ("MODEL",),
+            }
+        }
+    RETURN_TYPES = ("MODEL",)
+    FUNCTION = "vpred"
+    CATEGORY = "beinsezii/experimental"
+    def vpred(self, model):
+        model.model.model_type = comfy.model_base.ModelType.V_PREDICTION
+        return (model,)
+    # }}}
+
 NODE_CLASS_MAPPINGS = {
     "BSZInjectionKSampler": BSZInjectionKSampler,
+    "BSZMakeVPred": BSZMakeVPred
 }
 
 NODE_DISPLAY_NAME_MAPPINGS = {
     "BSZInjectionKSampler": "BSZ Injection KSampler",
+    "BSZMakeVPred": "BSZ Make VPred",
 }
 
