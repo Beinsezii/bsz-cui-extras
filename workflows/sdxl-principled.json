@@ -774,7 +774,7 @@
         0,
         6,
         2.5,
-        "ddim",
+        "euler",
         "normal",
         637089952773719,
         "randomize"
@@ -989,7 +989,7 @@
         0.15,
         6,
         2.5,
-        "ddim",
+        "euler",
         "normal",
         1,
         "randomize"
