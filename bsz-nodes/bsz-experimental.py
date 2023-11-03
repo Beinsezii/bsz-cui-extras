@@ -49,7 +49,9 @@ class BSZMakeVPred:
     FUNCTION = "vpred"
     CATEGORY = "beinsezii/experimental"
     def vpred(self, model):
-        model.model.model_type = comfy.model_base.ModelType.V_PREDICTION
+        class ModelSampling(comfy.model_base.ModelSamplingDiscrete, comfy.model_base.V_PREDICTION):
+            pass
+        model.model.model_sampling = ModelSampling(model.model.model_config)
         return (model,)
     # }}}
 
