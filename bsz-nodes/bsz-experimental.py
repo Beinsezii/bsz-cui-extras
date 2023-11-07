@@ -1,4 +1,3 @@
-import torch
 import nodes
 import comfy
 
@@ -37,31 +36,11 @@ class BSZInjectionKSampler:
 
     #}}}
 
-class BSZMakeVPred:
-    # {{{
-    @classmethod
-    def INPUT_TYPES(s):
-        return {"required": {
-            "model": ("MODEL",),
-            }
-        }
-    RETURN_TYPES = ("MODEL",)
-    FUNCTION = "vpred"
-    CATEGORY = "beinsezii/experimental"
-    def vpred(self, model):
-        class ModelSampling(comfy.model_base.ModelSamplingDiscrete, comfy.model_base.V_PREDICTION):
-            pass
-        model.model.model_sampling = ModelSampling(model.model.model_config)
-        return (model,)
-    # }}}
-
 NODE_CLASS_MAPPINGS = {
     "BSZInjectionKSampler": BSZInjectionKSampler,
-    "BSZMakeVPred": BSZMakeVPred
 }
 
 NODE_DISPLAY_NAME_MAPPINGS = {
     "BSZInjectionKSampler": "BSZ Injection KSampler",
-    "BSZMakeVPred": "BSZ Make VPred",
 }
 
