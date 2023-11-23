@@ -335,13 +335,13 @@ class BSZHueChromaXL:
 f"""
 LCH
 
-L + {lightness}
-C + {chroma}
+L * {lightness}
+C * {chroma}
 H + {hue}
 
 v1 = {lightness}
 v1 * 0.5
-A + v1
+A * v1
 """.encode('UTF-8'),
                 "laba".encode('UTF-8'),
                 buff,

@@ -119,8 +119,26 @@ Fill the four latent channels with arbitrary values.
 Output information about the latent tensor into stdout
 
 ### bsz-pixelbuster.py
-Node that loads the [Pixelbuster library](https://github.com/Beinsezii/pixelbuster). Linux and Windows libraries are included directly in the tree
+Nodes that require my own [Pixelbuster library](https://github.com/Beinsezii/pixelbuster).
+Linux and Windows libraries are included directly in this node pack and won't have to be downloaded separately.
+#### BSZPixelbuster
+Input fields
+  - `image` : Image[s] to work on
+  - `code` : Pixelbuster code. See [the help](https://github.com/Beinsezii/pixelbuster/blob/master/src/lib.rs#L10) for reference
+  - `e1-e9` : Vars you can set externally that will be seen by the pixelbuster code as e1-e9
+#### BSZLatentbuster
+Input fields
+  - `latent` : Latents[s] to work on. CIE LAB colorspace for the first 3 channels with the 4th being alpha.
+  - `code` : Pixelbuster code. See [the help](https://github.com/Beinsezii/pixelbuster/blob/master/src/lib.rs#L10) for reference
+  - `e1-e9` : Vars you can set externally that will be seen by the pixelbuster code as e1-e9
+#### BSZLatentHueChormaXL
+Input fields
+  - `hue` : Hue offset in degrees
+  - `chroma` : Multiply the chroma
+  - `lightness` : Multiply the lightness
 
+#### BSZPixelbuster
+Node that loads the [Pixelbuster library](https://github.com/Beinsezii/pixelbuster). Linux and Windows libraries are included directly in the tree
 Input fields
   - `image` : Image[s] to work on
   - `code` : Pixelbuster code. See [the help](https://github.com/Beinsezii/pixelbuster/blob/master/src/lib.rs#L10) for reference
