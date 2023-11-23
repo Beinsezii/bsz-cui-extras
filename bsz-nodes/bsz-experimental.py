@@ -1,5 +1,8 @@
 import nodes
 import comfy
+import torch
+import numpy
+import PIL
 
 class BSZInjectionKSampler:
     # {{{
@@ -36,11 +39,58 @@ class BSZInjectionKSampler:
 
     #}}}
 
+pil_modes = {
+        "PIL_Nearest": PIL.Image.Resampling.NEAREST,
+        "PIL_Box": PIL.Image.Resampling.BOX,
+        "PIL_Bilinear": PIL.Image.Resampling.BILINEAR,
+        "PIL_Hamming": PIL.Image.Resampling.HAMMING,
+        "PIL_Bicubic": PIL.Image.Resampling.BICUBIC,
+        "PIL_Lanczos": PIL.Image.Resampling.LANCZOS,
+}
+class BSZStrangeResample:
+    #{{{
+    @classmethod
+    def INPUT_TYPES(s):
+        return {
+            "required": {
+                "latent": ("LATENT",),
+                "method": (list(pil_modes.keys()),),
+                "width": ("INT", {"default": 1024, "min": 64, "max": nodes.MAX_RESOLUTION, "step": 8}),
+                "height": ("INT", {"default": 1024, "min": 64, "max": nodes.MAX_RESOLUTION, "step": 8}),
+            },
+        }
+
+    RETURN_TYPES = ("LATENT",)
+    FUNCTION = "resample"
+    CATEGORY = "beinsezii/experimental"
+
+    def resample(self, latent, method, width, height):
+        b, c, h, w = latent["samples"].shape
+        result = latent.copy()
+        if method in list(pil_modes.keys()):
+            tensors = []
+            for batch in latent["samples"]:
+                channels = []
+                for channel in batch:
+                    tensor = channel.to(torch.float32).numpy().copy()
+                    img: PIL.Image.Image = PIL.Image.fromarray(tensor, 'F').resize((width // 8, height // 8), resample=pil_modes[method])
+                    tensor = torch.from_numpy(numpy.asarray(img))
+                    shape = [1] + list(tensor.shape)
+                    channels.append(tensor.reshape(shape))
+                tensor = torch.cat(channels)
+                shape = [1] + list(tensor.shape)
+                tensors.append(tensor.reshape(shape))
+            result['samples'] = torch.cat(tensors)
+        return (result,)
+    # }}}
+
 NODE_CLASS_MAPPINGS = {
     "BSZInjectionKSampler": BSZInjectionKSampler,
+    "BSZStrangeResample": BSZStrangeResample,
 }
 
 NODE_DISPLAY_NAME_MAPPINGS = {
     "BSZInjectionKSampler": "BSZ Injection KSampler",
+    "BSZStrangeResample": "BSZ Strange Resample",
 }
 
