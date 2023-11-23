@@ -62,13 +62,21 @@ h = v1
 h * 240"""
 
 DEFAULT_LATENT="""\
-# Do not change colorspace! Latent ≠ pixels
-# Use c1, c2, c3, c4 for channels instead of RGBA
+# Initial colorspace is mapped to CIE L*a*b because it's surprisingly close to latent space
 
-c1 = xnorm
-c1 * pi
-c1 cos c1
-c1 * 15
+# Sepia latent filter
+LCH
+
+H = 180
+C * 0.3
+L * 1.3
+A * 1.15
+
+# Latent rainbow
+# LCH
+
+# H = xnorm
+# H * 360
 """
 
 class BSZPixelbuster:
@@ -269,11 +277,76 @@ class BSZLatentbuster:
             buff = ndarr.swapaxes(1, 2).reshape(channels*height*width, order='F')
             pb_lib.pixelbuster_ffi_ext(
                 code.encode('UTF-8'),
-                "lrgba".encode('UTF-8'),
+                "laba".encode('UTF-8'),
                 buff,
                 buff.nbytes,
                 width,
                 *externals
+            )
+            ndarr[:] = buff.reshape(channels, height, width, order='F').swapaxes(1, 2)
+        latent['samples'] = samples
+        return (latent,)
+    # }}}
+
+class BSZHueChromaXL:
+    # {{{
+    @classmethod
+    def INPUT_TYPES(s):
+        return {
+            "required": {
+                "latent": ("LATENT",),
+                "hue": ("FLOAT", {
+                    "default": 0.0,
+                    "min": -180.0,
+                    "max": 180.0,
+                }),
+                "chroma": ("FLOAT", {
+                    "default": 0.0,
+                    "min": -10.0,
+                    "max": 10.0,
+                }),
+                "lightness": ("FLOAT", {
+                    "default": 0.0,
+                    "min": -10.0,
+                    "max": 10.0,
+                }),
+            },
+        }
+
+    RETURN_TYPES = ("LATENT",)
+    # RETURN_NAMES = ("image",)
+
+    FUNCTION = "latent_hsv"
+
+    #OUTPUT_NODE = False
+
+    CATEGORY = "beinsezii/latent/advanced"
+
+    def latent_hsv(self, latent, hue, chroma, lightness, mode):
+        if hue == 0 and chroma == 0 and lightness == 0:
+            return (latent,)
+        latent = latent.copy()
+        samples = latent['samples'].cpu().clone()
+        batch_size, channels, height, width = samples.shape
+        for batch in samples:
+            ndarr = batch.numpy()
+            buff = ndarr.swapaxes(1, 2).reshape(channels*height*width, order='F')
+            pb_lib.pixelbuster_ffi(
+f"""
+LCH
+
+L + {lightness}
+C + {chroma}
+H + {hue}
+
+v1 = {lightness}
+v1 * 0.5
+A + v1
+""".encode('UTF-8'),
+                "laba".encode('UTF-8'),
+                buff,
+                buff.nbytes,
+                width,
             )
             ndarr[:] = buff.reshape(channels, height, width, order='F').swapaxes(1, 2)
         latent['samples'] = samples
@@ -298,10 +371,12 @@ class BSZPixelbusterHelp:
 NODE_CLASS_MAPPINGS = {
     "BSZPixelbuster": BSZPixelbuster,
     "BSZLatentbuster": BSZLatentbuster,
+    "BSZHueChromaXL": BSZHueChromaXL,
     "BSZPixelbusterHelp": BSZPixelbusterHelp
 }
 NODE_DISPLAY_NAME_MAPPINGS = {
     "BSZPixelbuster": "BSZ Pixelbuster",
     "BSZLatentbuster": "BSZ Latentbuster",
+    "BSZHueChromaXL": "BSZ Hue Chroma XL",
     "BSZPixelbusterHelp": "BSZ Pixelbuster Help"
 }
