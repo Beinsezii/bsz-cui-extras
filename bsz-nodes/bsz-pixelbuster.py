@@ -304,11 +304,13 @@ class BSZHueChromaXL:
                     "default": 0.0,
                     "min": -10.0,
                     "max": 10.0,
+                    "step": 0.05,
                 }),
                 "lightness": ("FLOAT", {
                     "default": 0.0,
                     "min": -10.0,
                     "max": 10.0,
+                    "step": 0.05,
                 }),
             },
         }
@@ -322,7 +324,7 @@ class BSZHueChromaXL:
 
     CATEGORY = "beinsezii/latent/advanced"
 
-    def latent_hsv(self, latent, hue, chroma, lightness, mode):
+    def latent_hsv(self, latent, hue, chroma, lightness):
         if hue == 0 and chroma == 0 and lightness == 0:
             return (latent,)
         latent = latent.copy()
@@ -335,13 +337,13 @@ class BSZHueChromaXL:
 f"""
 LCH
 
-L * {lightness}
-C * {chroma}
+L + {lightness}
+C + {chroma}
 H + {hue}
 
 v1 = {lightness}
-v1 * 0.5
-A * v1
+v1 * -0.5
+A + v1
 """.encode('UTF-8'),
                 "laba".encode('UTF-8'),
                 buff,
