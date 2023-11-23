@@ -54,9 +54,10 @@ class BSZStrangeResample:
         return {
             "required": {
                 "latent": ("LATENT",),
-                "method": (list(pil_modes.keys()),),
+                "method": (['slurry2'] + list(pil_modes.keys()),),
                 "width": ("INT", {"default": 1024, "min": 64, "max": nodes.MAX_RESOLUTION, "step": 8}),
                 "height": ("INT", {"default": 1024, "min": 64, "max": nodes.MAX_RESOLUTION, "step": 8}),
+                "bleed": ("FLOAT", {"default": 0.0, "min": -1.0, "max": 1.0, "step": 0.01}),
             },
         }
 
@@ -64,7 +65,16 @@ class BSZStrangeResample:
     FUNCTION = "resample"
     CATEGORY = "beinsezii/experimental"
 
-    def resample(self, latent, method, width, height):
+    def bleed(self, t, bleed):
+        result = torch.empty([4])
+        result[0] = t[1] * bleed + t[3] * bleed
+        result[1] = t[0] * bleed + t[2] * bleed
+        result[2] = t[3] * bleed + t[1] * bleed
+        result[3] = t[2] * bleed + t[0] * bleed
+        result.div_(2)
+        return result
+
+    def resample(self, latent, method, width, height, bleed):
         b, c, h, w = latent["samples"].shape
         result = latent.copy()
         if method in list(pil_modes.keys()):
@@ -81,6 +91,51 @@ class BSZStrangeResample:
                 shape = [1] + list(tensor.shape)
                 tensors.append(tensor.reshape(shape))
             result['samples'] = torch.cat(tensors)
+        if method == 'slurry2':
+            bleed *= (1 / 16)
+            tensor = torch.zeros([b, w*2, h*2, c])
+            old = result['samples'].permute(0, 3, 2, 1)
+            for bn, batch in enumerate(tensor):
+                for xn, x in enumerate(batch):
+                    for yn, y in enumerate(x):
+                        xo, yo = xn // 2, yn // 2
+                        nearest = old[bn][xo][yo]
+                        if xn % 2 == 1 or yn % 2 == 1:
+                            end = nearest.clone()
+                            bleeds = []
+                            n = 1
+
+                            if xo < w-1 and xn % 2:
+                                t = old[bn][xo+1][yo]
+                                end += t
+                                bleeds.append(self.bleed(t, bleed))
+                                n += 1
+                            if xo > 0 and xn % 2:
+                                t = old[bn][xo-1][yo]
+                                end += t
+                                bleeds.append(self.bleed(t, bleed))
+                                n += 1
+                            if yo > 0 and yn % 2:
+                                t = old[bn][xo][yo-1]
+                                end += t
+                                bleeds.append(self.bleed(t, bleed))
+                                n += 1
+                            if yo < h-1 and yn % 2:
+                                t = old[bn][xo][yo+1]
+                                end += t
+                                bleeds.append(self.bleed(t, bleed))
+                                n += 1
+
+                            end.div_(n)
+
+                            for b in bleeds:
+                                end += b
+                            end.div_(1 + (bleed / (1 + bleed)) * n)
+
+                            tensor[bn][xn][yn] = end
+                        else:
+                            tensor[bn][xn][yn] = nearest
+            result['samples'] = tensor.permute(0, 3, 2, 1)
         return (result,)
     # }}}
 
