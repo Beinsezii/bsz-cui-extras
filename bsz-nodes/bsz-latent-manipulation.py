@@ -340,6 +340,85 @@ class BSZLatentGradient:
         return (a | {'samples': aamples},)
 # }}}
 
+class BSZHueChromaXL:
+    # {{{
+    @classmethod
+    def INPUT_TYPES(s):
+        return {
+            "required": {
+                "latent": ("LATENT",),
+                "hue": ("FLOAT", {
+                    "default": 0.0,
+                    "min": -180.0,
+                    "max": 180.0,
+                }),
+                "chroma": ("FLOAT", {
+                    "default": 0.0,
+                    "min": -100.0,
+                    "max": 100.0,
+                }),
+                "lightness": ("FLOAT", {
+                    "default": 0.0,
+                    "min": -100.0,
+                    "max": 100.0,
+                }),
+            },
+        }
+
+    RETURN_TYPES = ("LATENT",)
+    # RETURN_NAMES = ("image",)
+
+    FUNCTION = "latent_huechroma"
+
+    #OUTPUT_NODE = False
+
+    CATEGORY = "beinsezii/latent"
+
+    def latent_huechroma(self, latent, hue, chroma, lightness):
+        if hue == 0 and chroma == 0 and lightness == 0:
+            return (latent,)
+        latent = latent.copy()
+        samples = latent['samples'].clone().permute(1,0,2,3)
+        # Lightness
+        samples[0] -= -21.675973892211914
+        samples[0] *= 100 / (abs(-21.675973892211914) + 18.038631439208984)
+
+        samples[3] -= 2.5792038440704346
+        samples[3] *= -100 / (abs(-8.136277198791504) + 2.5792038440704346)
+
+        # Naive approach until I make a backward plot
+        samples[0] += lightness
+        samples[3] += lightness
+
+        samples[0] /= 100 / (abs(-21.675973892211914) + 18.038631439208984)
+        samples[0] += -21.675973892211914
+        samples[3] /= -100 / (abs(-8.136277198791504) + 2.5792038440704346)
+        samples[3] += 2.5792038440704346
+
+        # Hue/Chroma
+        # Approx values due to lack of forward plot
+        samples[1] -= 4.560664176940918
+        samples[1] *= -100 / (abs(-11.767170906066895) + 4.560664176940918)
+        samples[2] -= 3.3889966011047363
+        samples[2] *= 100 / (18.39630699157715 + 3.3889966011047363)
+        chroma_arr = (samples[1] ** 2 + samples[2] ** 2).sqrt()
+        hue_arr = samples[2].atan2(samples[1]).rad2deg()
+
+        chroma_arr += chroma
+        hue_arr += hue
+
+        samples[1] = chroma_arr * hue_arr.deg2rad().cos()
+        samples[2] = chroma_arr * hue_arr.deg2rad().sin()
+
+        samples[1] /= -100 / (abs(-11.767170906066895) + 4.560664176940918)
+        samples[1] += 4.560664176940918
+        samples[2] /= 100 / (18.39630699157715 + 3.3889966011047363)
+        samples[2] += 3.3889966011047363
+
+        latent['samples'] = samples.permute(1,0,2,3)
+        return (latent,)
+    # }}}
+
 NODE_CLASS_MAPPINGS = {
     "BSZLatentDebug": BSZLatentDebug,
     "BSZLatentFill": BSZLatentFill,
@@ -348,6 +427,7 @@ NODE_CLASS_MAPPINGS = {
     "BSZLatentRGBAImage": BSZLatentRGBAImage,
     "BSZLatentHSVAImage": BSZLatentHSVAImage,
     "BSZLatentGradient": BSZLatentGradient,
+    "BSZHueChromaXL": BSZHueChromaXL,
 }
 
 NODE_DISPLAY_NAME_MAPPINGS = {
@@ -358,4 +438,5 @@ NODE_DISPLAY_NAME_MAPPINGS = {
     "BSZLatentRGBAImage": "BSZ Latent RGBA Image",
     "BSZLatentHSVAImage": "BSZ Latent HSVA Image",
     "BSZLatentGradient": "BSZ Latent Gradient",
+    "BSZHueChromaXL": "BSZ Hue Chroma XL",
 }

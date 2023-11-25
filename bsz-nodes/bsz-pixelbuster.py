@@ -288,73 +288,6 @@ class BSZLatentbuster:
         return (latent,)
     # }}}
 
-class BSZHueChromaXL:
-    # {{{
-    @classmethod
-    def INPUT_TYPES(s):
-        return {
-            "required": {
-                "latent": ("LATENT",),
-                "hue": ("FLOAT", {
-                    "default": 0.0,
-                    "min": -180.0,
-                    "max": 180.0,
-                }),
-                "chroma": ("FLOAT", {
-                    "default": 0.0,
-                    "min": -10.0,
-                    "max": 10.0,
-                    "step": 0.05,
-                }),
-                "lightness": ("FLOAT", {
-                    "default": 0.0,
-                    "min": -10.0,
-                    "max": 10.0,
-                    "step": 0.05,
-                }),
-            },
-        }
-
-    RETURN_TYPES = ("LATENT",)
-    # RETURN_NAMES = ("image",)
-
-    FUNCTION = "latent_hsv"
-
-    #OUTPUT_NODE = False
-
-    CATEGORY = "beinsezii/latent/advanced"
-
-    def latent_hsv(self, latent, hue, chroma, lightness):
-        if hue == 0 and chroma == 0 and lightness == 0:
-            return (latent,)
-        latent = latent.copy()
-        samples = latent['samples'].cpu().clone()
-        batch_size, channels, height, width = samples.shape
-        for batch in samples:
-            ndarr = batch.numpy()
-            buff = ndarr.swapaxes(1, 2).reshape(channels*height*width, order='F')
-            pb_lib.pixelbuster_ffi(
-f"""
-LCH
-
-L + {lightness}
-C + {chroma}
-H + {hue}
-
-v1 = {lightness}
-v1 * -0.5
-A + v1
-""".encode('UTF-8'),
-                "laba".encode('UTF-8'),
-                buff,
-                buff.nbytes,
-                width,
-            )
-            ndarr[:] = buff.reshape(channels, height, width, order='F').swapaxes(1, 2)
-        latent['samples'] = samples
-        return (latent,)
-    # }}}
-
 class BSZPixelbusterHelp:
     RETURN_TYPES = ()
     CATEGORY = "beinsezii/image"
@@ -373,12 +306,10 @@ class BSZPixelbusterHelp:
 NODE_CLASS_MAPPINGS = {
     "BSZPixelbuster": BSZPixelbuster,
     "BSZLatentbuster": BSZLatentbuster,
-    "BSZHueChromaXL": BSZHueChromaXL,
     "BSZPixelbusterHelp": BSZPixelbusterHelp
 }
 NODE_DISPLAY_NAME_MAPPINGS = {
     "BSZPixelbuster": "BSZ Pixelbuster",
     "BSZLatentbuster": "BSZ Latentbuster",
-    "BSZHueChromaXL": "BSZ Hue Chroma XL",
     "BSZPixelbusterHelp": "BSZ Pixelbuster Help"
 }
