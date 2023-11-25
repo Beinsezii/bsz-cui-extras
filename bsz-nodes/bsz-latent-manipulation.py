@@ -386,9 +386,15 @@ class BSZHueChromaXL:
         samples[3] -= 2.5792038440704346
         samples[3] *= -100 / (abs(-8.136277198791504) + 2.5792038440704346)
 
-        # Naive approach until I make a backward plot
-        samples[0] += lightness
-        samples[3] += lightness
+        alphas = (samples[0] + samples[3]) / 2
+        alphas /= 50
+        alphas **= 2
+        alphas /= 2
+        alphas = alphas.clip(0.0, 1.0)
+        betas = 1 - alphas
+
+        samples[0] += lightness * betas
+        samples[3] += lightness * alphas
 
         samples[0] /= 100 / (abs(-21.675973892211914) + 18.038631439208984)
         samples[0] += -21.675973892211914
