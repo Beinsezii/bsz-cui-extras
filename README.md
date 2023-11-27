@@ -128,7 +128,7 @@ Output information about the latent tensor into stdout
 
 ### bsz-pixelbuster.py
 Nodes that require my own [Pixelbuster library](https://github.com/Beinsezii/pixelbuster).
-Linux and Windows libraries are included directly in this node pack and won't have to be downloaded separately.
+Linux, Windows, and MacOS libraries are included directly in this node pack and won't have to be downloaded separately.
 
 #### BSZPixelbuster
 Write simple code to manipulate colors

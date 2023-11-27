@@ -6,8 +6,12 @@ import ctypes
 import numpy
 from sys import platform
 
-# Pretty sure MacOS is .so as well
-LIBRARY = "pixelbuster.dll" if platform == "win32" else "libpixelbuster.so"
+if platform == "win32":
+    LIBRARY = "pixelbuster.dll"
+elif platform == "darwin":
+    LIBRARY = "libpixelbuster.dylib"
+elif platform == "linux":
+    LIBRARY = "libpixelbuster.so"
 
 pb_lib = None
 try:
