@@ -1,6 +1,5 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
-import sys
 import os.path
 import ctypes
 import numpy
@@ -33,10 +32,6 @@ except Exception as e:
     raise e
 
 HELP = pb_lib.pb_help_ffi().decode('UTF-8')
-
-import nodes
-import comfy_extras.nodes_clip_sdxl as nodes_xl
-import comfy.samplers as samplers
 
 DEFAULT="""\
 # See the 'BSZ Pixelbuster Help'
